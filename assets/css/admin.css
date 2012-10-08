@@ -1,0 +1,149 @@
+/**
+ * Cuisine Admin Style
+ * 
+ * All the general admin styles necessary
+ *
+ * @author 		Chef du Web
+ * @category 	Admin
+ * @package 	Cuisine
+ */
+
+
+
+
+/* Simple View */
+body.simple-view{background:url('../images/tile.png');margin:0;background-attachment:fi;}
+
+body.simple-view #adminmenuback, body.simple-view #adminmenuwrap, body.simple-view #footer{display:none;}
+body.simple-view #wpwrap{position:relative;}
+body.simple-view #wpadminbar, body.simple-view #screen-meta-links{display:none !important;}
+body.simple-view #wpbody{width:90%;}
+body.simple-view .tablenav.top .actions:nth-child(2){display:none;}
+body.simple-view .tablenav.bottom{display:none;}
+body.simple-view .add-new-h2{background:#eee;border:1px solid #cacaca;border-radius:8px;box-shadow:inset 0 1px 1px #fff;}
+body.simple-view .add-new-h2:hover{border:1px solid #aaa;}
+.index-php.simple-view #wpcontent{display:none;}
+
+
+body.simple-view #publishing-action{
+	float:left;
+}
+body.simple-view #minor-publishing{display:none}
+body.simple-view #submitdiv .hndle, body.simple-view #submitdiv .handlediv{display:none;}
+body.simple-view #submitdiv .inside, body.simple-view #submitdiv #major-publishing-actions, body.simple-view #submitpost, body.simple-view #submitdiv{background:none !important;background-image:none !important;border:0px;}
+body.simple-view #delete-action{display:none;}
+body.simple-view #publishing-action #publish{width:100px;height:22px;border-radius:5;border:1px solid rgba(0,0,0,.1);cursor:hand;cursor:pointer;border:0px;}
+body.simple-view #publishing-action #publish:hover{width:100px;height:22px;border-radius:5;}
+//*body.simple-view #postimagediv{margin-top:45px !important;background-color:transparent !important;border:1px dashed #161616;background-image:url('../images/camera.png');background-repeat:no-repeat;background-position:50% 50%;}
+body.simple-view #postimagediv .hndle{display:none;}
+body.simple-view #postimagediv .inside{min-height:200px;background-color:transparent;}
+body.simple-view #postimagedive .handlediv{display:none;}
+body.simple-view #postimagediv #set-post-thumbnail{float:left;margin-top:0px;display:block;background-color:transparent !important;padding-top:30px;height:170px !important;width:100%;text-align:center;color:#161616;text-decoration:none;font-size:14px;font-family:'Lucida Grande', 'Helvetica', 'Sans-serif';}
+body.simple-view #postimagediv:hover #set-post-thumbnail{color:#CF0340;}
+body.simple-view #postimagediv .handlediv, #postimagediv:hover .handlediv{display:none !important;}*/
+body.simple-view #postimagediv{display:none;}
+body.simple-view .attachment-post-thumbnail{max-height:200px;min-height:75px;max-width:100%;margin-top:30px;}
+body.simple-view #remove-post-thumbnail{width:100%;height:100px;;display:block !important;color:#161616;text-align:center;text-decoration:none;font-size:14px;font-family:'Lucida Grande', 'Helvetica', 'Sans-serif';}
+body.simple-view #publishing-action #publish:hover{
+	background-image: -ms-linear-gradient(top, #f5f4f0 0%, #e2e0da 100%);
+	background-image: -moz-linear-gradient(top, #f5f4f0 0%, #e2e0da 100%);
+	background-image: -o-linear-gradient(top, #f5f4f0 0%, #e2e0da 100%);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #f5f4f0), color-stop(1, #e2e0da));
+	background-image: -webkit-linear-gradient(top, #f5f4f0 0%, #e2e0da 100%);
+	background-image: linear-gradient(to bottom, #f5f4f0 0%, #e2e0da 100%);
+	background-color:#e2e0da !important;
+	border:1px solid rgba(0,0,0,.4) !important;
+	color:#333;
+}
+
+body.simple-view #edit-slug-box{display:none;}
+body.simple-view #wp-content-editor-tools{display:none;}
+body.simple-view #wp-content-editor-container{background:#ffffff;}
+
+	/* button of god */
+	.cuisine_toggle_button{padding:10px 15px 10px 15px;background:#f3f2ed;border:1px solid #aeaca3; position:absolute;z-index:999;top:-28px;right:10%;color:#333;text-decoration:none;border-bottom-left-radius:10px;border-bottom-right-radius:10px;}
+	.cuisine_toggle_button:hover{background:#ccc;}
+
+	/* Back button */
+	.cuisine_back_button{position:absolute;top:50px;left:0px;height:20px;padding:10px 15px 10px 5px;background:#f3f2ed;color:#aeaca3;border:1px solid #aeaca3;border-top-right-radius:10px;border-bottom-right-radius:10px;font-size:18px;text-transform:uppercase;text-decoration:none;text-shadow:inset 0 1px 3px rgba(0,0,0,.2);box-shadow:1px 1px 2px #aeaca3;}
+	.cuisine_back_button:hover{background:#e5e4df;}
+	.cuisine_back_button img{padding:0 10px 0 0;float:left;}
+	.cuisine_back_button span{margin-top:2px;float:left;}
+
+
+	/* main menu */
+	.cuisine-simple-view-wrapper{width:100%;text-align:center;}
+	.cuisine-collection{width:80%;display:block;margin:30px 0 0 10%;padding-bottom:20px;float:left;}
+	.cuisine-collection-title{margin:0 0 30px 0;padding:0;}
+
+	.cuisine-item{display:inline-block;margin:0 20px 30px 20px;width:120px;text-decoration:none;}
+	.cuisine-item .page-icon{width:100%;}
+	.cuisine-item img{max-width:100%;width:100%;}
+	.cuisine-item strong{color:#333;text-decoration:none;text-transform:uppercase;}
+
+	.cuisine-item:hover img{opacity:.7;}
+	.cuisine-item:hover strong{color:#D54E21;}
+
+
+
+
+/* Options */
+.cuisine_form_section{margin:0 0 20px 0;padding:0 0 20px 0;border-bottom:1px solid #eee;}
+.cuisine_form_section label{width:100%;display:block;clear:both;margin:20px 0 0 20px;}
+
+
+
+/* COMMON PLUGIN STYLES */
+
+	/* Hide featured image */
+	.hide-featured-image #postimagediv{display:none;}
+
+	/* Media Items */
+	.mitem{height:auto;min-height:100px;margin:0;padding:20px 0 20px 0;border-top:1px solid #fff;border-bottom:1px solid #ddd;}
+	.mitem:hover{background:#ededed;}
+	.mitem-container{width:100%;height:auto;display:block;position:relative;}
+	.mitem-container img, .mitem-container div{-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}
+	.mitem-container img{max-width:20%;min-width:150px;padding:5px;box-shadow:1px 1px 3px #ccc;float:left;margin:0 20px 0 20px;}
+	.mitem-container .mitem-body{float:left;max-width:70%;width:60%;padding:5px 0 5px 0;}
+	.mitem-container .mitem-body label{width:100%;display:block;}
+	.mitem-container .mitem-body input, .mitem-container .mitem-body textarea{width:100%;display:block;padding:5px;font-size:14px;}
+	.mitem-container .mitem-body textarea{height:100px;}
+	.mitem-container .mitem-body input.mitem-title{margin-bottom:10px;}
+	.mitem-container .mitem-body textarea.mitem-description{margin-bottom:10px;}
+
+	.mitem-container .mitem-controls{position:absolute;top:-10px;right:3px;}
+	.mitem-control{width:20px;height:20px;display:block;float:left;margin:0 3px 0 10px;background:url('../images/mitem-icons.png');cursor:hand;cursor:pointer;}
+	.mitem-control.pin:hover{background-position:0 -31px;}
+	.mitem-control.trash{background-position:-36px 0;}	
+	.mitem-control.trash:hover{background-position:-36px -31px;}
+	.mitem-placeholder{min-height:100px;margin:20px 0 20px 0;border:2px dashed #bbb;}
+
+	/* Labels */
+	.cuisine_label{float:left;margin-top:10px;}
+	.cuisine_label.label_left{clear:both;width:100%;}
+	.cuisine_label.label_left p{width:100px;display:inline-block;}
+	.cuisine_label.label_left input{display:inline;margin-left:20px;}
+	#normal-sortables .cuisine_label.label_left input{min-width:300px;}
+	
+	.cuisine_input.video_input{width:180px;}
+	#slider-media-add .button{margin-right:20px;}
+	#cuisine-media-video-add{-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;width:100%;border-radius:7px;border:1px solid rgba(0,0,0,.1);background:#ededed;margin:20px 0 20px 0;padding:0 20px 5px 20px;}
+	#addvid{display:inline-block;margin-left:20px;width:50px;min-width:50px !important;max-width:50px !important;}
+	#cuisine-media-video-add{display:none;}
+
+	.clearfix{clear:both;}
+
+
+
+/* WIDGET STYLES */
+
+
+	/* Image widget: */
+	.cuisine_widget_centralized{width:100%;text-align:center;padding-bottom:10px;padding-top:10px;display:block}
+	.cuisine_widget_image{max-width:90%;max-height:150px;}
+	.cuisine_home_image_widget{width:220px;padding:20px;border:1px solid #ccc;background:#fff;box-shadow:1px 1px 3px #666;float:left;margin:10px 10px 0 10px;}
+	.cuisine_home_image_widget .cuisine_label{margin:0px;float:left;}
+	.cuisine_home_image_widget .cuisine_label p{display:inline-block;width:50px;}
+	.cuisine_home_image_widget .cuisine_label input{display:inline;width:150px;}
+
+
