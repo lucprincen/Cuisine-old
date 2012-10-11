@@ -31,6 +31,9 @@
 		//simple search
 		include('widget-simple-search.php');
 
+		//twitter
+		include('widget-twitter.php');
+
 	}
 
 
