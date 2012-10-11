@@ -20,7 +20,7 @@ class cuisine_widget_twitter extends WP_Widget {
 		$control_ops = array( 'width' => 300, 'height' => 350, 'id_base' => 'cuisine_widget_twitter' );
 
 		/* Create the widget. */
-		$this->WP_Widget( 'setinstonetwitter', __('Set in Stone - Twitter'), $widget_ops, $control_ops );
+		$this->WP_Widget( 'cuisine_widget_twitter', __('Twitter'), $widget_ops, $control_ops );
 	}
 
 	function widget($args, $instance) {
@@ -30,7 +30,6 @@ class cuisine_widget_twitter extends WP_Widget {
 		$title = apply_filters('widget_title', $instance['title']);
 		$account = $instance['account'];
 		$show = $instance['show'];
-		$directory = get_bloginfo( template_url );
 		
         // Output
 		echo $before_widget;
@@ -38,6 +37,7 @@ class cuisine_widget_twitter extends WP_Widget {
 		echo '<ul id="twitter_update_list"><li>Oops Twitter isnt working at the moment</li></ul>';
 		echo '<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>';
 		echo '<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/'.$account.'.json?callback=twitterCallback2&amp;count='.$show.'"></script>';
+
 		echo $after_widget;
 	}
 
@@ -52,7 +52,7 @@ class cuisine_widget_twitter extends WP_Widget {
 	}
 
 	function form($instance) {
-		$defaults = array( 'title' => 'Follow Us on Twitter', 'show' => '4', 'account' => 'anteksiler' );
+		$defaults = array( 'title' => 'Twitter', 'show' => '4', 'account' => 'chefduweb' );
 		$instance = wp_parse_args( (array) $instance, $defaults ); ?>
         
 		<p>

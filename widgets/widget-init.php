@@ -34,6 +34,9 @@
 		//twitter
 		include('widget-twitter.php');
 
+		//button
+		include('widget-button.php');
+
 	}
 
 
