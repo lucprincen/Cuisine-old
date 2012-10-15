@@ -75,7 +75,7 @@
 
 					<?php foreach( $plugins as $plugin ):?> 
 							
-						<a class="cuisine-item" href="<?php echo get_admin_url();?>edit.php?post_type=<?php echo $plugin['post_type']?>"  style="width:<?php echo $settings['icon_size']?>px !important">
+						<a class="cuisine-item" href="<?php cuisine_get_icon_link( $plugin );?>"  style="width:<?php echo $settings['icon_size']?>px !important">
 							<div class="page-icon">
 								<img src="<?php cuisine_simple_view_icon( $plugin );?>"/>
 							</div>
@@ -92,6 +92,22 @@
 		</div><!-- simple-view-wrapper -->
 <?php
 
+	}
+
+
+	/**
+	*	Get Icon link:
+	*/
+	
+	function cuisine_get_icon_link( $plugin ){
+
+		if( isset( $plugin['post_type'] ) ){
+			echo get_admin_url().'edit.php?post_type='.$plugin['post_type'];
+
+		}else if( isset( $plugin['link'] ) ){
+			echo get_admin_url().$plugin['link'];
+
+		}
 	}
 
 
