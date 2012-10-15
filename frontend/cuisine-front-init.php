@@ -54,11 +54,7 @@
 	function cuisine_frontend_scripts(){
 
 		global $post;
-		?>
-		<script type="text/javascript">
-			var post_id = '<?php echo $post->ID;?>;';
-		</script>
-		<?php
+		?><script type="text/javascript">var post_id = '<?php echo $post->ID;?>';</script><?php
 	}	
 
 ?>
