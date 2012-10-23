@@ -36,7 +36,7 @@ class cuisine_widget_twitter extends WP_Widget {
 		echo '<h3>'.$title.'</h3>';  
 		echo '<ul id="twitter_update_list"><li>Oops Twitter isnt working at the moment</li></ul>';
 		echo '<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>';
-		echo '<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/'.$account.'.json?callback=twitterCallback2&amp;count='.$show.'"></script>';
+		echo '<script type="text/javascript" src="http://api.twitter.com/1/statuses/user_timeline.json?screen_name='.$account.'&callback=twitterCallback2&count='.$show.'"></script>';
 
 		echo $after_widget;
 	}
