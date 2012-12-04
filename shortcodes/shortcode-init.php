@@ -24,6 +24,9 @@
 		// Buttons
 		include( 'shortcode-buttons.php' );
 
+		// STEPS:
+		include( 'shortcode-steps.php' );
+
 	}
 
 	cuisine_shortcodes_include();
