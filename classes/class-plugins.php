@@ -451,15 +451,18 @@ class Cuisine_Plugins {
 	 /**
 	 * Register a redirect domain:
 	 */
-	function register_template_redirect( $slug, $post_type = null ){
+	function register_template_redirect( $slug, $type = null, $post_type = null ){
 
 		//add the slug to the redirect list:
 		$this->redirect_list[] = $slug; 
 
+		if( $type == nukk )
+			$type = 'post_type';
+
 		if( $post_type == null )
 			$post_type = $slug;
 
-		$this->redirect_list_types[ $slug ] = $post_type;
+		$this->redirect_list_types[$type][ $slug ] = $post_type;
 
 
 		//add the template_redirect action if it doesn't exist yet:
@@ -502,38 +505,55 @@ class Cuisine_Plugins {
 				if( $posttype == '' && $wp_query->is_single == true )
 					$posttype = 'post';
 
-				$types = array_values( $this->redirect_list_types );
+				$types = array_values( $this->redirect_list_types['post_type'] );
+
 
 				//check if we are dealing with a post type overview or a single page:
 				if( ! empty( $posttype ) ){
 					//check if the post type is in the redirects list:
 					if( in_array( $posttype, $types ) ){
-											//it is, we are redirecting:
-						$wp_query->is_home = false;
-	
-						if( $posttype == 'post' )
-							$posttype = 'blog';
-	
-						//check for a single:
-						if( is_single() ){
-							$wp_query->is_custom_post_type_archive = false;
+							
+						//it's a page:
+						if( $posttype == 'page'){
 
+							$pages = array_values( $this->redirect_list_types['page'] );
 
-							locate_template( array( 'plugin-templates/'.$posttype.'-single.php', 'single.php', 'index.php' ), true );
-							die();
-						
-						//else it's an archive:
+							//we need to compare the post slug to the title in the query:
+
+							//we've verified that this is the page we are looking for, 
+							//redirect:
+							//locate_template( array( 'plugin-template/template-'.$page.'.php', 'page.php', 'index.php' ), true );
+							//die();
+
+						// else it's a post or post_type:
 						}else{
+							//it is, we are redirecting:
+							$wp_query->is_home = false;
+		
+							if( $posttype == 'post' )
+								$posttype = 'blog';
+		
+							//check for a single:
+							if( is_single() ){
+								$wp_query->is_custom_post_type_archive = false;
 	
-							//check if we're dealing with a paged querie:
-							if( $wp_query->query_vars['paged'] > 1 ){
-								$wp_query->is_404 = false;
-								$wp_query->is_paged = true;
+	
+								locate_template( array( 'plugin-templates/'.$posttype.'-single.php', 'single.php', 'index.php' ), true );
+								die();
+							
+							//else it's an archive:
+							}else{
+		
+								//check if we're dealing with a paged querie:
+								if( $wp_query->query_vars['paged'] > 1 ){
+									$wp_query->is_404 = false;
+									$wp_query->is_paged = true;
+								}
+		
+								$wp_query->is_custom_post_type_archive = true;
+								locate_template( array( 'plugin-templates/'.$posttype.'.php', 'index.php' ), true );
+								die();
 							}
-	
-							$wp_query->is_custom_post_type_archive = true;
-							locate_template( array( 'plugin-templates/'.$posttype.'.php', 'index.php' ), true );
-							die();
 						}
 					}
 				}else{
@@ -545,6 +565,9 @@ class Cuisine_Plugins {
 
 
 				}
+
+
+
 			}
 		}
 	 }
