@@ -456,7 +456,7 @@ class Cuisine_Plugins {
 		//add the slug to the redirect list:
 		$this->redirect_list[] = $slug; 
 
-		if( $type == nukk )
+		if( $type == null )
 			$type = 'post_type';
 
 		if( $post_type == null )

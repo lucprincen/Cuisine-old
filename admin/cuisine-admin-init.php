@@ -52,6 +52,10 @@
 			//add the body class:
 			add_filter( 'admin_body_class', 'cuisine_admin_body_class' );
 
+			//add simple view menu items from cuisine:
+			add_filter( 'register_cuisine_simple_view_plugin', 'cuisine_register_native_menu_items' );
+
+
 		}else{
 			//add the top menu button:
 			cuisine_advanced_view_button();
@@ -174,7 +178,7 @@
 	*/
 
 	function cuisine_admin_bar_menu(){
-			global $wp_admin_bar;
+		global $wp_admin_bar;
 		/* Add the main siteadmin menu item */
 		$wp_admin_bar->add_menu( array(
  			'id'     => 'debug-bar',
@@ -184,6 +188,28 @@
 		) );
 	}
 
+
+	/**
+	*	Menu items to be added to Simple View from Cuisine:
+	*/
+
+	function cuisine_register_native_menu_items( $array ){
+
+		global $cuisine;
+		$settings = get_cuisine_setting( 'simple_view' );
+
+		if( $settings['edit_menus'] ){
+
+			$a['Title'] = 'Menu\'s';
+			$a['link'] = 'nav-menus.php';
+			$a['icon']	= $cuisine->asset_url.'/images/menu-icon.png';
+			$array[] = $a;
+		}
+
+
+		return $array;
+
+	}
 
 	
 	/**

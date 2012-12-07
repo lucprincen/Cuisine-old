@@ -60,7 +60,8 @@
 
 					'back_button'		=> false,
 					'add_pages'			=> false,
-					'delete_pages'		=> false
+					'delete_pages'		=> false,
+					'edit_menus'		=> false
 				);
 
 				return $settings;
@@ -140,26 +141,37 @@
 	function cuisine_sanitize_options(){
 		$values = array();
 
-		if(!isset($_POST['cuisine_show_pages'])){
+		if( !isset($_POST['cuisine_show_pages'] ) ){
 			$values['show_pages_front'] = false;
+
 		}else{
 			$values['show_pages_front'] = true;
 		}
 
-		if( !isset($_POST['cuisine_add_pages'])){
+		if( !isset($_POST['cuisine_edit_menus'] ) ){
+			$values['edit_menus'] = false;
+
+		}else{
+			$values['edit_menus'] = true;
+		}
+
+		if( !isset($_POST['cuisine_add_pages'] ) ){
 			$values['add_pages'] = false;
+
 		}else{
 			$values['add_pages'] = true;
 		}
 
-		if( !isset($_POST['cuisine_delete_pages'])){
+		if( !isset($_POST['cuisine_delete_pages'] ) ){
 			$values['delete_pages'] = false;
+
 		}else{
 			$values['delete_pages'] = true;
 		}
 
-		if( !isset($_POST['cuisine_back_button'])){
+		if( !isset($_POST['cuisine_back_button'] ) ){
 			$values['back_button'] = false;
+
 		}else{
 			$values['back_button'] = true;
 		}
