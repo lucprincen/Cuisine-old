@@ -150,7 +150,7 @@
 
 		global $pagenow, $cuisine;
 
-		if( $pagenow == 'edit.php' ){
+		if( $pagenow == 'edit.php' || $pagenow == 'nav-menus.php' ){
 
 			return admin_url();
 
