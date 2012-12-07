@@ -150,11 +150,7 @@
 
 		global $pagenow, $cuisine;
 
-		if( $pagenow == 'edit.php' || $pagenow == 'nav-menus.php' ){
-
-			return admin_url();
-
-		}else if( $pagenow == 'post-new.php'){
+		if( $pagenow == 'post-new.php'){
 
 			if( isset( $_GET['post_type'] ) )
 				return admin_url().'/edit.php?post_type='.$_GET['post_type'];
@@ -167,6 +163,10 @@
 			$pt = get_post_type( $pid );
 			
 			return admin_url().'/edit.php?post_type='.$pt;
+
+		}else{
+
+			return admin_url();
 
 		}
 
