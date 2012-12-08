@@ -141,7 +141,7 @@ class Cuisine_Plugins {
 	
 
 	 	 	//check for the nonce:
-     	 	if ( !isset($_POST[ $this->get_nonce_name() ] ) )
+     	 	if ( !isset( $_POST[ $this->get_nonce_name() ] ) )
      	 		return $post_id;
 
 
@@ -149,6 +149,7 @@ class Cuisine_Plugins {
 	 	 	if ( !wp_verify_nonce( $_POST[ $this->get_nonce_name() ], plugin_basename( __FILE__ ) ) )
     			return $post_id;
 	
+
     		//check for a valid Cuisine session:
     		if ( !cuisine_is_valid_session() )
     			return $post_id;
@@ -163,15 +164,7 @@ class Cuisine_Plugins {
 
 				foreach( $save['all'] as $item ){
 
-					$values = $this->sanitize_values( $item['value'] );
-
-					if( $values ){
-
-						if( isset( $item['orderby'] ) && is_array( $item['value'] ) )
-							$values = cuisine_sort_array_by( $values, $item['orderby'], $item['order'] );
-	
-						update_post_meta($post_id, $item['key'], $values );
-					}
+					$this->save_meta_to_post( $post_id, $item );
 				}
 			}
 
@@ -181,15 +174,7 @@ class Cuisine_Plugins {
 
 				foreach( $save[$current_post_type] as $item ){
 
-					$values = $this->sanitize_values( $item['value'] );
-
-					if( $values ){
-					
-						if( isset( $item['orderby'] ) && is_array( $item['value'] ) )
-							$values = cuisine_sort_array_by( $values, $item['orderby'], $item['order'] );
-
-						update_post_meta( $post_id, $item['key'], $values );
-					}
+					$this->save_meta_to_post( $post_id, $item );
 				}
 			}
 
@@ -198,15 +183,7 @@ class Cuisine_Plugins {
 			if( isset( $save[$post_id] ) ){
 				foreach( $save[$post_id] as $item ){
 
-					$values = $this->sanitize_values( $item['value'] );
-					
-					if( $values ){
-					
-						if( isset( $item['orderby'] ) && is_array( $item['value'] ) )
-							$values = cuisine_sort_array_by( $values, $item['orderby'], $item['order'] );
-
-						update_post_meta( $post_id, $item['key'], $values );
-					}
+					$this->save_meta_to_post( $post_id, $item );
 				}
 			}
 
@@ -215,7 +192,26 @@ class Cuisine_Plugins {
 	}
 
 
+	/**
+	*	SAVES A SINGLE PIECE OF METADATA:
+	*/
+	function save_meta_to_post( $post_id, $item ){
+		$values = $this->sanitize_values( $item['value'] );
+					
+		if( $values ){
+					
+			if( isset( $item['orderby'] ) && is_array( $item['value'] ) )
+				$values = cuisine_sort_array_by( $values, $item['orderby'], $item['order'] );
 
+			update_post_meta( $post_id, $item['key'], $values );
+		}
+
+	}
+
+
+	/**
+	*	Generate a custom nonce name using the post id or the current php page:
+	*/
 	function get_nonce_name(){
 
 		if( isset( $_GET['post'] ) ){
@@ -238,7 +234,7 @@ class Cuisine_Plugins {
 	function get_plugin_nonce(){
 
 		if( !$this->has_nonce( $this->get_nonce_name() ) )
-			wp_nonce_field( plugin_basename( __FILE__ ), $this->get_nonce_name());
+			wp_nonce_field( plugin_basename( __FILE__ ), $this->get_nonce_name() );
 	
 	}
 
@@ -451,10 +447,10 @@ class Cuisine_Plugins {
 	 /**
 	 * Register a redirect domain:
 	 */
-	function register_template_redirect( $slug, $type = null, $post_type = null ){
+	function register_template_redirect( $slug, $type = null, $post_type = null, $page_object = array() ){
 
 		//add the slug to the redirect list:
-		$this->redirect_list[] = $slug; 
+		$this->redirect_list[$type][] = $slug; 
 
 		if( $type == null )
 			$type = 'post_type';
@@ -462,7 +458,10 @@ class Cuisine_Plugins {
 		if( $post_type == null )
 			$post_type = $slug;
 
+
 		$this->redirect_list_types[$type][ $slug ] = $post_type;
+
+		if( $type == 'page' && $this->has_permalink_structure() ) $this->register_page_object( $slug, $page_object );
 
 
 		//add the template_redirect action if it doesn't exist yet:
@@ -484,6 +483,47 @@ class Cuisine_Plugins {
 	}
 
 
+	/**
+	*	Add a page, if it doesn't exist yet:
+	*/
+
+	function register_page_object( $slug, $object = array() ){
+
+		$object = $this->sanitize_page_object( $slug, $object );
+
+		$page_id = get_page_by_title( $slug );
+
+		if($page_id == null){
+				
+
+			wp_insert_post(array(
+				'post_title' 	=> $object['post_title'],
+				'post_content'	=> $object['post_content'],
+				'post_type' 	=> 'page',
+				'post_status'	=> 'publish',
+				'post_name'		=> $slug
+			));
+		}
+	}
+
+
+
+	/**
+	*	Sanitize the page object:
+	*/
+	function sanitize_page_object( $slug, $object ){
+
+		if( empty( $object['post_title'] ) )
+			$object['post_title'] = ucwords(str_replace('-', ' ', $slug ) );
+
+		if( empty( $object['post_content'] ) )
+			$object['post_content'] = '';
+
+
+		return $object;
+	}
+
+
 
 	 /**
 	 * 	Add all template redirects:
@@ -502,6 +542,10 @@ class Cuisine_Plugins {
 
 				//get the queries post type:
 				$posttype = $wp_query->query_vars['post_type'];
+
+				if( $posttype == '' )
+					$posttype = $wp_query->post->post_type;
+
 				if( $posttype == '' && $wp_query->is_single == true )
 					$posttype = 'post';
 
@@ -510,8 +554,10 @@ class Cuisine_Plugins {
 
 				//check if we are dealing with a post type overview or a single page:
 				if( ! empty( $posttype ) ){
+
+
 					//check if the post type is in the redirects list:
-					if( in_array( $posttype, $types ) ){
+					if( in_array( $posttype, $types ) || $posttype == 'page' ){
 							
 						//it's a page:
 						if( $posttype == 'page'){
@@ -519,11 +565,18 @@ class Cuisine_Plugins {
 							$pages = array_values( $this->redirect_list_types['page'] );
 
 							//we need to compare the post slug to the title in the query:
+							$queried_slug = $wp_query->post->post_name;
 
-							//we've verified that this is the page we are looking for, 
-							//redirect:
-							//locate_template( array( 'plugin-template/template-'.$page.'.php', 'page.php', 'index.php' ), true );
-							//die();
+							foreach( $pages as $slug => $page ){
+
+								if( $slug == $queried_slug ){
+
+									locate_template( array( 'plugin-template/template-'.$page.'.php', 'page.php', 'index.php' ), true );
+									die();
+								}
+
+							}
+
 
 						// else it's a post or post_type:
 						}else{
@@ -580,19 +633,26 @@ class Cuisine_Plugins {
 	function add_template_rewrites($rules) {
 		
 		$newrules = array();
-		$rewrites = $this->redirect_list;
+		$types = $this->redirect_list;
 
-		foreach( $rewrites as $rewrite ){
+		foreach( $types as $key => $type ){
 
-			$slug = $this->redirect_list_types[ $rewrite ];
 
-			$newrules[$rewrite.'/?$'] = 'index.php?post_type='.$slug;
-			$newrules[$rewrite.'/page/?([0-9]{1,})/?$'] = 'index.php?post_type='.$slug.'&paged=$matches[1]';
+			if( !empty( $type ) ){
+				foreach( $type as $rewrite ){
+
+					$slug = $this->redirect_list_types[$key][ $rewrite ];
+	
+					$newrules[$rewrite.'/?$'] = 'index.php?post_type='.$slug;
+					$newrules[$rewrite.'/page/?([0-9]{1,})/?$'] = 'index.php?post_type='.$slug.'&paged=$matches[1]';
+				}
+			}
 		}
 
 		return array_merge($newrules, $rules);
 	
 	}
+
 
 
 
@@ -621,5 +681,22 @@ class Cuisine_Plugins {
 
 		}
 	}
+
+
+
+	/**
+	*	CHECK THE PERMALINK STRUCTURE:
+	*/
+
+	function has_permalink_structure(){
+
+		//get the option:
+		$structure = get_option( 'permalink_structure', '' );
+
+		if( $structure == '/%postname%/' ) return true;
+
+		return false;
+
+	} 
 
 }?>
