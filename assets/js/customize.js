@@ -1,5 +1,5 @@
 jQuery(document).ready(function(){
-
+	/*
 	jQuery('#save').click(function(){
 
 		refreshIframe();
@@ -10,5 +10,8 @@ jQuery(document).ready(function(){
 	function refreshIframe(){
 		jQuery('#customize-preview iframe')[0].contentWindow.location = _wpCustomizeSettings.url.preview;
 	}
+	*/
 
+	
+	
 });

@@ -377,13 +377,24 @@ class Cuisine_Theme {
 		/* #######################################################################*/
 		/* Add the Script on the bottom of customize for live updates ============*/
 
-		add_action( 'customize_controls_init', array( &$this, 'theme_test') );
+		add_action( 'customize_controls_init', array( &$this, 'theme_customize_init') );
 
 	}
 
-	function theme_test(){
+	function theme_customize_init(){
 
 		global $cuisine;
+
+		/*
+			if( !$this->customizer_json )
+				$this->customizer_json = $this->generate_customizer_json( );
+
+			
+			wp_locate_script( 'test', 'controls', $this->customizer_json );
+
+
+		*/
+
 		wp_enqueue_script('test', $cuisine->asset_url.'/js/customize.js', false, false, true);
 	}
 
@@ -545,149 +556,34 @@ class Cuisine_Theme {
 	}
 
 
-	/*****************************************************************************/
-	/** THEME DEFAULTS ***********************************************************/
-	/*****************************************************************************/
+	function generate_customizer_json(){
 
-	/**
-	*	Basic things you can set up in a theme:
-	*/
-	function get_theme_defaults(){
+		if( !$this->js_customizers )
+			$this->js_customizers = $this->get_theme_customizers();
 
-		$fonts = cuisine_get_all_fonts();
-		$background_repeat = array('no-repeat' => 'Niet herhalen', 'repeat' => 'Herhalen', 'repeat-x' => 'Herhalen (horizontaal)', 'repeat-y' => 'Herhalen (verticaal)');
-	
-		$array = array(
-	
-			'body-background-image'				=> 'none',
-			'body-background-repeat' 			=> 'repeat',
-			'body-background-repeat-choices'	=> $background_repeat,
-			'header-image'				 		=> 'none',
-	
-			'logo-show-text'					=> '1',
-			
-			'body-background-color'				=> '#D7D3C6',
-			'container-background-color' 		=> '#F8F8F8',
-			'header-background-color'			=> '#DFDFDF',
-			'footer-background-color'			=> '#DFDFDF',
-		
-			'a-color'							=> '#3399FF',
-			'a-hover-color'						=> '#FF6633',
-			'a-visited-color'					=> '#3399FF',
-			'h1-font-family'					=> 'helvetica',
-			'h1-font-size'						=> '32px',
-			'h1-font-color'						=> '#333333',
-			'h2-font-family'					=> 'helvetica',
-			'h2-font-size'						=> '24px',
-			'h2-font-color'						=> '#333333',
-			'h3-font-family'					=> 'helvetica',
-			'h3-font-size'						=> '18px',
-			'h3-font-color'						=> '#333333',
-			'p-font-family'						=> 'helvetica',
-			'p-font-size'						=> '14px',
-			'p-font-color'						=> '#333333',
-			'h1-font-family-choices'			=> $fonts,
-			'h2-font-family-choices'			=> $fonts,
-			'h3-font-family-choices'			=> $fonts,
-			'p-font-family-choices'				=> $fonts,
-		
-			'logo-h1-color'						=> '#F8F8F8',
-			'logo-h1-background-color'			=> '#333333',
-			'logo-image'						=> 'none',
-		
-			'topmenu-background-color'			=> '#333333',
-			'topmenu-font-size'					=> '12px',
-		
-			'mainmenu-background-color'			=> '#333333',
-			'mainmenu-background-hover-color'	=> '#888888',
-			'mainmenu-font-size'				=> '16px',
-			'mainmenu-font-color'				=> '#F8F8F8',
-			'mainmenu-font-family'				=> 'helvetica',
-			'mainmenu-font-family-choices'		=> $fonts,
-			'footer-background-color'			=> '#F8F8F8',
-			'footer-color'						=> '#333333',
-			'sidebar-background-color'			=> 'transparent',
-			'sidebar-color'						=> '#333333',
-	
-			'button-color'						=> '#F8F8F8',
-			'button-hover-color'				=> '#333333',
-			'button-background-color'			=> '#333333',
-			'button-hover-background-color'		=> '#F8F8F8',
-			'button-icon'						=> 'white',
-			'button-icon-choices'				=> array( 'white' => 'Wit', 'black' => 'Zwart' )
-	
-		);
 
-		//enable themes to customly override it::
-		$array = apply_filters( 'cuisine_default_theme_options', $array );
+		if( empty( $this->js_customizers ) ) return '';
 
-		return $array;
 
+		$json = '{"Controls":{[';
+
+		foreach( $this->js_customizers as $key => $cu ){
+
+			$json .= '{"control":{[';
+				$json .= '{"id":"'.$key.'"},';
+				$json .= '{"element":"'.$cu['object'].'"},';
+				$json .= '{"property":"'.$cu['property'].'"}';
+			$json .= ']}},';
+
+		}
+
+		//remove trailing comma:
+		$json = substr( $json, 0, -1 );
+
+		$json .= ']}}';
+
+		return $json;
 	}
-
-
-	/**
-	*	Theme default JavaScript properties (for auto refresh )
-	*/
-
-	function get_theme_customizers(){
-
-		$array = array(
-	
-			'body-background-image'				=> array( 'object' => 'body', 'property' => 'background-image' ),
-			'body-background-repeat' 			=> array( 'object' => 'body', 'property' => 'background-repeat' ),
-			'header-image'				 		=> array( 'object' => '#header', 'property' => 'background-image' ),
-			'body-background-color'				=> array( 'object' => 'body', 'property' => 'background-color' ),
-			'container-background-color' 		=> array( 'object' => '#container', 'property' => 'background-color' ),
-			'header-background-color'			=> array( 'object' => '#header', 'property' => 'background-color' ),
-			'footer-background-color'			=> array( 'object' => '#footer', 'property' => 'background-color' ),
-		
-			'a-color'							=> array( 'object' => 'a', 'property' => 'color' ),
-			'h1-font-family'					=> array( 'object' => 'h1', 'property' => 'font-family' ),
-			'h1-font-size'						=> array( 'object' => 'h1', 'property' => 'font-size' ),
-			'h1-font-color'						=> array( 'object' => 'h1', 'property' => 'color' ),
-			'h2-font-family'					=> array( 'object' => 'h2', 'property' => 'font-family' ),
-			'h2-font-size'						=> array( 'object' => 'h2', 'property' => 'font-size' ),
-			'h2-font-color'						=> array( 'object' => 'h2', 'property' => 'color' ),
-			'h3-font-family'					=> array( 'object' => 'h3', 'property' => 'font-family' ),
-			'h3-font-size'						=> array( 'object' => 'h3', 'property' => 'font-size' ),
-			'h3-font-color'						=> array( 'object' => 'h3', 'property' => 'color' ),
-			'p-font-family'						=> array( 'object' => 'p', 'property' => 'font-family' ),
-			'p-font-size'						=> array( 'object' => 'p', 'property' => 'font-size' ),
-			'p-font-color'						=> array( 'object' => 'p', 'property' => 'color' ),
-		
-			'logo-h1-color'						=> array( 'object' => '#logo h1', 'property' => 'color' ),
-			'logo-h1-background-color'			=> array( 'object' => '#logo h1', 'property' => 'background-color' ),
-		
-			'topmenu-background-color'			=> array( 'object' => '#topmenu', 'property' => 'background-color' ),
-			'topmenu-font-size'					=> array( 'object' => '#topmenu', 'property' => 'font-size' ),
-		
-			'mainmenu-background-color'			=> '#333333',
-			'mainmenu-background-hover-color'	=> '#888888',
-			'mainmenu-font-size'				=> '16px',
-			'mainmenu-font-color'				=> '#F8F8F8',
-			'mainmenu-font-family'				=> 'helvetica',
-			'mainmenu-font-family-choices'		=> $fonts,
-			'footer-background-color'			=> '#F8F8F8',
-			'footer-color'						=> '#333333',
-			'sidebar-background-color'			=> 'transparent',
-			'sidebar-color'						=> '#333333',
-	
-			'button-color'						=> '#F8F8F8',
-			'button-hover-color'				=> '#333333',
-			'button-background-color'			=> '#333333',
-			'button-hover-background-color'		=> '#F8F8F8',
-			'button-icon'						=> 'white',
-			'button-icon-choices'				=> array( 'white' => 'Wit', 'black' => 'Zwart' )
-	
-		);
-
-		//enable themes to customly override it::
-		$array = apply_filters( 'cuisine_theme_customizers', $array );
-
-		return $array;
-	}
-
 
 
 
@@ -1050,6 +946,144 @@ class Cuisine_Theme {
 		return $fonts;
 	}
 
+
+
+
+	/*****************************************************************************/
+	/** THEME DEFAULTS ***********************************************************/
+	/*****************************************************************************/
+
+	/**
+	*	Basic things you can set up in a theme:
+	*/
+	function get_theme_defaults(){
+
+		$fonts = cuisine_get_all_fonts();
+		$background_repeat = array('no-repeat' => 'Niet herhalen', 'repeat' => 'Herhalen', 'repeat-x' => 'Herhalen (horizontaal)', 'repeat-y' => 'Herhalen (verticaal)');
+	
+		$array = array(
+	
+			'body-background-image'				=> 'none',
+			'body-background-repeat' 			=> 'repeat',
+			'body-background-repeat-choices'	=> $background_repeat,
+			'header-image'				 		=> 'none',
+	
+			'logo-show-text'					=> '1',
+			
+			'body-background-color'				=> '#D7D3C6',
+			'container-background-color' 		=> '#F8F8F8',
+			'header-background-color'			=> '#DFDFDF',
+			'footer-background-color'			=> '#DFDFDF',
+		
+			'a-color'							=> '#3399FF',
+			'a-hover-color'						=> '#FF6633',
+			'a-visited-color'					=> '#3399FF',
+			'h1-font-family'					=> 'helvetica',
+			'h1-font-size'						=> '32px',
+			'h1-font-color'						=> '#333333',
+			'h2-font-family'					=> 'helvetica',
+			'h2-font-size'						=> '24px',
+			'h2-font-color'						=> '#333333',
+			'h3-font-family'					=> 'helvetica',
+			'h3-font-size'						=> '18px',
+			'h3-font-color'						=> '#333333',
+			'p-font-family'						=> 'helvetica',
+			'p-font-size'						=> '14px',
+			'p-font-color'						=> '#333333',
+			'h1-font-family-choices'			=> $fonts,
+			'h2-font-family-choices'			=> $fonts,
+			'h3-font-family-choices'			=> $fonts,
+			'p-font-family-choices'				=> $fonts,
+		
+			'logo-h1-color'						=> '#F8F8F8',
+			'logo-h1-background-color'			=> '#333333',
+			'logo-image'						=> 'none',
+		
+			'topmenu-background-color'			=> '#333333',
+			'topmenu-font-size'					=> '12px',
+		
+			'mainmenu-background-color'			=> '#333333',
+			'mainmenu-background-hover-color'	=> '#888888',
+			'mainmenu-font-size'				=> '16px',
+			'mainmenu-font-color'				=> '#F8F8F8',
+			'mainmenu-font-family'				=> 'helvetica',
+			'mainmenu-font-family-choices'		=> $fonts,
+			'footer-background-color'			=> '#F8F8F8',
+			'footer-color'						=> '#333333',
+			'sidebar-background-color'			=> 'transparent',
+			'sidebar-color'						=> '#333333',
+	
+			'button-color'						=> '#F8F8F8',
+			'button-hover-color'				=> '#333333',
+			'button-background-color'			=> '#333333',
+			'button-hover-background-color'		=> '#F8F8F8',
+			'button-icon'						=> 'white',
+			'button-icon-choices'				=> array( 'white' => 'Wit', 'black' => 'Zwart' )
+	
+		);
+
+		//enable themes to customly override it::
+		$array = apply_filters( 'cuisine_default_theme_options', $array );
+
+		return $array;
+
+	}
+
+
+	/**
+	*	Theme default JavaScript properties (for auto refresh )
+	*/
+
+	function get_theme_customizers(){
+
+		$array = array(
+	
+			'body-background-image'				=> array( 'object' => 'body', 'property' => 'background-image' ),
+			'body-background-repeat' 			=> array( 'object' => 'body', 'property' => 'background-repeat' ),
+			'header-image'				 		=> array( 'object' => '#header', 'property' => 'background-image' ),
+			'body-background-color'				=> array( 'object' => 'body', 'property' => 'background-color' ),
+			'container-background-color' 		=> array( 'object' => '#container', 'property' => 'background-color' ),
+			'header-background-color'			=> array( 'object' => '#header', 'property' => 'background-color' ),
+			'footer-background-color'			=> array( 'object' => '#footer', 'property' => 'background-color' ),
+		
+			'a-color'							=> array( 'object' => 'a', 'property' => 'color' ),
+			'h1-font-family'					=> array( 'object' => 'h1', 'property' => 'font-family' ),
+			'h1-font-size'						=> array( 'object' => 'h1', 'property' => 'font-size' ),
+			'h1-font-color'						=> array( 'object' => 'h1', 'property' => 'color' ),
+			'h2-font-family'					=> array( 'object' => 'h2', 'property' => 'font-family' ),
+			'h2-font-size'						=> array( 'object' => 'h2', 'property' => 'font-size' ),
+			'h2-font-color'						=> array( 'object' => 'h2', 'property' => 'color' ),
+			'h3-font-family'					=> array( 'object' => 'h3', 'property' => 'font-family' ),
+			'h3-font-size'						=> array( 'object' => 'h3', 'property' => 'font-size' ),
+			'h3-font-color'						=> array( 'object' => 'h3', 'property' => 'color' ),
+			'p-font-family'						=> array( 'object' => 'p', 'property' => 'font-family' ),
+			'p-font-size'						=> array( 'object' => 'p', 'property' => 'font-size' ),
+			'p-font-color'						=> array( 'object' => 'p', 'property' => 'color' ),
+		
+			'logo-h1-color'						=> array( 'object' => '#logo h1', 'property' => 'color' ),
+			'logo-h1-background-color'			=> array( 'object' => '#logo h1', 'property' => 'background-color' ),
+		
+			'topmenu-background-color'			=> array( 'object' => '#topmenu', 'property' => 'background-color' ),
+			'topmenu-font-size'					=> array( 'object' => '#topmenu', 'property' => 'font-size' ),
+		
+			'mainmenu-background-color'			=> array( 'object' => '#mainmenu', 'property' => 'background-color' ),
+			'mainmenu-font-size'				=> array( 'object' => '#mainmenu', 'property' => 'font-size' ),
+			'mainmenu-font-color'				=> array( 'object' => '#mainmenu', 'property' => 'color' ),
+			'mainmenu-font-family'				=> array( 'object' => '#mainmenu', 'property' => 'font-family' ),
+			'footer-background-color'			=> array( 'object' => '#footer', 'property' => 'background-color' ),
+			'footer-color'						=> array( 'object' => '#footer', 'property' => 'color' ),
+			'sidebar-background-color'			=> array( 'object' => '#sidebar', 'property' => 'background-color' ),
+			'sidebar-color'						=> array( 'object' => '#sidebar', 'property' => 'color' ),
+	
+			'button-color'						=> array( 'object' => '.button', 'property' => 'color' ),
+			'button-background-color'			=> array( 'object' => '.button', 'property' => 'background-color' )	
+		);
+
+		//enable themes to customly override it::
+		$array = apply_filters( 'cuisine_theme_customizers', $array );
+
+		return $array;
+	}
 
 
 }

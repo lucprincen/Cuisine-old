@@ -61,11 +61,11 @@ body.simple-view #wp-content-editor-tools{display:none;}
 body.simple-view #wp-content-editor-container{background:#ffffff;}
 
 	/* button of god */
-	.cuisine_toggle_button{padding:10px 15px 10px 15px;background:#f3f2ed;border:1px solid #aeaca3; position:absolute;z-index:999;top:-28px;right:10%;color:#333;text-decoration:none;border-bottom-left-radius:10px;border-bottom-right-radius:10px;}
-	.cuisine_toggle_button:hover{background:#ccc;}
+	.cuisine_toggle_button{padding:10px 15px 10px 15px;background:#f3f2ed;box-shadow:0 1px 0px #e4e3df, 0 2px 0px #aeaca3;border:1px solid #aeaca3; position:absolute;z-index:999;top:-28px;right:10%;color:#333;text-decoration:none;border-bottom-left-radius:10px;border-bottom-right-radius:10px;}
+	.cuisine_toggle_button:hover{background:#ccc;box-shadow:0 1px 0px #aeaca3, 0 2px 0px #bbb;}
 
 	/* Back button */
-	.cuisine_back_button{position:absolute;top:50px;left:0px;height:20px;padding:10px 15px 10px 5px;background:#f3f2ed;color:#aeaca3;border:1px solid #aeaca3;border-top-right-radius:10px;border-bottom-right-radius:10px;font-size:18px;text-transform:uppercase;text-decoration:none;text-shadow:inset 0 1px 3px rgba(0,0,0,.2);box-shadow:1px 1px 2px #aeaca3;}
+	.cuisine_back_button{position:fixed;top:50px;left:0px;height:20px;padding:10px 15px 10px 5px;background:#f3f2ed;color:#aeaca3;border:1px solid #aeaca3;border-top-right-radius:10px;border-bottom-right-radius:10px;font-size:18px;text-transform:uppercase;text-decoration:none;text-shadow:inset 0 1px 3px rgba(0,0,0,.2);box-shadow:1px 1px 2px #aeaca3;}
 	.cuisine_back_button:hover{background:#e5e4df;}
 	.cuisine_back_button img{padding:0 10px 0 0;float:left;}
 	.cuisine_back_button span{margin-top:2px;float:left;}
