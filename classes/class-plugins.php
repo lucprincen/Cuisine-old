@@ -571,7 +571,7 @@ class Cuisine_Plugins {
 
 								if( $slug == $queried_slug ){
 
-									locate_template( array( 'plugin-template/template-'.$page.'.php', 'page.php', 'index.php' ), true );
+									locate_template( array( 'plugin-templates/template-'.$page.'.php', 'page.php', 'index.php' ), true );
 									die();
 								}
 
