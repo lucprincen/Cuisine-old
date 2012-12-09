@@ -15,7 +15,10 @@
 	function cuisine_simple_ui_init(){
 		
 		// first get the cuisine settings:
-		$settings = get_cuisine_setting( 'simple_view' );?>
+		$settings = get_cuisine_setting( 'simple_view' );
+
+		do_action( 'cuisine_before_simple_view' );
+		?>
 
 		<div class="cuisine-simple-view-wrapper">
 
@@ -87,9 +90,31 @@
 
 				</div>
 
-<?php 		} //plugins empty check ?>
+<?php 		} //plugins empty check
+			
+			// allow plugins to create there own collection of icons:
+			$collections = apply_filters( 'cuisine_simple_view_collections', array() );
+
+			if( !empty( $collections ) ):
+			  foreach( $collections as $collection ):?>
+			  <div class="cuisine-collection">
+			  	<h2 class="cuisine-collection-title"><?php echo $collection['title'];?></h2>
+
+			  	<?php foreach( $collection['items'] as $item ):?>
+			  		<a class="cuisine-item" href="<?php cuisine_get_icon_link( $item );?>"  style="width:<?php echo $settings['icon_size']?>px !important">
+						<div class="page-icon">
+							<img src="<?php cuisine_simple_view_icon( $item );?>"/>
+						</div>
+						<strong><?php echo $item['Title']?></strong>
+					</a>
+			  	<?php endforeach;?>
+			  </div>
+		<?php endforeach; endif; ?>
+			
+		<?php do_action( 'cuisine_simple_view_after_collections' );?>
 
 		</div><!-- simple-view-wrapper -->
+		<?php do_action( 'cuisine_after_simple_view' );?>
 <?php
 
 	}
@@ -149,6 +174,8 @@
 	function cuisine_simple_view_back_url(){
 
 		global $pagenow, $cuisine;
+
+		do_action( 'cuisine_simple_view_back_url' );
 
 		if( $pagenow == 'post-new.php'){
 

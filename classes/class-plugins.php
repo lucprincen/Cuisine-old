@@ -20,6 +20,8 @@ class Cuisine_Plugins {
 	var $redirect_list = array();
 	var $redirect_list_types = array();
 
+
+
 	function __construct(){
 
 		// the plugin_main_menu_items contain arrays for which pluginmenu's to add on the main admin_menu hook
@@ -38,7 +40,6 @@ class Cuisine_Plugins {
 		add_action( 'save_post', array( &$this, 'do_save_post' ) );
 
 	}
-
 
 
 
@@ -124,6 +125,7 @@ class Cuisine_Plugins {
 	/**
 	*	Save a post with the data registered to save
 	*/
+
 	function do_save_post( $post_id ){
 
 
@@ -192,9 +194,11 @@ class Cuisine_Plugins {
 	}
 
 
+
 	/**
 	*	SAVES A SINGLE PIECE OF METADATA:
 	*/
+
 	function save_meta_to_post( $post_id, $item ){
 		$values = $this->sanitize_values( $item['value'] );
 					
@@ -209,9 +213,11 @@ class Cuisine_Plugins {
 	}
 
 
+
 	/**
 	*	Generate a custom nonce name using the post id or the current php page:
 	*/
+
 	function get_nonce_name(){
 
 		if( isset( $_GET['post'] ) ){
@@ -231,6 +237,7 @@ class Cuisine_Plugins {
 	/**
 	*	Show a nonce on the specific page:
 	*/
+
 	function get_plugin_nonce(){
 
 		if( !$this->has_nonce( $this->get_nonce_name() ) )
@@ -242,6 +249,7 @@ class Cuisine_Plugins {
 	/**
 	*	Check if a nonce already exists:
 	*/
+
 	function has_nonce( $nonce_name ){
 
 		if( in_array( $nonce_name, $this->nonce_list ) ){
@@ -258,6 +266,7 @@ class Cuisine_Plugins {
 	/**
 	*	Add default values to the meta array:
 	*/
+
 	function sanitize_meta( $meta ){
 
 		//check if there's a title set:
@@ -296,6 +305,7 @@ class Cuisine_Plugins {
 	/**
 	*	Wrap all variables in $_POST[]
 	*/
+
 	function sanitize_values( $values ){
 		
 		$array = array();
@@ -358,6 +368,7 @@ class Cuisine_Plugins {
 	 /**
 	 * Add a single plugin options or main menuitem:
 	 */
+
 	function add_plugin_menu_items(){
 
 		// FIRST, THE MAIN MENU:
@@ -403,6 +414,7 @@ class Cuisine_Plugins {
 	/**
 	*	Creates a neat array of menu-items and fills in the blanks.
 	*/
+
 	function sanitize_menuitems($menu, $func = null){
 		if( empty($menu['label']) ){
 			$menu['label'] = $menu['title'];
@@ -433,6 +445,7 @@ class Cuisine_Plugins {
 	 /**
 	 * Register a plugin submenu:
 	 */
+
 	 function add_plugin_submenu(){
 
 	 }
@@ -447,6 +460,7 @@ class Cuisine_Plugins {
 	 /**
 	 * Register a redirect domain:
 	 */
+
 	function register_template_redirect( $slug, $type = null, $post_type = null, $page_object = array() ){
 
 		//add the slug to the redirect list:
@@ -483,6 +497,7 @@ class Cuisine_Plugins {
 	}
 
 
+
 	/**
 	*	Add a page, if it doesn't exist yet:
 	*/
@@ -511,6 +526,7 @@ class Cuisine_Plugins {
 	/**
 	*	Sanitize the page object:
 	*/
+
 	function sanitize_page_object( $slug, $object ){
 
 		if( empty( $object['post_title'] ) )
@@ -563,13 +579,15 @@ class Cuisine_Plugins {
 						if( $posttype == 'page' ){
 							
 							$pages = $this->redirect_list_types['page'];
+
 							//we need to compare the post slug to the title in the query:
 							$queried_slug = $wp_query->post->post_name;
 
 							foreach( $pages as $slug => $page ){
 
 								if( $slug == $queried_slug ){
-
+									echo $slug .' -- '. $queried_slug;
+									die();
 									locate_template( array( 'plugin-templates/template-'.$page.'.php', 'page.php', 'index.php' ), true );
 									die();
 								}
@@ -629,6 +647,7 @@ class Cuisine_Plugins {
 	 /**
 	 *	Add all template rewrites:
 	 */
+
 	function add_template_rewrites($rules) {
 		
 		$newrules = array();
