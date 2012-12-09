@@ -560,10 +560,9 @@ class Cuisine_Plugins {
 					if( in_array( $posttype, $types ) || $posttype == 'page' ){
 							
 						//it's a page:
-						if( $posttype == 'page'){
-
-							$pages = array_values( $this->redirect_list_types['page'] );
-
+						if( $posttype == 'page' ){
+							
+							$pages = $this->redirect_list_types['page'];
 							//we need to compare the post slug to the title in the query:
 							$queried_slug = $wp_query->post->post_name;
 
@@ -665,18 +664,26 @@ class Cuisine_Plugins {
 		if( is_admin() ){
 
 			$rewrites = $this->redirect_list;
+			$rewritestring = '';
+
+			if( !empty( $rewrites ) ){
+				foreach( $rewrites as $rewrite ){
+					$rewritestring .= implode('|', $rewrite ).'|';
+				}
+			}
 
 			//check if there are new redirects:
 			$redirects = get_cuisine_setting( 'rewrites' );
 
-			if( empty( $redirects ) || $redirects != implode('|', $rewrites ) ){
+
+			if( empty( $redirects ) || $redirects != $rewritestring ){
 
 				//then flush the rewrite rules:
 				global $wp_rewrite;
 				$wp_rewrite->flush_rules();
 
 				//and update the redirects options:
-				update_cuisine_setting( 'rewrites', implode('|', $rewrites ) );
+				update_cuisine_setting( 'rewrites', $rewritestring );
 			}
 
 		}

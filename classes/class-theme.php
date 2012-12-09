@@ -13,6 +13,8 @@ class Cuisine_Theme {
 
 	var $theme_customization_sections;
 	var $theme_customization_controls;
+	var $customizer_json;
+	var $js_customizers;
 
 	var $theme_scripts_to_query;
 
@@ -26,6 +28,9 @@ class Cuisine_Theme {
 		$this->theme_custimization_sections = array();
 		$this->theme_custimization_controls = array();
 
+		$this->customizer_json = ''; 
+		$this->js_customizers = array();
+
 		$this->theme_scripts_to_query = array();
 	}
 
@@ -34,6 +39,10 @@ class Cuisine_Theme {
 
 		if( is_admin() ) $this->init_theme_admin();
 		if( !is_admin() ) $this->init_theme_frontend();
+
+		//setup the theme editor:
+		$this->setup_theme_editor();
+
 
 		return false;
 
@@ -51,8 +60,6 @@ class Cuisine_Theme {
 	function init_theme_admin(){
 
 		if( $this->is_cuisine_enabled_theme() ){
-			//setup the theme editor:
-			$this->setup_theme_editor();
 
 			//setup links to the customizer:
 			$this->setup_customizer_links();
@@ -138,7 +145,7 @@ class Cuisine_Theme {
     *	After that, add the ones generated from the theme itself.
     */
 	
-	function cuisine_setup_theme_customizer($wp_customize) {
+	function cuisine_setup_theme_customizer( $wp_customize ) {
 
 		/* ##########################################################*/
 		/* Sections =================================================*/
@@ -377,7 +384,11 @@ class Cuisine_Theme {
 		/* #######################################################################*/
 		/* Add the Script on the bottom of customize for live updates ============*/
 
-		add_action( 'customize_controls_init', array( &$this, 'theme_customize_init') );
+		global $wp_customize;
+
+		if( $wp_customize->is_preview() && !is_admin() )
+			add_action( 'wp_footer', array( &$this, 'theme_customize_init') );
+
 
 	}
 
@@ -385,17 +396,15 @@ class Cuisine_Theme {
 
 		global $cuisine;
 
-		/*
+		
 			if( !$this->customizer_json )
 				$this->customizer_json = $this->generate_customizer_json( );
 
-			
-			wp_locate_script( 'test', 'controls', $this->customizer_json );
+		
 
+		wp_enqueue_script( 'cuisine_customizer', $cuisine->asset_url.'/js/customize.js', false, false, true);
+		wp_localize_script( 'cuisine_customizer', 'controls_object', $this->customizer_json );
 
-		*/
-
-		wp_enqueue_script('test', $cuisine->asset_url.'/js/customize.js', false, false, true);
 	}
 
 
@@ -565,24 +574,17 @@ class Cuisine_Theme {
 		if( empty( $this->js_customizers ) ) return '';
 
 
-		$json = '{"Controls":{[';
+		$json = array();
 
 		foreach( $this->js_customizers as $key => $cu ){
+			$arr = array();
 
-			$json .= '{"control":{[';
-				$json .= '{"id":"'.$key.'"},';
-				$json .= '{"element":"'.$cu['object'].'"},';
-				$json .= '{"property":"'.$cu['property'].'"}';
-			$json .= ']}},';
-
+			$arr['control'] = array( 'id' => $key, 'element' => $cu['object'], 'property' => $cu['property'] );
+			$json[] = $arr;
 		}
 
-		//remove trailing comma:
-		$json = substr( $json, 0, -1 );
-
-		$json .= ']}}';
-
-		return $json;
+		//turn into a json object:
+		return json_encode( $json );
 	}
 
 
@@ -686,6 +688,7 @@ class Cuisine_Theme {
 
 		//add the registered scripts to the footer:
 		add_action( 'wp_footer', array( &$this, 'enqueue_registered_scripts' )  );
+
 
 	}
 
@@ -1064,12 +1067,13 @@ class Cuisine_Theme {
 			'logo-h1-background-color'			=> array( 'object' => '#logo h1', 'property' => 'background-color' ),
 		
 			'topmenu-background-color'			=> array( 'object' => '#topmenu', 'property' => 'background-color' ),
-			'topmenu-font-size'					=> array( 'object' => '#topmenu', 'property' => 'font-size' ),
+			'topmenu-font-size'					=> array( 'object' => '#topmenu a', 'property' => 'font-size' ),
 		
 			'mainmenu-background-color'			=> array( 'object' => '#mainmenu', 'property' => 'background-color' ),
-			'mainmenu-font-size'				=> array( 'object' => '#mainmenu', 'property' => 'font-size' ),
-			'mainmenu-font-color'				=> array( 'object' => '#mainmenu', 'property' => 'color' ),
-			'mainmenu-font-family'				=> array( 'object' => '#mainmenu', 'property' => 'font-family' ),
+			'mainmenu-background-hover-color'	=> array( 'object' => '#mainmenu .current_page_item a', 'property' => 'background-color' ),
+			'mainmenu-font-size'				=> array( 'object' => '#mainmenu a', 'property' => 'font-size' ),
+			'mainmenu-font-color'				=> array( 'object' => '#mainmenu a', 'property' => 'color' ),
+			'mainmenu-font-family'				=> array( 'object' => '#mainmenu a', 'property' => 'font-family' ),
 			'footer-background-color'			=> array( 'object' => '#footer', 'property' => 'background-color' ),
 			'footer-color'						=> array( 'object' => '#footer', 'property' => 'color' ),
 			'sidebar-background-color'			=> array( 'object' => '#sidebar', 'property' => 'background-color' ),
