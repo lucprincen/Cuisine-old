@@ -1,7 +1,11 @@
 <?php
 
 	/**
-	*	Annoying little hack to maintain clean code when we use WordPress' Recent comments widget:
+	*	Annoying little hack to maintain clean code when we use WordPress' Recent comments widget,
+	*	The css is in the Chef du Web theme's reset file
+	*
+ 	* @access public
+	* @return void
 	*/
 
 	add_action( 'widgets_init', 'chef_remove_recent_comments_style' );

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Cuisine
  * Plugin URI: http://www.chefduweb.nl/cuisine/
- * Description: Cuisine contains the basic framework for Chef du Web. It provides the simple admin and theme / admin / plugin communication
+ * Description: Cuisine contains the basic framework for Chef du Web. Comunication between plugins and themes and loads of admin & frontend helpers
  * Version: 1.1
  * Author: Chef du Web
  * Author URI: http://www.chefduweb.nl

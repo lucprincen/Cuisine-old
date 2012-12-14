@@ -11,6 +11,9 @@
 
 	/**
 	* Get the simple view UI:
+	*
+ 	* @access public
+	* @return html
 	*/
 	function cuisine_simple_ui_init(){
 		
@@ -122,6 +125,9 @@
 
 	/**
 	*	Get Icon link:
+	*
+ 	* @access public
+	* @return url
 	*/
 	
 	function cuisine_get_icon_link( $plugin ){
@@ -138,6 +144,9 @@
 
 	/**
 	* 	Get the simple view Button:
+	*
+ 	* @access public
+	* @return html
 	*/
 
 	function cuisine_simple_view_button(){
@@ -154,6 +163,9 @@
 
 	/**
 	*	Add the Simple view back button:
+	*
+ 	* @access public
+	* @return html
 	*/
 
 	function cuisine_simple_view_back_button(){
@@ -169,6 +181,9 @@
 
 	/**
 	*	Generate the back url:
+	*
+ 	* @access public
+	* @return url
 	*/
 
 	function cuisine_simple_view_back_url(){
@@ -202,32 +217,65 @@
 
 	/**
 	*	Get icons for specific blocks:
+	*
+ 	* @access public
+	* @return url
 	*/
 
 	function cuisine_simple_view_icon( $obj ){
 
-		//check if it's a page:
-		if( isset( $obj->post_type ) && $obj->post_type == 'page' ){
+		$done_by_filter = false; 
 
-			global $cuisine;
-			//now we have to delve deeper:
-			if( $obj->post_name == 'home' ){
-				 echo $cuisine->asset_url.'/images/home-icon.png';
-			
-			}else if( $obj->post_name == 'contact' ){
-				echo $cuisine->asset_url.'/images/contact-icon.png';
+		//First, check if there's a plugin wantin' a piece of this action:
+		if( has_filter( 'cuisine_simple_view_icon' ) ){
 
-			}else{
-				echo $cuisine->asset_url.'/images/page-icon.png';
+			$icons = apply_filters( 'cuisine_simple_view_icon', $obj );
+
+			//check if there's an icon for the current object:
+			if( isset( $icons[ $obj->post_name] ) ){
+				
+				//yes it is, don't look any further
+				$done_by_filter = true;
+
+				//and echo the damn thing:
+				echo $icons[ $obj->post_name ];
 
 			}
+		}
 
 
-		}else{
+		//else, we'll get the icon via cuisine or a cuisine registered plugin:
+		if( !$done_by_filter ){
 
-			//get the icon:
-			if( isset($obj['icon'] ) ){
-				echo $obj['icon'];
+			//check if it's a page:
+			if( isset( $obj->post_type ) && $obj->post_type == 'page' ){
+	
+				global $cuisine;
+				//now we have to delve deeper:
+				if( $obj->post_name == 'home' ){
+					 echo $cuisine->asset_url.'/images/home-icon.png';
+				
+				}else if( $obj->post_name == 'contact' ){
+					echo $cuisine->asset_url.'/images/contact-icon.png';
+	
+				}else{
+					echo $cuisine->asset_url.'/images/page-icon.png';
+	
+				}
+	
+			//it's from a plugin
+			}else{
+	
+				//check if there's an icon set:
+				if( isset($obj['icon'] ) ){
+
+					echo $obj['icon'];
+				
+				}else{
+					//else, use the default:
+					echo $cuisine->asset_url.'/images/page-icon.png';
+
+				}
 			}
 		}
 	}
@@ -236,6 +284,9 @@
 
 	/**
 	*	Output the UI for the overview page:
+	*
+ 	* @access public
+	* @return css
 	*/
 	function cuisine_simple_ui_overview(){
 		

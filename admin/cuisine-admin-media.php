@@ -11,6 +11,12 @@
  * @package 	Cuisine
  */
 
+	/**
+	*	SETUP A META BOX FOR MEDIA
+	*
+ 	* @access public
+	* @return void
+	*/
 
 	function cuisine_media_init( $post_type, $include = array( 'image', 'video', 'text' ), $label = '' ){
 
@@ -36,6 +42,12 @@
 			$cuisine->plugins->add_plugin_meta( $meta );
 	}
 
+	/**
+	*	RETURN THE HTML FOR THE METABOX
+	*
+ 	* @access public
+	* @return void
+	*/
 
 	function cuisine_media_html(){
 
@@ -135,7 +147,12 @@
 
 	}
 
-
+	/**
+	*	GET THE MEDIA POST META OBJECT:
+	*
+ 	* @access public
+	* @return void
+	*/
 
 	function cuisine_get_media( $pid = null, $posttype = null ){
 

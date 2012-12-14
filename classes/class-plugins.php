@@ -504,13 +504,15 @@ class Cuisine_Plugins {
 
 	function register_page_object( $slug, $object = array() ){
 
+		//fill in the blanks:
 		$object = $this->sanitize_page_object( $slug, $object );
 
+		//check if the page exists:
 		$page_id = get_page_by_title( $slug );
 
+		//if it doesn't, create the page:
 		if($page_id == null){
 				
-
 			wp_insert_post(array(
 				'post_title' 	=> $object['post_title'],
 				'post_content'	=> $object['post_content'],
@@ -576,24 +578,28 @@ class Cuisine_Plugins {
 					if( in_array( $posttype, $types ) || $posttype == 'page' ){
 							
 						//it's a page:
-						if( $posttype == 'page' ){
+						if( $posttype == 'page' && !empty( $this->redirect_list_types['page'] ) ){
 							
 							$pages = $this->redirect_list_types['page'];
 
 							//we need to compare the post slug to the title in the query:
 							$queried_slug = $wp_query->post->post_name;
 
+							//loop through the pages in the redirect array:
 							foreach( $pages as $slug => $page ){
 
+								//the page is the same as the queried object, we are redirecting:
 								if( $slug == $queried_slug ){
-									echo $slug .' -- '. $queried_slug;
-									die();
-									locate_template( array( 'plugin-templates/template-'.$page.'.php', 'page.php', 'index.php' ), true );
+
+									//create a template name out of the slug;
+									$template_file = str_replace(' ', '-', strtolower( $page ) );
+
+									//locate the template:
+									locate_template( array( 'plugin-templates/template-'.$template_file.'.php', 'page.php', 'index.php' ), true );
 									die();
 								}
 
 							}
-
 
 						// else it's a post or post_type:
 						}else{
@@ -626,18 +632,7 @@ class Cuisine_Plugins {
 							}
 						}
 					}
-				}else{
-
-					//we are dealing with another sort of array:
-					
-						//$relurl = str_replace( $cuisine->site_url, '', )
-						//$posttype = 
-
-
 				}
-
-
-
 			}
 		}
 	 }
@@ -653,20 +648,26 @@ class Cuisine_Plugins {
 		$newrules = array();
 		$types = $this->redirect_list;
 
+		//for all registered types:
 		foreach( $types as $key => $type ){
 
-
+			// if the type isn't empty:
 			if( !empty( $type ) ){
+
+				//loop through the rewrites in the type:
 				foreach( $type as $rewrite ){
 
+					//get the slug:
 					$slug = $this->redirect_list_types[$key][ $rewrite ];
-	
+		
+					//add the new rule:
 					$newrules[$rewrite.'/?$'] = 'index.php?post_type='.$slug;
 					$newrules[$rewrite.'/page/?([0-9]{1,})/?$'] = 'index.php?post_type='.$slug.'&paged=$matches[1]';
 				}
 			}
-		}
+		}	
 
+		//and add the new rules to the existing template rewrites:
 		return array_merge($newrules, $rules);
 	
 	}
@@ -680,11 +681,13 @@ class Cuisine_Plugins {
 
 	function flush_rewrites(){
 
+		//if we're in the admin:
 		if( is_admin() ){
 
 			$rewrites = $this->redirect_list;
 			$rewritestring = '';
 
+			//create the rewrite string:
 			if( !empty( $rewrites ) ){
 				foreach( $rewrites as $rewrite ){
 					$rewritestring .= implode('|', $rewrite ).'|';

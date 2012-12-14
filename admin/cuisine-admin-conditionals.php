@@ -12,6 +12,9 @@
 
 	/**
 	*	Check the Cuisine session:
+	*
+ 	* @access public
+	* @return boolean
 	*/
 
 	function cuisine_is_valid_session(){

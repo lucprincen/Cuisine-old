@@ -10,7 +10,12 @@
  * @package 	Cuisine
  */
 
-	// get comments
+	/**
+	* get comments
+	*
+ 	* @access public
+	* @return html
+	*/
 	function cuisine_comment( $comment, $args, $depth ) {
 		
 		$GLOBALS['comment'] = $comment;

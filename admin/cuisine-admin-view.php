@@ -11,6 +11,9 @@
 
 	/**
 	* Get the simple view status:
+	*
+ 	* @access public
+	* @return string
 	*/
 
 	function cuisine_get_simple_view(){
@@ -19,6 +22,9 @@
 
 	/**
 	* Check if the simple view is active (users who can't toggle_admin_mode, will always get a simple view):
+	*
+ 	* @access public
+	* @return boolean
 	*/
 
 	function cuisine_simple_view_is_active(){
@@ -36,6 +42,9 @@
 
 	/**
 	* Check if the simpel view is toggled:
+	*
+ 	* @access public
+	* @return void
 	*/
 
 	function cuisine_check_toggle_simple_view(){
@@ -69,6 +78,9 @@
 
 	/**
 	* Update the simpleview option:
+	*
+ 	* @access public
+	* @return boolean
 	*/
 
 	function cuisine_update_simple_view( $value ){
@@ -78,6 +90,9 @@
 
 	/**
 	* Check to see if the simpleview exists:
+	*
+ 	* @access public
+	* @return boolean
 	*/
 
 	function cuisine_simple_view_exists(){

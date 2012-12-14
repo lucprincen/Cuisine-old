@@ -50,11 +50,15 @@
 
 	}
 
+	add_action('wp-footer', 'cuisine_frontend_scripts' );
 
 	function cuisine_frontend_scripts(){
 
-		global $post;
-		?><script type="text/javascript">var post_id = '<?php echo $post->ID;?>';</script><?php
+		global $cuisine, $post;
+
+	 	wp_enqueue_script( 'chef-front-script', $cuisine->theme->url('scripts').'script.js', null, null, true );
+		wp_localize_script( 'chef-front-script', 'post', array( 'ID' => $post->ID, 'post_title' => $post->post_title, 'slug' => $post->post_name, 'post_parent' => $post->post_parent, 'guid' => $post->guid ) );
+
 	}	
 
 ?>

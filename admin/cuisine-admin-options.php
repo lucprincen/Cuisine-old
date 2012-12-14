@@ -1,9 +1,15 @@
 <?php
 
+	/**
+	*	RETURN THE HTML FOR THE CUISINE OPTION PAGE
+	*
+ 	* @access public
+	* @return html
+	*/
 
-function cuisine_show_options_page(){
-
-	$s = get_cuisine_setting( 'simple_view' );
+	function cuisine_show_options_page(){
+	
+		$s = get_cuisine_setting( 'simple_view' );
 
 ?>
 
@@ -58,7 +64,14 @@ function cuisine_show_options_page(){
 <?php } 
 
 
-function cuisine_options_saved(){
+	/**
+	*	RETURN THE HTML WHEN THE OPTIONS FORM IS SAVED:
+	*
+ 	* @access public
+	* @return void
+	*/
+
+	function cuisine_options_saved(){
 		?>
 	<div class="wrap">
 		<h2><?php _e('Form saved', 'chef_forms');?></h2>

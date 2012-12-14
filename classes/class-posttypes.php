@@ -13,10 +13,12 @@ class Cuisine_Posttypes {
 	/**
 	* Register a post type
 	*/
-	function register( $type, $singular, $plural, $slug = null, $supports = array( 'title', 'editor', 'thumbnail', 'revisions' ), $taxonomies = array() ){
+	function register( $type, $singular, $plural, $slug = null, $supports = array( 'title', 'editor', 'thumbnail', 'revisions' ), $taxonomies = array(), $vars = array() ){
 
 		if( $slug == null )
 			$slug = strtolower( $plural );
+
+		$vars = $this->set_defaults( $vars );
 
 		$args = array(
 			'labels'			=> array(
@@ -32,14 +34,14 @@ class Cuisine_Posttypes {
 				'not_found'				=> __('Geen '.strtolower($plural).' gevonden'),
 				'not_found_in_trash'	=> __('Geen '.strtolower($plural).' gevonden in de prullenbak')
 			),
-			'public'			=> true,
-			'show_ui'			=> true,
-			'_builtin'			=> false,
-			'_edit_link'		=> 'post.php?post=%d',
-			'capability_type'	=> 'post',
+			'public'			=> $vars['public'],
+			'show_ui'			=> $vars['show_ui'],
+			'_builtin'			=> $vars['_builtin'],
+			'_edit_link'		=> $vars['_edit_link'],
+			'capability_type'	=> $vars['capability_type'],
 			'rewrite'			=> array( 'slug' => $slug ),
-			'hierarchical'		=> true,
-			'menu_position'		=> 20,
+			'hierarchical'		=> $vars['hierarchical'],
+			'menu_position'		=> $vars['menu_position'],
 			'taxonomies'		=> $taxonomies,
 			'supports'			=> $supports
 		);
@@ -48,6 +50,26 @@ class Cuisine_Posttypes {
 		/** create the custom post type */
 		register_post_type( $type, $args );
 
+	}
+
+
+	function set_defaults( $vars ){
+
+		if( !isset( $vars['public'] ) ) $vars['public'] = true;
+
+		if( !isset( $vars['show_ui'] ) ) $vars['show_ui'] = true;
+
+		if( !isset( $vars['_builtin'] ) ) $vars['_builtin'] = false;
+
+		if( !isset( $vars['_edit_link'] ) ) $vars['_edit_link'] = 'post.php?post=%d';
+
+		if( !isset( $vars['capability_type'] ) ) $vars['capability_type'] = 'post';
+
+		if( !isset( $vars['hierarchical'] ) ) $vars['hierarchical'] = true;
+
+		if( !isset( $vars['menu_position'] ) ) $vars['menu_position'] = 20;
+
+		return $vars;
 	}
 
 	/**

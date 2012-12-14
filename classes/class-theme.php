@@ -687,7 +687,7 @@ class Cuisine_Theme {
 	function init_theme_frontend(){
 
 		//add the registered scripts to the footer:
-		add_action( 'wp_footer', array( &$this, 'enqueue_registered_scripts' )  );
+		add_action( 'wp_footer', array( &$this, 'enqueue_registered_scripts' ), 0  );
 
 
 	}
@@ -1089,6 +1089,29 @@ class Cuisine_Theme {
 		return $array;
 	}
 
+	/*****************************************************************************/
+	/** THEME VARIABLE RETURNERS *************************************************/
+	/*****************************************************************************/
+
+
+	/**
+	*	Return the current theme url:
+	*/
+	function url( $type = 'theme' ){
+
+		if( $type == 'theme' )
+			return get_bloginfo( 'template_url' );
+
+		if( $type == 'stylesheet' )
+			return get_bloginfo( 'stylesheet_directory' );
+
+		if( $type == 'scripts' )
+			return get_bloginfo( 'template_url' ) .'/js';
+
+		if( $type == 'images' )
+			return get_bloginfo( 'template_url' ) .'/images';
+
+	}
 
 }
 	

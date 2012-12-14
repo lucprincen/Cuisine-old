@@ -18,6 +18,9 @@
 	
 	/**
 	* Include required admin core files
+	*
+ 	* @access public
+	* @return void
 	**/
 	function cuisine_admin_includes(){
 	
@@ -32,6 +35,9 @@
 	
 	/**
 	* Checks to see if Cuisine's simple view exists and toggles views.
+	*
+ 	* @access public
+	* @return void
 	**/
 	function cuisine_admin_init(){
 	
@@ -66,6 +72,9 @@
 	
 	/**
 	* Add Cuisine's admin scripts.
+	*
+ 	* @access public
+	* @return void
 	**/
 	function cuisine_admin_scripts(){
 
@@ -130,6 +139,9 @@
 
 	/**
 	* Add the cuisine UI file and outputs the UI in the footer
+	*
+ 	* @access public
+	* @return void
 	**/
 	function cuisine_admin_simple_ui(){
 		global $pagenow;
@@ -156,6 +168,9 @@
 
 	/**
 	*	Add the admin body class:
+	*
+ 	* @access public
+	* @return string
 	*/
 	
 	function cuisine_admin_body_class( $classes ){
@@ -165,6 +180,9 @@
 
 	/**
 	*	Add the simple view button to the admin bar:
+	*
+ 	* @access public
+	* @return void
 	*/
 	function cuisine_advanced_view_button(){
 		//else add the button of god (if a user is capable)
@@ -175,6 +193,9 @@
 
 	/**
 	*	Admin bar button:
+	*
+ 	* @access public
+	* @return void
 	*/
 
 	function cuisine_admin_bar_menu(){
@@ -191,6 +212,9 @@
 
 	/**
 	*	Menu items to be added to Simple View from Cuisine:
+	*
+ 	* @access public
+	* @return array
 	*/
 
 	function cuisine_register_native_menu_items( $array ){
@@ -214,6 +238,9 @@
 	
 	/**
 	* Install cuisine
+	*
+ 	* @access public
+	* @return void
 	**/
 	function install_cuisine() {
 		include_once( 'cuisine-admin-install.php' );

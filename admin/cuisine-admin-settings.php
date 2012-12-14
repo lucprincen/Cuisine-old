@@ -18,6 +18,9 @@
 
 	/**
 	* Get a cuisine setting:
+	*
+ 	* @access public
+	* @return array
 	*/
 	function get_cuisine_setting( $type ){
 
@@ -34,6 +37,9 @@
 
 	/**
 	*	Update a setting:
+	*
+ 	* @access public
+	* @return void
 	*/
 
 	function update_cuisine_setting( $type, $value ){
@@ -45,6 +51,9 @@
 
 	/**
 	*	Get defaults to a cuisine setting:
+	*
+ 	* @access public
+	* @return Array
 	*/
 
 	function get_cuisine_defaults ( $type ){
@@ -87,6 +96,9 @@
 
 	/**
 	*	Register the options page:
+	*
+ 	* @access public
+	* @return void
 	*/
 	cuisine_register_option_page();
 
@@ -112,6 +124,9 @@
 
 	/**
 	*	Show the options page:
+	*
+ 	* @access public
+	* @return void
 	*/
 	function cuisine_option_page(){
 
@@ -137,6 +152,12 @@
 
 	}
 
+	/**
+	*	RETURN A DEFAULTED ARRAY OF CUISINES OPTIONS
+	*
+ 	* @access public
+	* @return void
+	*/
 
 	function cuisine_sanitize_options(){
 		$values = array();
