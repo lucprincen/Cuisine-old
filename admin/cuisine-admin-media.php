@@ -67,9 +67,7 @@
 		?>
 		<div id="cuisine-media-add">
 			<?php if( in_array( 'image', $includes ) ):?>
-				<a title="Add Media" class="thickbox" id="add_media" href="media-upload.php?post_id=<?php echo $pid; ?>&cuisine_plugin_media=true&TB_iframe=1&width=640&height=644" style="border:none;text-decoration:none;">
-					<input type="button" value="Afbeeldingen toevoegen" class="button tagadd" />
-				</a>
+				<input type="button" value="Afbeeldingen toevoegen" class="button tagadd cuisine-add-media" data-media-type="image" data-multiple="true"/>
 			<?php endif;?>
 
 			<?php if( in_array( 'video', $includes ) ):?>

@@ -93,11 +93,7 @@ class cuisine_widget_image extends WP_Widget {
 	 </div>
 
 	<p class="cuisine_widget_centralized">
-<?php	
-	$image_upload_iframe_src = "media-upload.php?type=image&post_id=0&width=640&height=644&cuisine_widget_media=true&widget_id=".$this->id;
-?>
-	<a href="<?php echo $image_upload_iframe_src; ?>&TB_iframe=true" class="button-primary cuisine_widget_button thickbox"  onClick="setActiveWidget('<?php echo $this->id; ?>');return false;" style="text-decoration:none"><?php echo __('Afbeelding kiezen');?></a>
-
+		<input type="button" value="Afbeeldingen toevoegen" class="button tagadd cuisine-widget-media" data-media-type="image" data-widget="<?php echo $this->id;?>" data-button="Voeg toe" />
 	</p>
 
 	 <p>

@@ -95,12 +95,7 @@
 		if( cuisine_simple_view_is_active() ){
 				
 	
-			if( $pagenow == 'post.php' || $pagenow == 'post-new.php' ){
-			    //first check for the editscreen:
-			    wp_enqueue_script( 'cuisine_edit_script', $cuisine->asset_url.'/js/admin-edit.js' );
-
-	
-			}else if( $pagenow == 'media-upload.php' && isset( $_GET['cuisine_media'] ) ){
+			if( $pagenow == 'media-upload.php' && isset( $_GET['cuisine_media'] ) ){
 				//check for the media library
 				wp_enqueue_style( 'cuisine_media_style', $cuisine->asset_url.'/css/admin-media.css' );
 				wp_enqueue_script( 'cuisine_media_script', $cuisine->asset_url.'/js/admin-media.js' );
@@ -109,29 +104,31 @@
 	
 		}
 		
+		
+		// Add scripts regardless of the view:
+			
+		if( $pagenow == 'widgets.php' || $pagenow == 'post.php' || $pagenow == 'post-new.php' ){
+			//always load the media scripts in the edit page:
+			wp_enqueue_media();
+			
+			wp_enqueue_style( 'thickbox' );
+
+		}else if( $pagenow == 'media-upload.php' && isset( $_GET['cuisine_widget_media'] ) ){
+			//check for the media library for widgets
+			//wp_enqueue_script( 'cuisine_widget_media_script', $cuisine->asset_url.'/js/admin-widgets-media.js' );
+		
+		}else if( $pagenow == 'media-upload.php' && isset( $_GET['cuisine_plugin_media'] ) ){
+			//wp_enqueue_script('cuisine_media_script', $cuisine->asset_url. '/js/admin-plugin-media.js', 'jquery');
+		
+		}
 
 		//add the general admin styles:
 		wp_enqueue_style( 'cuisine_admin', $cuisine->asset_url.'/css/admin.css' );
 
 		//add the scripts for the general admin area:
-
+		wp_enqueue_script( 'cuisine_main_class', $cuisine->asset_url.'/js/cuisine.js', array('jquery', 'jquery-ui-sortable', 'thickbox'), FALSE, TRUE  );
 		wp_enqueue_script( 'cuisine_admin', $cuisine->asset_url.'/js/admin.js', array('jquery', 'jquery-ui-sortable', 'thickbox'), FALSE, TRUE  );
 
-		
-		// Add scripts for normal view:
-			
-		if( $pagenow == 'widgets.php' || $pagenow == 'post.php' || $pagenow == 'post-new.php' ){
-
-			wp_enqueue_style( 'thickbox' );
-
-		}else if( $pagenow == 'media-upload.php' && isset( $_GET['cuisine_widget_media'] ) ){
-			//check for the media library for widgets
-			wp_enqueue_script( 'cuisine_widget_media_script', $cuisine->asset_url.'/js/admin-widgets-media.js' );
-		
-		}else if( $pagenow == 'media-upload.php' && isset( $_GET['cuisine_plugin_media'] ) ){
-			wp_enqueue_script('cuisine_media_script', $cuisine->asset_url. '/js/admin-plugin-media.js', 'jquery');
-		
-		}
 
 	}
 

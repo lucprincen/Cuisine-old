@@ -6,7 +6,7 @@
  * Version: 1.1
  * Author: Chef du Web
  * Author URI: http://www.chefduweb.nl
- * Requires at least: 3.4
+ * Requires at least: 3.5
  * Tested up to: 3.5
  * 
  * Text Domain: cuisine
@@ -34,7 +34,7 @@ class Cuisine {
 
 	/** Version ***************************************************************/
 	
-	var $version = '1.0';
+	var $version = '1.1';
 	
 	/** URLS ******************************************************************/
 	
