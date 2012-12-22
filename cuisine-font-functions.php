@@ -8,7 +8,7 @@
 	}
 
 	function cuisine_get_google_fonts(){
-		$fonts = array('Alice' => 'Alice', 'Antic' => 'Antic', 'Ruluko' => 'Rukolo', 'Marko+One' => 'Marko One', 'Voltaire' => 'Voltaire', 'Capriola' => 'Capriola', 'Advent+Pro' => 'Advent Pro', 'Ropa+Sans' => 'Ropa Sans', 'Droid+Sans' => 'Droid Sans', 'Lobster' => 'Lobster');
+		$fonts = array('Alice' => 'Alice', 'Antic' => 'Antic', 'Ruluko' => 'Rukolo', 'Marko+One' => 'Marko One', 'Voltaire' => 'Voltaire', 'Capriola' => 'Capriola', 'Advent+Pro' => 'Advent Pro', 'Ropa+Sans' => 'Ropa Sans', 'Droid+Sans' => 'Droid Sans', 'Lobster' => 'Lobster', 'Open+Sans:400,600,700,300' => 'Open Sans', 'Stoke:300,400' => 'Stoke');
 		asort( $fonts );
 		return $fonts;
 	}

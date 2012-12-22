@@ -804,8 +804,13 @@ class Cuisine_Theme {
 
 		global $cuisine;
 
+		//get the theme object:
 		$themeobj = wp_get_theme();
+
+		//create the name:
 		$name = 'script_'.$themeobj->stylesheet.'.min.js';
+
+		//generate the root and url paths:
 		$filepath = $this->root_url( 'scripts', true ).$name;
 		$relativepath = $this->url( 'scripts', true ).$name;
 
@@ -813,6 +818,7 @@ class Cuisine_Theme {
 		$vars = array();
 		$script_ids = '';
 
+		//add the deps + vars and create the script id-string:
 		foreach( $scripts as $script ){
 
 			if( !empty( $script['deps'] ) )
@@ -825,12 +831,12 @@ class Cuisine_Theme {
 
 		}
 
-		//only minify if we've added a new script:
+		//only minify if we've added a new script id:
 		if( get_option( 'cuisine_minified_js') != $script_ids ){
 
 			//include the minifier script:
 			include('includes/JSMin.php');
-	
+			
 			$js = '';
 			foreach( $scripts as $script ){
 				
@@ -926,20 +932,18 @@ class Cuisine_Theme {
 		*/
 	
 		function sanitize_fonts( $options ){
-			//set the empty variables:
-			$fonts = array();
 	
-			//and the keys of the options to determine if this is a font:
-			$keys = array_keys( $options );
-	
-			$i = 0;
-			foreach( $options as $option){
+			foreach( $options as $key => $option){
 	
 				//the array key ends with 'font-family':
-				if( substr( $keys[$i], -11 ) == 'font-family' )
-					$options[ $keys[$i] ] = str_replace( '+', ' ', $option );
-	
-				$i++;
+				if( substr( $key, -11 ) == 'font-family' ){
+
+					$value = str_replace( '+', ' ', $option );
+					$val = explode( ':', $value );
+
+					$options[ $key ] = "'".$val[0]."'";
+				
+				}
 			}
 	
 			return $options;
