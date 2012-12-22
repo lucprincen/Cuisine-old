@@ -17,6 +17,7 @@ class Cuisine_Theme {
 	var $js_customizers;
 
 	var $theme_scripts_to_query;
+	var $theme_vars_to_query;
 
 	var $theme_setting_priority = 0;
 
@@ -32,6 +33,7 @@ class Cuisine_Theme {
 		$this->js_customizers = array();
 
 		$this->theme_scripts_to_query = array();
+		$this->theme_vars_to_query = array();
 	}
 
 
@@ -729,6 +731,24 @@ class Cuisine_Theme {
 
 
 	/**
+	*	Register localization / variables for javascript:
+	*/
+
+	function register_js_vars( $var ){
+
+		if( !isset( $var['on_page'] ) )
+			$var['on_page'] = 'all';
+
+		if( !isset( $var['page_type'] ) )
+			$var['page_type'] = 'page';
+
+		$this->theme_vars_to_query[] = $var;
+
+	}
+
+
+
+	/**
 	*	Enqueue the scripts in theme_scripts_to_query if this is the right page:
 	*/
 	function enqueue_registered_scripts(){
@@ -764,7 +784,24 @@ class Cuisine_Theme {
 	 				wp_enqueue_script( $script['id'], $script['url'], $script['deps'], $script['vars'], true );
 	 			}
 			}
+		}
 
+
+		/**
+		*	Add the variables, if they are set:
+		*/
+
+		if( !empty( $this->theme_vars_to_query ) ){
+
+			foreach( $this->theme_vars_to_query as $var ){
+
+				if( $script['on_page'] == 'all' || $this->is_correct_enqueue_page( $var['on_page'], $var['page_type'] ) ){ 
+					
+					//setup the variables:
+					wp_localize_script( $var['id'], $var['var'], $var['value'] );
+
+				}
+			}
 
 		}
 
@@ -856,7 +893,7 @@ class Cuisine_Theme {
 		}
 
 		//enqueue the minified script:
-		wp_enqueue_script( 'script_'.$themeobj->stylesheet, $relativepath, $deps, $vars, true );
+		wp_enqueue_script( 'cuisine_script', $relativepath, $deps, $vars, true );
 	}
 
 
