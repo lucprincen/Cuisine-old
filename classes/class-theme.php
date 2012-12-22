@@ -709,7 +709,7 @@ class Cuisine_Theme {
 			$script['on_page'] = 'all';
 
 		//add the type of page on which to load the script ( single, archive, post_type_archive )
-		if( empty( $script['page_type'] ) && $script['on_page'] != 'all' ){
+		if( empty( $script['page_type'] ) || $script['page_type'] == '' ){
 
 			global $cuisine;
 
@@ -734,38 +734,39 @@ class Cuisine_Theme {
 	function enqueue_registered_scripts(){
 
 
-		/**
-		*		KUNNEN SCRIPTS HIER SAMENGEVOEGD WORDEN?
-		*/
-
 		//check if the array isn't empty:
 		if( !empty( $this->theme_scripts_to_query ) ){
 
+			//first, check if there are scripts we need to minify ( on_page 'all' scripts ):
+			$to_minify = array();
+
 			foreach( $this->theme_scripts_to_query as $script ){
 
-				// if minify === false :
+				if( $script['on_page'] == 'all' && isset( $script['root_url'] ) ){
 
-				global $wp_query;
+					//add it to the minify array:
+					$to_minify[] = $script;
 
+				}
+
+			}
+
+			//Check if there's anything to minify, if so... do it:
+			if( !empty( $to_minify ) )
+				$this->minify_js( $to_minify );
+
+
+			foreach( $this->theme_scripts_to_query as $script ){
 				//check if on this page / single post or archive on which to load:
-				if( $script['on_page'] == 'all' || $this->is_correct_enqueue_page( $script['on_page'], $script['page_type'] ) ){
+				if( ( $script['on_page'] == 'all' && !isset( $script['root_url'] ) ) || $this->is_correct_enqueue_page( $script['on_page'], $script['page_type'] ) ){
+			
 					//enqueue the script:
 	 				wp_enqueue_script( $script['id'], $script['url'], $script['deps'], $script['vars'], true );
 	 			}
-
-	 			// if minify === true
-
-	 			// this->add_to_minified_js( script['url'] )
-	 			// deps[] = $script[deps];
-	 			// vars[] = $script['vars';
-
-
 			}
+
+
 		}
-
-		//if minified != null
-
-		// wp_enqueue_script( //minified, url, deps, vars );
 
 	}
 
@@ -794,6 +795,75 @@ class Cuisine_Theme {
 		return false;
 
 	}
+
+
+	/**
+	*	Minify JS:
+	*/
+	function minify_js( $scripts ){
+
+		global $cuisine;
+
+		$themeobj = wp_get_theme();
+		$name = 'script_'.$themeobj->stylesheet.'.min.js';
+		$filepath = $this->root_url( 'scripts', true ).$name;
+		$relativepath = $this->url( 'scripts', true ).$name;
+
+		$deps = array();
+		$vars = array();
+		$script_ids = '';
+
+		foreach( $scripts as $script ){
+
+			if( !empty( $script['deps'] ) )
+				$deps = array_merge( $deps, $script['deps'] );
+			
+			if( !empty( $script['vars'] ) )
+				$vars = array_merge( $vars, $script['vars'] );
+			
+			$script_ids .= $script['id'].'|';
+
+		}
+
+		//only minify if we've added a new script:
+		if( get_option( 'cuisine_minified_js') != $script_ids ){
+
+			//include the minifier script:
+			include('includes/JSMin.php');
+	
+			$js = '';
+			foreach( $scripts as $script ){
+				
+				//add the contents of each js file to the js variable:
+				$js .= file_get_contents( $script['root_url'] );
+	
+			}
+			
+			//minify the js variable:
+			$js = JSMin::minify( $js );
+	
+			//write the contents to a new file:
+			file_put_contents( $filepath, $js );
+
+			//update the minified option with all the IDS:
+			update_option( 'cuisine_minified_js', $script_ids );
+		}
+
+		//enqueue the minified script:
+		wp_enqueue_script( 'script_'.$themeobj->stylesheet, $relativepath, $deps, $vars, true );
+	}
+
+
+	/**
+	*	A little function to reset the minified file.
+	*/
+	function clear_minified_stack(){
+
+		update_option( 'cuisine_minified_js', '' );
+
+	}
+
+
 
 
 	/*****************************************************************************/
@@ -1097,21 +1167,56 @@ class Cuisine_Theme {
 	/**
 	*	Return the current theme url:
 	*/
-	function url( $type = 'theme' ){
+	function url( $type = 'theme', $trail = false ){
+
+		$url = '';
 
 		if( $type == 'theme' )
-			return get_bloginfo( 'template_url' );
+			$url = get_bloginfo( 'template_url' );
 
 		if( $type == 'stylesheet' )
-			return get_bloginfo( 'stylesheet_directory' );
+			$url = get_bloginfo( 'stylesheet_directory' );
 
 		if( $type == 'scripts' )
-			return get_bloginfo( 'template_url' ) .'/js';
+			$url = get_bloginfo( 'template_url' ) .'/js';
 
 		if( $type == 'images' )
-			return get_bloginfo( 'template_url' ) .'/images';
+			$url = get_bloginfo( 'template_url' ) .'/images';
+
+		if( $trail ) $url .= '/';
+
+
+		return $url;
 
 	}
+
+
+	/**
+	*	Return the current root url:
+	*/ 
+
+	function root_url( $type = 'root', $trail = false ){
+
+		$root = ABSPATH;
+		$themeobj = wp_get_theme();
+
+		if( $type == 'root' )
+			$url = $root;
+
+		if( $type == 'theme' )
+			$url = $themeobj->theme_root.'/'.$themeobj->stylesheet;
+
+		if( $type == 'scripts' )
+			$url = $themeobj->theme_root.'/'.$themeobj->stylesheet.'/js';
+
+
+		if( $trail )
+			return $url.'/';
+
+		return $url;
+
+	}
+
 
 }
 	

@@ -16,6 +16,8 @@ class Cuisine_Plugins {
 
 	var $plugin_data_to_save = array();
 
+	var $tinymce_plugins = array();
+
 	var $nonce_list = array();
 	var $redirect_list = array();
 	var $redirect_list_types = array();
@@ -727,5 +729,22 @@ class Cuisine_Plugins {
 		return false;
 
 	} 
+
+
+	/**
+	*	GET ROOT URLS:
+	*/
+
+	function root_url( $slug = '', $trail = false ){
+		
+		$url = ABSPATH.'wp-content/plugins';
+
+		if( $slug != '' ) $url .= '/'.$slug;
+
+		if( $trail ) $url .= '/';
+
+		return $url;		
+
+	}
 
 }?>

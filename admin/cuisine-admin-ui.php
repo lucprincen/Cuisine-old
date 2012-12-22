@@ -29,8 +29,14 @@
 		// if cuisine is setup to show the pages first:
 		if( $settings['show_pages_front'] == true ){
 			
+			do_action( 'cuisine_simple_view_before_collections' );
+
 			//get the pages from the database:
 			$pages = get_pages(array('sort_order' => 'ASC','sort_column' => 'menu_order'));
+
+			//add the posibility for plugins to add pages:
+			$pages = apply_filters( 'register_cuisine_simple_view_page', $pages );
+
 
 				//check if $pages isn't empty:
 				if( !empty( $pages ) ){ ?>
@@ -39,13 +45,25 @@
 						
 						<h2 class="cuisine-collection-title"><?php echo __('Which page would you like to edit?', 'cuisine');?></h2>
 
-						<?php foreach( $pages as $page ):?> 
-							
-							<a class="cuisine-item" href="<?php echo get_admin_url();?>post.php?post=<?php echo $page->ID;?>&action=edit&post_type=page" style="width:<?php echo $settings['icon_size']?>px !important">
+						<?php foreach( $pages as $page ):
+
+								if( isset( $page->ID ) ){
+
+									$link = get_admin_url().'post.php?post='. $page->ID .'&action=edit&post_type=page';
+									$title = get_the_title( $page->ID );
+
+								}else{
+
+									$link = $page['link'];
+									$title = $page['title'];
+
+								}?> 
+				
+							<a class="cuisine-item" href="<?php echo $link;?>" style="width:<?php echo $settings['icon_size']?>px !important">
 								<div class="page-icon">
 									<img src="<?php cuisine_simple_view_icon( $page );?>"/>
 								</div>
-								<strong><?php echo get_the_title( $page->ID );?></strong>
+								<strong><?php echo $title;?></strong>
 							</a>
 
 						<?php endforeach;?>
@@ -89,7 +107,6 @@
 						</a>
 
 					<?php endforeach;?>
-
 
 				</div>
 
@@ -190,27 +207,28 @@
 
 		global $pagenow, $cuisine;
 
-		do_action( 'cuisine_simple_view_back_url' );
 
 		if( $pagenow == 'post-new.php'){
 
 			if( isset( $_GET['post_type'] ) )
 				return admin_url().'/edit.php?post_type='.$_GET['post_type'];
 
-			return admin_url().'/edit.php?post_type=post';
+			$url = admin_url().'/edit.php?post_type=post';
 
 		}else if( $pagenow == 'post.php'){
 
 			$pid = cuisine_get_post_id();
 			$pt = get_post_type( $pid );
 			
-			return admin_url().'/edit.php?post_type='.$pt;
+			$url = admin_url().'/edit.php?post_type='.$pt;
 
 		}else{
 
-			return admin_url();
+			$url = admin_url();
 
 		}
+
+		return apply_filters( 'cuisine_simple_view_back_url', $url );
 
 	}
 
@@ -294,7 +312,7 @@
 		
 		if( isset( $_GET['post_type'] ) && $_GET['post_type'] == 'page' ){
 			echo '<style>';
-	
+
 				if($settings['add_pages']){
 					echo '.add-new-h2{display:inline !important;}';
 				}else{
@@ -308,6 +326,8 @@
 					echo '.tablenav.top{display:none !important;}';
 					echo 'input[type="checkbox"]{display:none}';
 				}
+
+				do_action( 'cuisine_simple_view_style' );
 	
 			echo '</style>';
 		}

@@ -22,23 +22,25 @@
  	* @access public
 	* @return void
 	**/
+
 	function cuisine_admin_includes(){
 	
 		if( is_admin() ){
 			include( 'cuisine-admin-view.php' );						//all the simple view functions
 			include( 'cuisine-admin-conditionals.php' );				//simple admin conditionals
 			include( 'cuisine-admin-settings.php' );
-			include( 'cuisine-admin-media.php');
+			include( 'cuisine-admin-media.php' );		
 		}
 	}
-	
-	
+
+
 	/**
 	* Checks to see if Cuisine's simple view exists and toggles views.
 	*
  	* @access public
 	* @return void
 	**/
+
 	function cuisine_admin_init(){
 	
 	
@@ -67,8 +69,47 @@
 			cuisine_advanced_view_button();
 		}
 
+		// Add an extra button to the editor where we can add Shortcodes and other stuff:
+		add_filter( 'mce_external_plugins', 'cuisine_add_editor_plugins' );
+		add_filter( 'mce_buttons', 'cuisine_add_editor_button' );
 	}
 	
+
+
+
+	/**
+	* Add Cuisine's custom editor plugins:	
+	*
+	* @access public
+	* @return array
+	*/
+
+	function cuisine_add_editor_plugins( $plugin_array ){
+
+		global $cuisine;
+		$plugins = $cuisine->plugins->tinymce_plugins;
+
+		return $plugin_array; 
+
+	}
+
+
+
+
+	/**
+	* Add's cuisine editor button.
+	*
+	* @access public
+	* @return array
+	*/
+
+	function cuisine_add_editor_button( $buttons ){
+
+		array_push( $buttons, 'separator', 'cuisine' );
+  		return $buttons;
+	}
+
+
 	
 	/**
 	* Add Cuisine's admin scripts.
