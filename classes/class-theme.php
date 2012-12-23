@@ -931,23 +931,28 @@ class Cuisine_Theme {
 		 */
 		function get_theme_style( $sanitize = false ){
 	
-			//Add default theme options first:
+		global $style;
+
+		//Add default theme options first:
+			//first the custom work:
+			$options = apply_filters( 'cuisine_get_theme_options', array() );
 	
-				//first the custom work:
-				$options = apply_filters( 'cuisine_get_theme_options', array() );
+			//then the defaults:
+			$options = array_merge($options, $this->get_theme_defaults() );
 	
-				//then the defaults:
-				$options = array_merge($options, $this->get_theme_defaults() );
-	
-				//then the options from the database:
-				$options = array_merge( $options, get_option( 'cuisine_theme_options', true ) );
+			//then the options from the database:
+			$options = array_merge( $options, get_option( 'cuisine_theme_options', true ) );
 				
-				//(we've overwritten some styles by now by order of importance; defaults from plugins, defaults from theme and info from the database.)
+			//(we've overwritten some styles by now by order of importance; defaults from plugins, defaults from theme and info from the database.)
 	
-				if($sanitize)
-					$options = $this->sanitize_theme_style( $options );
-	
+			if($sanitize)
+				$options = $this->sanitize_theme_style( $options );
+
+		
+			$GLOBALS['style'] = $options;
+
 			return $options;	
+		
 		}
 
 
