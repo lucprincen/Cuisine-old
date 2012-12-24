@@ -39,7 +39,7 @@ class Cuisine_Plugins {
 	function init(){ 
 
 		// add the save_post hook
-		add_action( 'save_post', array( &$this, 'do_save_post' ) );
+		add_action( 'save_post', array( &$this, 'do_save_post' ), 0 );
 
 	}
 
@@ -130,7 +130,6 @@ class Cuisine_Plugins {
 
 	function do_save_post( $post_id ){
 
-
       	//check if there is data to save:
 		if( !empty($this->plugin_data_to_save ) ){
 
@@ -160,7 +159,9 @@ class Cuisine_Plugins {
 
 
 
+
 			$save = $this->plugin_data_to_save;
+
 			$current_post_type = get_post_type( $post_id );
 
 			//first check data to save for 'all' post types
@@ -179,6 +180,7 @@ class Cuisine_Plugins {
 				foreach( $save[$current_post_type] as $item ){
 
 					$this->save_meta_to_post( $post_id, $item );
+
 				}
 			}
 
@@ -203,11 +205,13 @@ class Cuisine_Plugins {
 
 	function save_meta_to_post( $post_id, $item ){
 		$values = $this->sanitize_values( $item['value'] );
-					
+		
+			
 		if( $values ){
 					
 			if( isset( $item['orderby'] ) && is_array( $item['value'] ) )
 				$values = cuisine_sort_array_by( $values, $item['orderby'], $item['order'] );
+
 
 			update_post_meta( $post_id, $item['key'], $values );
 		}
@@ -465,8 +469,6 @@ class Cuisine_Plugins {
 
 	function register_template_redirect( $slug, $type = null, $post_type = null, $page_object = array() ){
 
-		//add the slug to the redirect list:
-		$this->redirect_list[$type][] = $slug; 
 
 		if( $type == null )
 			$type = 'post_type';
@@ -474,6 +476,12 @@ class Cuisine_Plugins {
 		if( $post_type == null )
 			$post_type = $slug;
 
+		
+		//don't add pages to the redirect list, they already have great permalink handling:
+		if( $type != 'page' ){
+			//add the slug to the redirect list:
+			$this->redirect_list[$type][] = $slug; 
+		}
 
 		$this->redirect_list_types[$type][ $slug ] = $post_type;
 
@@ -653,8 +661,9 @@ class Cuisine_Plugins {
 		//for all registered types:
 		foreach( $types as $key => $type ){
 
+
 			// if the type isn't empty:
-			if( !empty( $type ) ){
+			if( !empty( $type ) && $type != 'page' ){
 
 				//loop through the rewrites in the type:
 				foreach( $type as $rewrite ){
@@ -683,6 +692,7 @@ class Cuisine_Plugins {
 
 	function flush_rewrites(){
 
+
 		//if we're in the admin:
 		if( is_admin() ){
 
@@ -701,6 +711,7 @@ class Cuisine_Plugins {
 
 
 			if( empty( $redirects ) || $redirects != $rewritestring ){
+
 
 				//then flush the rewrite rules:
 				global $wp_rewrite;
