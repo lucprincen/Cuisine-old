@@ -50,5 +50,10 @@ function cuisine_one_half_last( $atts, $content = null ) {
 }
 add_shortcode('one_half_last', 'cuisine_one_half_last');
 
+function cuisine_break( $atts, $content = null ){
+	return '<hr/ class="content-break">';
+}
+
+add_shortcode('break', 'cuisine_break');
 
 ?>

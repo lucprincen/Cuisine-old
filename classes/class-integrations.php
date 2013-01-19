@@ -45,9 +45,19 @@ class Cuisine_Integrations {
     /**
 	 * Register a plugin:
 	 */
-    function plugin_register($plugin_name){
+    function plugin_register( $plugin_name, $version = null ){
+
     	$this->plugin_list[] = $plugin_name;
+    
+    	if( $version != null ){
+    		global $cuisine;
+			    		
+    		$args = array( 'slug' => $plugin_name, 'version' => $version );
+    		$cuisine->updates->add_to_update_list( $args );
+
+    	}
     }
+
 
 
 

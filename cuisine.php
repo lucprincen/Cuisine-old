@@ -34,7 +34,7 @@ class Cuisine {
 
 	/** Version ***************************************************************/
 	
-	var $version = '1.1';
+	var $version = '1.1.1';
 	
 	/** URLS ******************************************************************/
 	
@@ -130,6 +130,7 @@ class Cuisine {
 		include( 'classes/class-integrations.php');				// Intergrations classes
 		include( 'classes/class-plugins.php');					// Plugins class
 		include( 'classes/class-theme.php');					// Theme class
+		include( 'classes/class-updates.php');					// Update functions
 
 		include( 'classes/class-posttypes.php');				// Handle posttypes easier
 		include( 'classes/class-taxonomies.php');				// Handle taxonomies easier
@@ -187,6 +188,7 @@ class Cuisine {
 
 		$this->posttypes 			= new Cuisine_Posttypes();			// Posttypes class
 		$this->taxonomies 			= new Cuisine_Taxonomies();			// Taxonomies class
+		$this->updates 				= new Cuisine_Updates();
 
 		// Init integrations, theme and plugins
 		$this->integrations->init();

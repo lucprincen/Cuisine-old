@@ -931,9 +931,9 @@ class Cuisine_Theme {
 		 */
 		function get_theme_style( $sanitize = false ){
 	
-		global $style;
 
-		//Add default theme options first:
+			//Add default theme options first:
+	
 			//first the custom work:
 			$options = apply_filters( 'cuisine_get_theme_options', array() );
 	
@@ -951,7 +951,7 @@ class Cuisine_Theme {
 		
 			$GLOBALS['style'] = $options;
 
-			return $options;	
+			return $options;
 		
 		}
 

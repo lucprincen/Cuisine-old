@@ -25,7 +25,7 @@ class Cuisine_Plugins {
 
 
 	function __construct(){
-
+		
 		// the plugin_main_menu_items contain arrays for which pluginmenu's to add on the main admin_menu hook
 		$this->plugin_main_menu_items = array();
 
@@ -756,6 +756,17 @@ class Cuisine_Plugins {
 
 		return $url;		
 
+	}
+
+	/**
+	*	Get page url by slug:
+	*/
+
+	function get_page_url( $slug ){
+
+		$page = get_page_by_title( $slug );
+
+		return get_permalink( $page->ID );
 	}
 
 }?>

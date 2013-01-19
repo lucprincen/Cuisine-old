@@ -194,7 +194,9 @@
 			cuisine_simple_ui_overview();
 	
 		//add the button:
-		cuisine_simple_view_button();
+		if( current_user_can( 'toggle_admin_mode' ) ){
+			cuisine_simple_view_button();
+		}
 
 		$settings = get_cuisine_setting( 'simple_view' );
 
