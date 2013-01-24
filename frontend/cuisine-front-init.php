@@ -12,6 +12,8 @@
 
 
 	add_action( 'init', 'cuisine_front_init', 1 );
+	add_action( 'login_head', 'cuisine_admin_login' );
+
 
 	function cuisine_front_init(){
 
@@ -59,6 +61,23 @@
 
 		if( isset( $post ) )
 			wp_localize_script( 'chef-front-script', 'post', array( 'ID' => $post->ID, 'post_title' => $post->post_title, 'slug' => $post->post_name, 'post_parent' => $post->post_parent, 'guid' => $post->guid ) );
+	}
+
+
+	/**
+	* Add the custom login style
+	* 
+	* @access public
+	* @return void
+	**/
+
+	function cuisine_admin_login(){
+
+		global $cuisine;
+
+		//enqueue the style:
+		wp_enqueue_style( 'cuisine_login_style', $cuisine->asset_url.'/css/login.css' );
+
 	}
 
 ?>

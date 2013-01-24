@@ -39,7 +39,7 @@ class Cuisine_Updates {
 
 		// TEMP: Show which variables are being requested when query plugin API
 		add_filter('plugins_api_result', array( &$this, 'result_info' ), 100, 3);
-*/		
+		*/		
 		
 		add_action( 'admin_init', array( &$this, 'run_check_plugins'), 0 );
 
@@ -52,22 +52,28 @@ class Cuisine_Updates {
 	}
 
 
+	/**
+	*	On Admin init, check for updates.
+	*/
 	function run_check_plugins(){
-		//Add the filter for plugin-update checks:
-		add_filter('pre_set_site_transient_update_plugins', array( &$this, 'check_for_updates' ), 100, 1 );
 
+		//Add the filter for plugin-update checks --this only runs when the transient isn't set--:
+		add_filter('pre_set_site_transient_update_plugins', array( &$this, 'check_for_updates' ), 100, 1 );
 
 		// Take over the Plugin info screen
 		add_filter('plugins_api', array( &$this, 'plugin_api_call' ), 10, 3);
 	}
 
 
+	/**
+	*	Check if there are updates available
+	*/
 	function check_for_updates( $checked_data ){
 		global $wp_version;
 
 
-		//if ( !isset( $checked_data ) || empty( $checked_data->checked ) )
-		//	return $checked_data;
+		if ( !isset( $checked_data ) || empty( $checked_data->checked ) )
+			return $checked_data;
 
 
 		if( !empty( $this->check_updates_for ) ){
@@ -109,9 +115,15 @@ class Cuisine_Updates {
 	}
 
 
+	/**
+	*	Do a plugin-api call...
+	*/
 	function plugin_api_call($def, $action, $args) {
 		global $wp_version;
 		
+		if( !isset( $args->slug ) )
+			return false;
+
 		if (isset($args->slug) && isset( $this->check_updates_for[ $args->slug ] ) == false )
 			return false;
 		
@@ -145,6 +157,9 @@ class Cuisine_Updates {
 	}
 
 
+	/**
+	*	Add a plugin to the 'update-check' list.
+	*/
 	function add_to_update_list( $args ){
 
 		if( !isset( $this->check_updates_for[ $args['slug'] ] ) ){

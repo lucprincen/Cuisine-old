@@ -228,6 +228,8 @@ class Cuisine_Plugins {
 
 		if( isset( $_GET['post'] ) ){
 			return 'cuisine_nonce_'.$_GET['post'];
+		}else if( isset( $_GET['page'] ) ){
+			return 'cuisine_nonce_'.$_GET['page'];
 		}else {
 			
 			global $post;

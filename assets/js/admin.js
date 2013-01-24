@@ -1,11 +1,17 @@
+/**
+ * Cuisine Admin / Media
+ * 
+ * Simple Cuisine Media functions
+ *
+ * @author      Chef du Web
+ * @category    JS
+ * @package     Cuisine
+ */
 
-    /**
-    *   ALL ADMIN FUNCTIONS
-    */
     jQuery(document).ready(function(){
     
     
-        //global sort function:
+        // Media sort function
         jQuery('#sortable').sortable({
           handle: '.pin',
           placeholder: 'mitem-placeholder',
@@ -16,24 +22,28 @@
         });
     
       
-        //global trash function for media:
+        // Media trash function
         jQuery('.trash').click(function(){
-      
-          if (confirm('Weet je zeker dat je dit wilt verwijderen?')) {
-            var id = jQuery(this).attr('id').substring(6);
-            jQuery('#mitem-'+id).fadeOut('slow', function(){
-              jQuery('#mitem-'+id).remove();
-      
-              if( jQuery('#sortable li').length == 0 ){
-                var post_type = JSvars.post_type;
-                jQuery('#sortable').append('<input type="hidden" name="'+post_type+'_media" value=" " id="media_data_empty">');
             
-              }else{
-                setPositions();
+            if (confirm('Weet je zeker dat je dit wilt verwijderen?')) {
+                
+                var id = jQuery(this).attr('id').substring(6);
+                
+                jQuery('#mitem-'+id).fadeOut('slow', function(){
+                    
+                    jQuery('#mitem-'+id).remove();
       
-              }     
-            })
-              }
+                    if( jQuery('#sortable li').length == 0 ){
+                        
+                        var post_type = JSvars.post_type;
+                        jQuery('#sortable').append('<input type="hidden" name="'+post_type+'_media" value=" " id="media_data_empty">');
+            
+                    }else{
+                        setPositions();
+      
+                    }     
+                })
+            }
         });
       
       
@@ -204,9 +214,6 @@
       
     }
 
-  
- 
-    
     
     /**
     * Create a mediaitem

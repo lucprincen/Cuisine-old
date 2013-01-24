@@ -1,0 +1,8 @@
+body.login{background:url('../images/tile.png');}
+#login{padding-top:40px;}
+#login h1 a{background:url('../images/login.png') no-repeat;height:159px;margin-bottom:20px;}
+.login .message{background:#abd4aa;border:1px solid rgba(0,0,0,.1);}
+.login #loginform, .login #lostpasswordform{background:#f3f2ed;border:1px solid #cbc9c0;box-shadow:0 4px 0 0 #f3f2ed, 0 4px 0 1px #cbc9c0, 0 10px 0 0 #f3f2ed, 0 10px 0 1px #cbc9c0;border-radius:10px;margin-bottom:20px;}
+.login #loginform input, .login #lostpasswordform input{border:1px solid #ccc;box-shadow:1px 1px 2px rgba(0,0,0,.15);-webkit-transition: all .3s ease; -moz-transition: all .3s ease; -ms-transition: all .3s ease; -o-transition: all .3s ease; transition: all .3s ease;}
+.login #loginform input:focus, .login #lostpasswordform input:focus{border:1px solid #aaa;box-shadow:1px 1px 3px rgba(0,0,0,.4);}
+.login #backtoblog a, .login #nav a{background:transparent !important;}

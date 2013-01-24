@@ -10,6 +10,26 @@
  * @package 	Cuisine
  */
 
+function cuisine_row($atts, $content = null){
+   $content = preg_replace('#^<\/p>|<p>$#', '', $content);
+   return '<div class="row-fluid">' . do_shortcode($content) . '</div>';
+ }
+
+add_shortcode("row", "cuisine_row");
+
+
+function cuisine_span($atts, $content = null){
+   extract(shortcode_atts(array(
+      "columns" => '6',
+      "offset" => '',
+   ), $atts));
+
+  $content = preg_replace('#^<\/p>|<p>$#', '', $content);
+  return '<div class="span' . $columns . '' . ( empty ($offset) ? '' : ' offset' . $offset ) . '">' . do_shortcode($content) . '</div>';
+}
+
+add_shortcode("span", "cuisine_span");  
+
 function cuisine_one_fourth( $atts, $content = null ) {
    return '<div class="onefourth span3 column">' . do_shortcode(wpautop($content)) . '</div>';
 }
