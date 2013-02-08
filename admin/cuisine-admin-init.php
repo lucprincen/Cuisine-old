@@ -147,22 +147,13 @@
 		}
 		
 		
-		// Add scripts regardless of the view:
+		// Load the media scripts and styles on the widgets page:
 			
-		if( $pagenow == 'widgets.php' || $pagenow == 'post.php' || $pagenow == 'post-new.php' ){
-			//always load the media scripts in the edit page:
+		if( $pagenow == 'widgets.php' ){
 			wp_enqueue_media();
-			
 			wp_enqueue_style( 'thickbox' );
-
-		}else if( $pagenow == 'media-upload.php' && isset( $_GET['cuisine_widget_media'] ) ){
-			//check for the media library for widgets
-			//wp_enqueue_script( 'cuisine_widget_media_script', $cuisine->asset_url.'/js/admin-widgets-media.js' );
-		
-		}else if( $pagenow == 'media-upload.php' && isset( $_GET['cuisine_plugin_media'] ) ){
-			//wp_enqueue_script('cuisine_media_script', $cuisine->asset_url. '/js/admin-plugin-media.js', 'jquery');
-		
 		}
+
 
 		//add the general admin styles:
 		wp_enqueue_style( 'cuisine_admin', $cuisine->asset_url.'/css/admin.css' );

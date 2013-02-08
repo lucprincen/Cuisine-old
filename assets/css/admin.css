@@ -128,7 +128,7 @@ body.simple-view #wp-content-editor-container{background:#ffffff;}
 	.cuisine_input.video_input{width:180px;}
 	#slider-media-add .button{margin-right:20px;}
 	#cuisine-media-video-add{-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;width:100%;border-radius:7px;border:1px solid rgba(0,0,0,.1);background:#ededed;margin:20px 0 20px 0;padding:0 20px 5px 20px;}
-	#addvid{display:inline-block;margin-left:20px;width:50px;min-width:50px !important;max-width:50px !important;}
+	#addvid{display:inline-block;margin-left:20px;width:80px !important;min-width:80px !important;max-width:80px !important;}
 	#cuisine-media-video-add{display:none;}
 
 	.clearfix{clear:both;}

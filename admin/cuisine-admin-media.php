@@ -63,6 +63,11 @@
 		$includes = $cuisine_media_includes[$posttype];
 		$metaname = $posttype.'_media';
 
+		$only_video = false;
+		if( in_array('video', $includes) && count( $includes ) == 1 ){
+			$only_video = true;
+		}
+
 		$i = 0;
 		?>
 		<div id="cuisine-media-add">
@@ -70,7 +75,7 @@
 				<input type="button" value="Afbeeldingen toevoegen" class="button tagadd cuisine-add-media" data-media-type="image" data-multiple="true"/>
 			<?php endif;?>
 
-			<?php if( in_array( 'video', $includes ) ):?>
+			<?php if( in_array( 'video', $includes ) && !$only_video ):?>
 			<input type="button" value="Videos toevoegen" class="button tagadd" id="addvideos"/>
 			<?php endif;?>
 
@@ -79,12 +84,12 @@
 			<?php endif;?>
 
 			<?php if( in_array( 'video', $includes ) ):?>
-			<div id="cuisine-media-video-add">
+			<div id="cuisine-media-video-add" <?php if( $only_video ) echo 'style="display:block !important;"';?>>
 				
 				<label class="cuisine_label label_left">
 					<p>Video URL:</p>
 					<input type="text" class="cuisine_input input_left video_input" id="vidurl" value="Plak hier het webadres van de video" onClick="doSmartEmpty('#vidurl', 'Plak hier het webadres van de video');"/>
-					<input type="button" value="Voeg toe" class="button tagadd" id="addvid"/>
+					<input type="button" value="Voeg toe" class="button" id="addvid"/>
 				</label>
 				<div class="clearfix"></div>
 			</div>

@@ -116,7 +116,7 @@
 		if( isset( $_GET['post'] ) )
 			return $_GET['post'];
 
-		if( $pagenow == 'post-new.php')
+		if( $pagenow == 'post-new.php' && isset( $post ) )
 			return $post->ID;
 
 		if( isset( $post ) )

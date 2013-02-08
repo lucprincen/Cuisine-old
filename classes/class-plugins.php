@@ -212,7 +212,6 @@ class Cuisine_Plugins {
 			if( isset( $item['orderby'] ) && is_array( $item['value'] ) )
 				$values = cuisine_sort_array_by( $values, $item['orderby'], $item['order'] );
 
-
 			update_post_meta( $post_id, $item['key'], $values );
 		}
 
