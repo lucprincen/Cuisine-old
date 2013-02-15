@@ -144,15 +144,25 @@
 		
 			}
 	
-		}
-		
+		}			
+	
 		
 		// Load the media scripts and styles on the widgets page:
 			
 		if( $pagenow == 'widgets.php' ){
-			wp_enqueue_media();
 			wp_enqueue_style( 'thickbox' );
+			wp_enqueue_media();
+
+		}else if( $pagenow == 'post.php' || $pagenow == 'post-new.php' ){
+			//if this post doesn't support featured images, include the media:
+			$pid = cuisine_get_post_id();
+
+			if( $pid && !post_type_supports( get_post_type( $pid ), 'thumbnail' ) ){
+				wp_enqueue_media();
+			}
+
 		}
+
 
 
 		//add the general admin styles:
