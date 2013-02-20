@@ -595,7 +595,7 @@ class Cuisine_Plugins {
 
 							//we need to compare the post slug to the title in the query:
 							$queried_slug = $wp_query->post->post_name;
-
+							
 							//loop through the pages in the redirect array:
 							foreach( $pages as $slug => $page ){
 
@@ -613,7 +613,7 @@ class Cuisine_Plugins {
 							}
 
 						// else it's a post or post_type:
-						}else{
+						}else if( in_array( $posttype, $types ) ){
 							//it is, we are redirecting:
 							$wp_query->is_home = false;
 		
