@@ -567,7 +567,7 @@ class Cuisine_Plugins {
 		if ( isset($wp_query->query_vars) ){
 
 			//then check if we're not servicing a robot or feed:
-			if( !is_robots() && !is_feed() && !is_trackback() ){
+			if( !is_robots() && !is_feed() && !is_trackback()  && !is_404() ){
 
 				//get the queries post type:
 				$posttype = $wp_query->query_vars['post_type'];

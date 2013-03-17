@@ -56,4 +56,39 @@
 
 	}
 
+	function cuisine_post_media( $pid = null, $posttype = null ){
+
+		if( $pid == null )
+			$pid = cuisine_get_post_id();
+
+		if( $posttype == null )
+			$posttype = get_post_type( $pid );
+
+
+		return get_post_meta( $pid, $posttype.'_media', true );
+	}
+
+	function cuisine_video_embedcode( $id, $url, $width = 560, $height = 315 ){
+		
+		$html = '';
+		if( cuisine_is_vimeo( $url ) ){
+			//it's a vimeo movie:
+			$html = '<iframe src="http://player.vimeo.com/video/'.$id.'" width="'.$width.'" height="'.$height.'" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
+
+
+		}else{
+			//it's a youtube movie:
+			$html = '<iframe width="'.$width.'" height="'.$height.'" src="http://www.youtube.com/embed/'.$id.'" frameborder="0" allowfullscreen></iframe>';
+
+		}
+
+		echo $html;
+
+	}
+
+	function cuisine_is_vimeo( $string ){
+		if( substr( $string, 0, 12 ) == 'http://vimeo' || substr( $string, 0, 13 ) == 'https://vimeo' || substr( $string, 0, 16 ) == 'http://www.vimeo' || substr( $string, 0, 17 ) == 'https://www.vimeo' ) return true;
+		return false;
+	}
+
 ?>

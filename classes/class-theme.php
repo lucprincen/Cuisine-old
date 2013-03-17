@@ -795,7 +795,7 @@ class Cuisine_Theme {
 
 			foreach( $this->theme_vars_to_query as $var ){
 
-				if( $script['on_page'] == 'all' || $this->is_correct_enqueue_page( $var['on_page'], $var['page_type'] ) ){ 
+				if( $var['on_page'] == 'all' || $this->is_correct_enqueue_page( $var['on_page'], $var['page_type'] ) ){ 
 					
 					//setup the variables:
 					wp_localize_script( $var['id'], $var['var'], $var['value'] );
@@ -825,7 +825,7 @@ class Cuisine_Theme {
 		if( $type == 'post_type' && $q['post_type'] == $page )
 			return true;
 		
-		if( $post->ID == $page )
+		if( isset( $post ) && $post->ID == $page )
 			return true;
 
 
