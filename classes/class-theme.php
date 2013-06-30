@@ -37,6 +37,7 @@ class Cuisine_Theme {
 	}
 
 
+
 	function init(){ 
 
 		if( is_admin() ) $this->init_theme_admin();
@@ -748,40 +749,57 @@ class Cuisine_Theme {
 
 
 
+
 	/**
 	*	Enqueue the scripts in theme_scripts_to_query if this is the right page:
 	*/
 	function enqueue_registered_scripts(){
 
+		global $cuisine;
+
 
 		//check if the array isn't empty:
 		if( !empty( $this->theme_scripts_to_query ) ){
 
-			//first, check if there are scripts we need to minify ( on_page 'all' scripts ):
-			$to_minify = array();
 
-			foreach( $this->theme_scripts_to_query as $script ){
-
-				if( $script['on_page'] == 'all' && isset( $script['root_url'] ) ){
-
-					//add it to the minify array:
-					$to_minify[] = $script;
-
+			//if Cuisine's in production mode, first include the minfied master:
+			if( $cuisine->production_mode ){
+	
+				//first, queue the script and all its dependencies:
+				$relativepath = $this->get_minified_js_path();
+	
+				$minified = $this->get_minified_js_scripts();
+	
+				$dv = $this->get_minified_js_deps( $minified );
+				$deps = ( empty( $dv['deps'] ) ) ? array() : $dv['deps'] ;
+				$vars = ( empty( $dv['vars'] ) ) ? array() : $dv['vars'] ;
+					
+				wp_enqueue_script( 'cuisine_script', $relativepath, $deps, $vars, true );
+	
+				foreach( $this->theme_scripts_to_query as $key => $script ){
+	
+					//remove these scripts from the array, they don't need to be loaded it again.
+					if( $script['on_page'] == 'all' && isset( $script['root_url'] ) ){
+	
+						unset( $this->theme_scripts_to_query[ $key ] );
+						
+					}
 				}
-
 			}
-
-			//Check if there's anything to minify, if so... do it:
-			if( !empty( $to_minify ) )
-				$this->minify_js( $to_minify );
 
 
 			foreach( $this->theme_scripts_to_query as $script ){
 				//check if on this page / single post or archive on which to load:
-				if( ( $script['on_page'] == 'all' && !isset( $script['root_url'] ) ) || $this->is_correct_enqueue_page( $script['on_page'], $script['page_type'] ) ){
-			
-					//enqueue the script:
-	 				wp_enqueue_script( $script['id'], $script['url'], $script['deps'], $script['vars'], true );
+				if( $script['on_page'] == 'all' || $this->is_correct_enqueue_page( $script['on_page'], $script['page_type'] ) ){
+				
+					if( isset( $script['url'] ) ){
+						//enqueue the script:
+		 				wp_enqueue_script( $script['id'], $script['url'], $script['deps'], $script['vars'], true );
+
+					}else{
+						echo 'SCRIPT URL NOT FOUND:'. $script['id'];
+					}
+
 	 			}
 			}
 		}
@@ -835,65 +853,140 @@ class Cuisine_Theme {
 
 
 	/**
+	*	Get the JS to minify:
+	*/
+
+	function generateMinifiedJS(){
+		
+		global $cuisine;
+	
+		//check if the array isn't empty:
+		if( !empty( $this->theme_scripts_to_query ) ){
+
+			$to_minify = $this->get_minified_js_scripts();
+
+			//Check if there's anything to minify, if so... do it:
+			if( !empty( $to_minify ) ){
+
+				$name = $this->get_minified_js_filename();
+
+				//generate the root and url paths:
+				$filepath = $this->root_url( 'scripts', true ).$name;
+				$relativepath = $this->get_minified_js_path();
+
+				include('includes/JSMin.php');
+						
+				$js = '';
+				foreach( $to_minify as $script ){
+					//add the contents of each js file to the js variable:
+					$js .= file_get_contents( $script['root_url'] );
+				
+				}
+						
+				//minify the js variable:
+				$js = JSMin::minify( $js );
+
+				//write the contents to a new file:
+				if( file_put_contents( $filepath, $js ) ){
+					return 'success-minify';
+				
+				}else{
+					return 'fail-minify';
+
+				}
+				
+			
+			}else{
+
+				return 'zero-minify';
+			}
+
+		}
+
+		return 'zero-minify';
+	}
+
+
+	/**
 	*	Minify JS:
 	*/
 	function minify_js( $scripts ){
 
-		global $cuisine;
 
+
+		
+	//	$depsvars = $this->get_minified_js_deps( $scripts );
+	//	$deps = $depsvars['deps'];
+	//	$vars = $depsvars['vars'];
+
+		
+		//include the minifier script:
+	
+
+	}
+
+
+	function get_minified_js_scripts(){
+		//first, check if there are scripts we need to minify ( on_page 'all' scripts ):
+		$minified = array();
+
+		foreach( $this->theme_scripts_to_query as $script ){
+
+			if( $script['on_page'] == 'all' && isset( $script['root_url'] ) ){
+
+				//add it to the minify array:
+				$minified[] = $script;
+
+			}
+
+		}
+
+		return $minified;
+	}
+
+
+	/**
+	*	Get the minified js path:
+	*/
+	function get_minified_js_path(){
+
+		return $this->url( 'scripts', true ).$this->get_minified_js_filename();
+	
+	}
+
+	/**
+	*	Get the minified js filename:
+	*/
+	function get_minified_js_filename(){
 		//get the theme object:
 		$themeobj = wp_get_theme();
 
 		//create the name:
-		$name = 'script_'.$themeobj->stylesheet.'.min.js';
+		$name = 'script_'.str_replace( ' ', '_', $themeobj->stylesheet ).'.min.js';
 
-		//generate the root and url paths:
-		$filepath = $this->root_url( 'scripts', true ).$name;
-		$relativepath = $this->url( 'scripts', true ).$name;
+		return $name;
+	}
 
-		$deps = array();
-		$vars = array();
-		$script_ids = '';
+
+	/**
+	*	Get the minified js deps and vars:
+	*/
+	function get_minified_js_deps( $scripts ){
 
 		//add the deps + vars and create the script id-string:
+		$array = array( 'deps', 'vars' );
 		foreach( $scripts as $script ){
 
 			if( !empty( $script['deps'] ) )
-				$deps = array_merge( $deps, $script['deps'] );
+				$array['deps'] = array_merge( $array['deps'], $script['deps'] );
 			
 			if( !empty( $script['vars'] ) )
-				$vars = array_merge( $vars, $script['vars'] );
+				$array['vars'] = array_merge( $array['vars'], $script['vars'] );
 			
-			$script_ids .= $script['id'].'|';
-
 		}
 
-		//only minify if we've added a new script id:
-		if( get_option( 'cuisine_minified_js') != $script_ids ){
+		return $array;
 
-			//include the minifier script:
-			include('includes/JSMin.php');
-			
-			$js = '';
-			foreach( $scripts as $script ){
-				
-				//add the contents of each js file to the js variable:
-				$js .= file_get_contents( $script['root_url'] );
-	
-			}
-			
-			//minify the js variable:
-			$js = JSMin::minify( $js );
-	
-			//write the contents to a new file:
-			file_put_contents( $filepath, $js );
-
-			//update the minified option with all the IDS:
-			update_option( 'cuisine_minified_js', $script_ids );
-		}
-
-		//enqueue the minified script:
-		wp_enqueue_script( 'cuisine_script', $relativepath, $deps, $vars, true );
 	}
 
 

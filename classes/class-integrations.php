@@ -49,7 +49,7 @@ class Cuisine_Integrations {
 
     	$this->plugin_list[] = $plugin_name;
     
-    	if( $version != null ){
+    	if( ( is_admin() && $version != null ) &&  !defined('DOING_AJAX') ){
     		global $cuisine;
 			    		
     		$args = array( 'slug' => $plugin_name, 'version' => $version );

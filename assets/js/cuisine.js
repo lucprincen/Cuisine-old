@@ -9,7 +9,6 @@
     var Cuisine = new function(){
 
 
-
         /*****************************************************************/
         /** MEDIA FUNCTIONS: *********************************************/
         /*****************************************************************/
@@ -21,6 +20,8 @@
         //keep the post id variable for later, if we decide to change it:
         var wp_media_post_id = wp.media.model.settings.post.id;
 
+
+        var PostExtras = PostExtras;
 
 
         /**
@@ -208,32 +209,4 @@
          
          }
 
-
-
-         /**
-         *  VALIDATION
-         */
-
-         this.validate = function(){
-
-
-            this.email = function( string ){
-
-                var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-                return reg.test( string );
-
-            }
-
-
-            this.empty = function( string ){
-                
-                if( string == undefined || string == null || string == ''){
-                    return true;
-                }
-
-                return false;
-
-            }
-
-         }
     }

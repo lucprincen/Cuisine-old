@@ -133,7 +133,7 @@
 				if( cuisine_is_plural( $diff ) ){
 					return $diff .' '. __('months ago', 'cuisine');
 				}else{
-					return $diff .' '. __('months ago', 'cuisine');
+					return $diff .' '. __('month ago', 'cuisine');
 				}
 			}
 

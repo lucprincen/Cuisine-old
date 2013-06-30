@@ -22,6 +22,8 @@ class Cuisine_Plugins {
 	var $redirect_list = array();
 	var $redirect_list_types = array();
 
+	var $postextras = array();
+
 
 
 	function __construct(){
@@ -99,6 +101,7 @@ class Cuisine_Plugins {
 				$this->plugin_data_to_save[$pid][] = $meta['data'];
 			}
 
+
 			// if this metabox applies to all post types:
 			if($meta['post_type'] == 'all'){
 
@@ -130,6 +133,7 @@ class Cuisine_Plugins {
 
 	function do_save_post( $post_id ){
 
+
       	//check if there is data to save:
 		if( !empty($this->plugin_data_to_save ) ){
 
@@ -158,11 +162,10 @@ class Cuisine_Plugins {
     			return $post_id;
 
 
-
-
 			$save = $this->plugin_data_to_save;
 
 			$current_post_type = get_post_type( $post_id );
+
 
 			//first check data to save for 'all' post types
 			if( isset($save['all'] ) ){
@@ -178,6 +181,7 @@ class Cuisine_Plugins {
 			if( isset( $save[$current_post_type] ) ){
 
 				foreach( $save[$current_post_type] as $item ){
+
 
 					$this->save_meta_to_post( $post_id, $item );
 
@@ -206,7 +210,10 @@ class Cuisine_Plugins {
 	function save_meta_to_post( $post_id, $item ){
 		$values = $this->sanitize_values( $item['value'] );
 		
-			
+		//allow plugins to change and filter the data to save at the last minute: 	
+		$values = apply_filters( 'cuisine_save_data', $values, $item, $post_id );
+
+
 		if( $values ){
 					
 			if( isset( $item['orderby'] ) && is_array( $item['value'] ) )
@@ -357,6 +364,7 @@ class Cuisine_Plugins {
     	//$menu['icon_url']
     	//$menu['position']
 
+
     	if($type == 'main'){
 			$this->plugin_main_menu_items[] = array($menu, $menu['func']);
 
@@ -383,6 +391,7 @@ class Cuisine_Plugins {
 		//go by all the saved main menu items:
 
 		foreach($this->plugin_main_menu_items as $menuitem){
+
 			$menu = $this->sanitize_menuitems($menuitem[0], $menuitem[1]);
 
 			//add the options page
@@ -458,6 +467,98 @@ class Cuisine_Plugins {
 	 }
 
 
+	/*************************************************************************/
+	/** Plugin PostExtras ****************************************************/
+	/*************************************************************************/
+
+	/**
+	*	Register a post-extra; very much like a metabox. 
+	*	Add a php ouput function, js-files and arguments.
+	*/
+	function register_post_extra( $id, $label, $function, $js = array(), $priority = null,  $args = array() ){
+
+		$this->postextras[ $id ] = array( 
+		                                 'id' 		=> $id,
+		                                 'label' 	=> $label,
+		                                 'priority' => $priority,
+		                                 'func' 	=> $function,
+		                                 'js' 		=> $js,
+		                                 'args' 	=> $args
+		                           );
+
+
+		if( !has_filter( 'cuisine_post_extras_tabs', array( &$this, 'post_extra_tabs'), null, 1 ) )
+			add_filter( 'cuisine_post_extras_tabs', array( &$this, 'post_extra_tabs' ), null, 1 );
+
+		if( !has_action( 'cuisine_post_extras', array( &$this, 'post_extra_functions' ) ) )
+			add_action( 'cuisine_post_extras', array( &$this, 'post_extra_functions' ) ); 
+	
+	}
+
+	/**
+	*	Display all the post-extra divs:
+	*/
+	function post_extra_functions(){
+
+		if( !empty( $this->postextras ) ){
+
+			foreach( $this->postextras as $extra ){
+
+				if( function_exists( $extra['func'] ) ){
+
+					echo '<div class="post-extra" id="pe_'.$extra['id'].'" data-id="'.$extra['id'].'">';
+
+						call_user_func( $extra['func'], $extra['args'] );
+
+					echo '</div>';
+
+
+					if( !empty( $extra['js'] ) ){
+
+						foreach( $extra['js'] as $url ){
+
+							wp_enqueue_script( $extra['id'].'_js', $url, array(), null, true );
+
+						}
+
+					}
+				}
+			}
+		}
+	}
+
+
+	/**
+	*	return all the post_extra tabs:
+	*/
+	function post_extra_tabs( $tabs ){
+
+		$t = array();
+		if( !empty( $this->postextras ) ){
+
+			foreach( $this->postextras as $extra ){
+
+				$default_js_func = apply_filters( 'cuisine_post_extra_js_output', str_replace('-', '_', $extra['id']).'_output', $extra['id'] );
+
+				$t[] = array( 
+				             'id' 		=> $extra['id'],
+				             'title' 	=> $extra['label'],
+				             'priority' => $extra['priority'],
+				             'jsfunc' 	=> $default_js_func
+				       );
+
+			}
+
+			if( !empty( $t ) )
+				$tabs = cuisine_sort_array_by( $t, 'priority', 'ASC' );
+
+		}
+
+		return $tabs;
+
+	}
+
+
 
 	/*************************************************************************/
 	/** Redirect Functions ***************************************************/
@@ -519,8 +620,9 @@ class Cuisine_Plugins {
 		$object = $this->sanitize_page_object( $slug, $object );
 
 		//check if the page exists:
-		$page_id = get_page_by_title( $slug );
+		$page_id = get_page_by_path( $slug );
 
+		
 		//if it doesn't, create the page:
 		if($page_id == null){
 				
@@ -602,6 +704,8 @@ class Cuisine_Plugins {
 								//the page is the same as the queried object, we are redirecting:
 								if( $slug == $queried_slug ){
 
+									$wp_query->cuisine_slug = $page;
+
 									//create a template name out of the slug;
 									$template_file = str_replace(' ', '-', strtolower( $page ) );
 
@@ -620,6 +724,10 @@ class Cuisine_Plugins {
 							if( $posttype == 'post' )
 								$posttype = 'blog';
 		
+
+							$wp_query->cuisine_slug = $posttype;
+
+
 							//check for a single:
 							if( is_single() ){
 								$wp_query->is_custom_post_type_archive = false;
@@ -735,8 +843,7 @@ class Cuisine_Plugins {
 
 		//get the option:
 		$structure = get_option( 'permalink_structure', '' );
-
-		if( $structure == '/%postname%/' ) return true;
+		if( $structure == apply_filters('cuisine_permalink_structure', '/%postname%/' ) ) return true;
 
 		return false;
 
@@ -765,9 +872,12 @@ class Cuisine_Plugins {
 
 	function get_page_url( $slug ){
 
-		$page = get_page_by_title( $slug );
+		$page = get_page_by_path( $slug );
 
-		return get_permalink( $page->ID );
+		if( !empty( $page ) )
+			return get_permalink( $page->ID );
+
+		return '';
 	}
 
 }?>

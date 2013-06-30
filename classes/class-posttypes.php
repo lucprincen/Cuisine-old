@@ -73,6 +73,36 @@ class Cuisine_Posttypes {
 	}
 
 	/**
+	*	Return the current post type:
+	*/
+
+	function get( ){
+		global $post;
+
+		if( is_admin() ){
+
+			if( isset( $_GET['post_type' ] ) )
+				return $_GET['post_type'];
+
+			if( isset( $post ) )
+				return get_post_type( $post->ID );
+
+			if( isset( $_GET['post' ] ) )
+				return get_post_type( $_GET['post'] );
+
+		}else{
+			
+			if( isset( $post ) )
+				return $post->post_type;
+		}
+
+
+		return false;
+
+	}
+
+
+	/**
 	* Get the current post type:
 	*/
 	function current( $type ){
@@ -92,6 +122,9 @@ class Cuisine_Posttypes {
 		
 		global $post;
 		if( isset( $post ) && get_post_type( $post->ID ) == $type )
+			return true;
+
+		if( isset( $_GET['post'] ) && get_post_type( $_GET['post'] ) == $type )
 			return true;
 
 		return false;

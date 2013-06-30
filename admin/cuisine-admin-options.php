@@ -8,8 +8,15 @@
 	*/
 
 	function cuisine_show_options_page(){
-	
+			
+		global $cuisine;
+
 		$s = get_cuisine_setting( 'simple_view' );
+		if( $cuisine->production_mode ){
+			$prod_class = 'productionmode';
+		}else{
+			$prod_class = 'developmentmode';
+		}
 
 ?>
 
@@ -23,37 +30,53 @@
 
 	?>	
 	<h2><?php _e('Cuisine Options', 'cuisine');?></h2>
-		
+			
+		<?php if( current_user_can( 'toggle_production_mode' ) ):?>
+		<a class="cuisine_form_section cuisine_production_section <?php echo $prod_class;?>" href="<?php echo admin_url();?>admin.php?page=cuisine_options&toggle_production_mode=true">
+			<h3><?php _e( 'Website Status', 'cuisine' );?></h3>
+			<?php 
+
+			if( $cuisine->production_mode ){
+				echo '<p>'.__('website is functioning normally in', 'cuisine').' <strong>'.__('PRODUCTION MODE', 'cuisine').'</strong></p>';
+				echo '<p class="warning_txt">Click this bar to toggle it back to development mode.</p>';
+			}else{
+				echo '<p>'.__('website might be a bit unstable because it\'s in', 'cuisine').' <strong>'.__('DEVELOPMENT MODE').'</strong></p>';
+				echo '<p class="warning_txt">Click this bar to toggle it to production mode.</p>';
+			}
+			?>
+		</a>
+		<?php endif;?>
+
 		<div class="cuisine_form_section">
 			<h3><?php _e('First admin page', 'cuisine');?></h3>
 		
 			<label>
-				<input type="checkbox" name="cuisine_show_pages" <?php if( $s['show_pages_front'] == true ) echo 'checked' ;?>/> <?php _e( 'Show all pages directly', 'cuisine' );?></label>
+				<input type="checkbox" name="cuisine_show_pages" <?php checked( $s['show_pages_front'], true );?>/> <?php _e( 'Show all pages directly', 'cuisine' );?></label>
 
 			<label><?php _e('Icon size', 'cuisine');?>
 					<select name="cuisine_icon_size">
-						<option value="50" <?php if($s['icon_size'] == '50') echo 'selected';?>><?php _e('Small', 'cuisine');?></option>
-						<option value="120" <?php if($s['icon_size'] == '120') echo 'selected';?>><?php _e('Medium', 'cuisine');?></option>
-						<option value="190" <?php if($s['icon_size'] == '190') echo 'selected';?>><?php _e('Large', 'cuisine');?></option>
-						<option value="250" <?php if($s['icon_size'] == '250') echo 'selected';?>><?php _e('Extra large', 'cuisine');?></option>
+						<option value="50" <?php selected($s['icon_size'], '50');?>><?php _e('Small', 'cuisine');?></option>
+						<option value="120" <?php selected($s['icon_size'], '120');?>><?php _e('Medium', 'cuisine');?></option>
+						<option value="190" <?php selected($s['icon_size'], '190');?>><?php _e('Large', 'cuisine');?></option>
+						<option value="250" <?php selected($s['icon_size'], '250');?>><?php _e('Extra large', 'cuisine');?></option>
 					</select>
 			</label>
 
 			<label>
-				<input type="checkbox" name="cuisine_edit_menus" <?php if( $s['edit_menus'] == true ) echo 'checked';?>/> <?php _e( 'Users can edit menu\'s', 'cuisine' );?></label>
+				<input type="checkbox" name="cuisine_edit_menus" <?php checked( $s['edit_menus'], true );?>/> <?php _e( 'Users can edit menu\'s', 'cuisine' );?></label>
 		</div>
 
 		<div class="cuisine_form_section">
 			<h3><?php _e('Overview page', 'cuisine');?></h3>
 
 			<label>
-				<input type="checkbox" name="cuisine_add_pages" <?php if( $s['add_pages'] == true ) echo 'checked' ;?>/> <?php _e( 'Users can add new pages', 'cuisine' );?></label>
+				<input type="checkbox" name="cuisine_add_pages" <?php checked( $s['add_pages'], true );?>/> <?php _e( 'Users can add new pages', 'cuisine' );?></label>
 
 			<label>
-				<input type="checkbox" name="cuisine_delete_pages" <?php if( $s['delete_pages'] == true ) echo 'checked' ;?>/> <?php _e( 'Users can delete pages', 'cuisine' );?></label>
+				<input type="checkbox" name="cuisine_delete_pages" <?php checked( $s['delete_pages'], true );?>/> <?php _e( 'Users can delete pages', 'cuisine' );?></label>
 
 			<label>
-				<input type="checkbox" name="cuisine_back_button" <?php if( $s['back_button'] == true ) echo 'checked' ;?>/> <?php _e( 'Show \'Back button\'', 'cuisine' );?></label>
+				<input type="checkbox" name="cuisine_back_button" <?php checked( $s['back_button'], true );?>/> <?php _e( 'Show \'Back button\'', 'cuisine' );?></label>
 		</div>
 		<div class="cuisine_form_section">
 			<input type="submit" value="<?php _e( 'Submit','cuisine' );?>" class="primary">

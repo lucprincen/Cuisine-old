@@ -17,10 +17,7 @@
 	
 		//Text Highlights
 		include( 'shortcode-highlights.php' );
-	
-		//Image frames
-		include( 'shortcode-frames.php' );
-	
+		
 		// Buttons
 		include( 'shortcode-buttons.php' );
 

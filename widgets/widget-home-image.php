@@ -270,8 +270,7 @@ function cuisine_widget_home_image_meta_html(){
 			 </div>
 		</p>
 		<p class="cuisine_widget_centralized">
-			<?php $image_upload_iframe_src = "media-upload.php?type=image&post_id=0&width=640&height=644&cuisine_widget_media=true&widget_id=".$wid;?>
-			<a href="<?php echo $image_upload_iframe_src; ?>&TB_iframe=true" class="button-primary cuisine_widget_button thickbox"  onClick="setActiveWidget('<?php echo $wid; ?>');return false;" style="text-decoration:none"><?php echo __('Afbeelding kiezen');?></a>
+			<a href="#" class="button-primary cuisine-widget-media" data-widget="<?php echo $wid;?>" style="text-decoration:none"><?php echo __('Afbeelding kiezen');?></a>
 		</p>
 
 		<label class="cuisine_label"><p>Link</p><input type="text" value="<?php echo $img['link']?>" name="<?php echo $arrpos;?>[link]"/></label>

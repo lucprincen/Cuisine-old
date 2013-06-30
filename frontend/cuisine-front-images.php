@@ -3,12 +3,85 @@
 /**
  * Cuisine Front image functions
  * 
- * Handles the front image function.
+ * Handles lazy loading images and some post-thumbnail stuff.
  *
  * @author 		Chef du Web
  * @category 	Front
  * @package 	Cuisine
  */
+
+
+	function cuisine_img( $url, $supports = array( 'desktop', 'tablet', 'mobile' ), $args = array() ){
+		echo cuisine_get_img( $url, $supports, $args );
+	}
+
+
+	function cuisine_get_img( $url, $supports = array( 'desktop', 'tablet', 'mobile' ), $args = array() ){
+
+		if( $url == null || $url == '' ) return false;
+
+		global $cuisine;
+
+		$class = 'lazy-img cuisine-img';
+		if( isset( $args['class'] ) ) $class .= ' '.$args['class'];
+		
+		$class .= cuisine_get_img_class( $supports );
+
+		$title = '';
+		$alt = '';
+		$extension = cuisine_get_img_extension( $url );
+
+		$src = $cuisine->asset_url.'/images/0.gif';
+
+		if( isset( $args['title'] ) ) $title = ' title="'.$args['title'].'"';
+		if( isset( $args['alt'] ) ) $alt = ' alt="'.$args['alt'].'"';
+
+
+		$html = '<img src="'.$src.'" data-src="'.$url.'" ';
+		$html .= 'data-extension="'.$extension.'" ';
+		$html .= 'class="'.$class.'" ';
+		$html .= $title;
+		$html .= $alt;
+		$html .= '/>';
+
+		return $html;
+
+	}
+
+
+
+
+	function cuisine_get_img_class( $supports ){
+		$c = '';
+		if( in_array( 'desktop', $supports ) )
+			$c .= ' desktop-load';
+	
+		if( in_array( 'mobile', $supports ) )
+			$c .= ' mobile-load';
+
+		if( in_array( 'tablet', $supports ) )
+			$c .= ' tablet-load';
+
+		if( in_array( 'retina', $supports ) )
+			$c .= ' retina-load';
+
+		return $c;
+	}
+
+	function cuisine_get_img_extension( $url ){
+
+		$ex = substr( $url, -4 );
+		if( $ex == '.jpg' || 'jpeg' ){
+			return 'jpg';
+		}else if( $ex == '.png' ){
+			return 'png';
+		}else if( $ex == '.gif' ){
+			return 'gif';
+		}
+
+		return 'unknown';
+
+	}
 
 
 	//echo image src by post id
@@ -68,27 +141,14 @@
 		return get_post_meta( $pid, $posttype.'_media', true );
 	}
 
-	function cuisine_video_embedcode( $id, $url, $width = 560, $height = 315 ){
-		
-		$html = '';
-		if( cuisine_is_vimeo( $url ) ){
-			//it's a vimeo movie:
-			$html = '<iframe src="http://player.vimeo.com/video/'.$id.'" width="'.$width.'" height="'.$height.'" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
+	function cuisine_get_image_id_by_url( $image_url ){
+	
+		global $wpdb;
+		$prefix = $wpdb->prefix;
+		$attachment = $wpdb->get_col($wpdb->prepare("SELECT ID FROM " . $prefix . "posts" . " WHERE guid='%s';", $image_url )); 
 
-
-		}else{
-			//it's a youtube movie:
-			$html = '<iframe width="'.$width.'" height="'.$height.'" src="http://www.youtube.com/embed/'.$id.'" frameborder="0" allowfullscreen></iframe>';
-
-		}
-
-		echo $html;
-
-	}
-
-	function cuisine_is_vimeo( $string ){
-		if( substr( $string, 0, 12 ) == 'http://vimeo' || substr( $string, 0, 13 ) == 'https://vimeo' || substr( $string, 0, 16 ) == 'http://www.vimeo' || substr( $string, 0, 17 ) == 'https://www.vimeo' ) return true;
-		return false;
+        return $attachment[0]; 
+        
 	}
 
 ?>

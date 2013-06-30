@@ -14,7 +14,7 @@
 	add_action( 'init', 'cuisine_admin_includes', 1);
 	add_action( 'admin_init', 'cuisine_admin_init' );
 	add_action( 'admin_menu', 'cuisine_admin_scripts' );
-	
+	add_action( 'wp_after_admin_bar_render', 'cuisine_admin_errors' );
 	
 	/**
 	* Include required admin core files
@@ -29,9 +29,10 @@
 			include( 'cuisine-admin-view.php' );						//all the simple view functions
 			include( 'cuisine-admin-conditionals.php' );				//simple admin conditionals
 			include( 'cuisine-admin-settings.php' );
-			include( 'cuisine-admin-media.php' );		
+			include( 'cuisine-admin-media.php' );	
+			include( 'cuisine-admin-edit-post.php' ); 	
+			include( 'cuisine-admin-install.php' );
 		}
-
 	}
 
 
@@ -50,6 +51,10 @@
 			cuisine_update_simple_view( 'false' );
 		}
 	
+		//Check if we are toggeling production mode:
+		cuisine_toggle_production_mode();
+
+
 		//toggle views:
 		cuisine_check_toggle_simple_view();
 	
@@ -133,6 +138,7 @@
 
 		}
 
+
 		// Add scripts for simple view:
 		if( cuisine_simple_view_is_active() ){
 				
@@ -153,25 +159,25 @@
 			wp_enqueue_style( 'thickbox' );
 			wp_enqueue_media();
 
-		}else if( $pagenow == 'post.php' || $pagenow == 'post-new.php' ){
+		}else if( $pagenow == 'post.php' || $pagenow == 'post-new.php' || $pagenow == 'page.php' || $pagenow == 'page-new.php' ){
 			//if this post doesn't support featured images, include the media:
 			$pid = cuisine_get_post_id();
 
 			if( $pid && !post_type_supports( get_post_type( $pid ), 'thumbnail' ) ){
 				wp_enqueue_media();
 			}
+			wp_enqueue_script( 'cuisine_specials_class', $cuisine->asset_url.'/js/cuisine-specials.js',  array('jquery', 'jquery-ui-sortable', 'thickbox', ), false, true  );
+
+
+			//add the scripts for the general admin area:
+			wp_enqueue_script( 'cuisine_main_class', $cuisine->asset_url.'/js/cuisine.js', array('jquery', 'jquery-ui-sortable', 'thickbox' ), false, true  );
+
 
 		}
 
-
-
-		//add the general admin styles:
+		//add the general admin styles & scripts
 		wp_enqueue_style( 'cuisine_admin', $cuisine->asset_url.'/css/admin.css' );
-
-		//add the scripts for the general admin area:
-		wp_enqueue_script( 'cuisine_main_class', $cuisine->asset_url.'/js/cuisine.js', array('jquery', 'jquery-ui-sortable', 'thickbox'), FALSE, TRUE  );
-		wp_enqueue_script( 'cuisine_admin', $cuisine->asset_url.'/js/admin.js', array('jquery', 'jquery-ui-sortable', 'thickbox'), FALSE, TRUE  );
-
+		wp_enqueue_script( 'cuisine_admin', $cuisine->asset_url.'/js/admin.js', array('jquery', 'jquery-ui-sortable', 'thickbox' ), false, true  );
 
 	}
 
@@ -277,6 +283,35 @@
 
 	}
 
+	/**
+	*	Display erros in cuisine's error-object
+	*
+ 	* @access public
+	* @return html
+	*/
+	function cuisine_admin_errors(){
+
+		global $cuisine;
+		$errors = $cuisine->get_errors();
+
+
+		if( !empty( $errors ) ){
+
+			echo '<div class="cuisine_message cuisine_error">';
+
+				foreach( $errors as $error ){
+
+					echo '<p>'.$error.'</p>';
+
+				}
+
+			echo '</div>';
+			
+		//	$cuisine->clear_errors();
+		}
+
+	}
+
 	
 	/**
 	* Install cuisine
@@ -285,7 +320,6 @@
 	* @return void
 	**/
 	function install_cuisine() {
-		include_once( 'cuisine-admin-install.php' );
 		do_install_cuisine();
 	}
 

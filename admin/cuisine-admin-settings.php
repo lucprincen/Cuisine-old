@@ -67,7 +67,7 @@
 					'show_pages_front'	=> true,
 					'icon_size'			=> '120',
 
-					'back_button'		=> false,
+					'back_button'		=> true,
 					'add_pages'			=> false,
 					'delete_pages'		=> false,
 					'edit_menus'		=> false

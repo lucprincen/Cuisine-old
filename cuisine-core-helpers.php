@@ -101,6 +101,19 @@
 
 
 
+	//A quick function to compare 2 variables and output some text:
+	function cuisine_current( $first, $second, $raw = true, $class = 'current' ){
+
+		if( $first == $second ){
+
+			if( $raw ) echo $class;
+
+			return $class;
+
+		}
+
+	} 
+
 
 	/**************************************************/
 	/** Post / Post-meta  getters *********************/
@@ -148,6 +161,14 @@
 		$cuisine->plugins->get_plugin_nonce();
 	}
 
+
+
+	/* Post Extras */
+	function cuisine_register_post_extra( $id, $label, $func, $js = array(), $priority = null, $args = array() ){
+		global $cuisine;
+		$cuisine->plugins->register_post_extra( $id, $label, $func, $js, $priority, $args );
+
+	}
 
 
 

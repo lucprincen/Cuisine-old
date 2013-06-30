@@ -3,11 +3,11 @@
  * Plugin Name: Cuisine
  * Plugin URI: http://www.chefduweb.nl/cuisine/
  * Description: Cuisine contains the basic framework for Chef du Web. Comunication between plugins and themes and loads of admin & frontend helpers
- * Version: 1.1.2
+ * Version: 1.2
  * Author: Chef du Web
  * Author URI: http://www.chefduweb.nl
  * Requires at least: 3.5
- * Tested up to: 3.5
+ * Tested up to: 3.5.1
  * 
  * Text Domain: cuisine
  * Domain Path: /languages/
@@ -34,7 +34,7 @@ class Cuisine {
 
 	/** Version ***************************************************************/
 	
-	var $version = '1.1.2';
+	var $version = '1.2';
 	
 	/** URLS ******************************************************************/
 	
@@ -62,6 +62,9 @@ class Cuisine {
 	var $posttypes;
 	var $taxonomies;
 
+	/** Production / Development **********************************************/
+	var $production_mode = false;
+
 
 
 
@@ -86,6 +89,7 @@ class Cuisine {
 			session_name( $this->session_name );
 			session_start();
 		}
+
 
 
 		// Include required files
@@ -130,7 +134,6 @@ class Cuisine {
 		include( 'classes/class-integrations.php');				// Intergrations classes
 		include( 'classes/class-plugins.php');					// Plugins class
 		include( 'classes/class-theme.php');					// Theme class
-		include( 'classes/class-updates.php');					// Update functions
 
 		include( 'classes/class-posttypes.php');				// Handle posttypes easier
 		include( 'classes/class-taxonomies.php');				// Handle taxonomies easier
@@ -143,6 +146,7 @@ class Cuisine {
 	 **/
 	function admin_includes() {
 		include( 'admin/cuisine-admin-init.php' );				// Takes care of the 'open' admin functions
+		include( 'classes/class-updates.php');					// Update functions
 
 
 	}
@@ -152,6 +156,9 @@ class Cuisine {
 	 **/
 	function frontend_includes() {
 		include( 'frontend/cuisine-front-init.php' );			// All Frontend functions
+
+		
+		
 	}
 	
 
@@ -188,22 +195,33 @@ class Cuisine {
 
 		$this->posttypes 			= new Cuisine_Posttypes();			// Posttypes class
 		$this->taxonomies 			= new Cuisine_Taxonomies();			// Taxonomies class
-		$this->updates 				= new Cuisine_Updates();
 
 		// Init integrations, theme and plugins
 		$this->integrations->init();
 		$this->theme->init();
 		$this->plugins->init();
 
-		
 		// Load messages
 		$this->load_messages();
+
+
+		if( is_admin() ){
+
+			$this->updates 				= new Cuisine_Updates();
+
+		}
 
 		// Init user roles
 		$this->init_user_roles();
 				
 		// Init action
 		do_action( 'cuisine_init' );
+
+
+		//Get the production/development variable:
+		$this->production_mode = get_option( 'cuisine_production_mode', false );
+
+		$this->register_scripts();
 	}
 
 
@@ -231,6 +249,7 @@ class Cuisine {
 			// Main capabilities for admin
 			
 			$wp_roles->add_cap( 'administrator', 'toggle_admin_mode' );
+			$wp_roles->add_cap( 'administrator', 'toggle_production_mode' );
 
 			$wp_roles->add_cap( 'administrator', 'manage_cuisine' );
 			$wp_roles->add_cap( 'administrator', 'edit_cuisine_template' );
@@ -239,6 +258,56 @@ class Cuisine {
 			$wp_roles->add_cap( 'editor', 'edit_cuisine_content');
 
 		}
+	}
+
+	/**************************************************************************/
+	/** Register front-end scripts ********************************************/
+	/**************************************************************************/
+
+	function register_scripts(){
+
+		// Register Cuisine frontend javascripts
+		$args = array(
+			'id'			=>	'cuisine_responsive',
+			'url'			=> 	$this->asset_url.'/js/cuisine-responsive.js',
+			'root_url'		=>	$this->plugins->root_url('cuisine', true ).'assets/js/cuisine-responsive.js',
+			'on_page'		=>	'all'
+		);
+
+		$this->theme->register_scripts( $args );
+		
+		$args = array(
+			'id'			=>	'cuisine_script',
+			'url'			=> 	$this->asset_url.'/js/cuisine-front.js',
+			'root_url'		=>	$this->plugins->root_url('cuisine', true ).'assets/js/cuisine-front.js',
+			'on_page'		=>	'all'
+		);
+
+		$this->theme->register_scripts( $args );
+
+
+		$args = array(
+		      'id'			=> 'cuisine_images',
+		      'url'			=> 	$this->asset_url.'/js/cuisine-images.js',
+		      'root_url'	=> $this->plugins->root_url('cuisine', true).'assets/js/cuisine-images.js',
+		      'on_page'		=> 'all'
+		);
+
+		$this->theme->register_scripts( $args );
+
+		$args = array(
+		      'id'			=> 'cuisine_validate',
+		      'url'			=> 	$this->asset_url.'/js/cuisine-validate.js',
+		      'root_url'	=> $this->plugins->root_url('cuisine', true).'assets/js/cuisine-validate.js',
+		      'on_page'		=> 'all'
+		);
+
+		$this->theme->register_scripts( $args );
+
+
+		if( isset( $post ) )
+			wp_localize_script( 'chef-front-script', 'post', array( 'ID' => $post->ID, 'post_title' => $post->post_title, 'slug' => $post->post_name, 'post_parent' => $post->post_parent, 'guid' => $post->guid ) );
+
 	}
 
 
@@ -281,12 +350,16 @@ class Cuisine {
 	 * Load Messages
 	 */
 	function load_messages() { 
+
+
 		if ( isset( $_SESSION['errors'] ) ) $this->errors = $_SESSION['errors'];
 		if ( isset( $_SESSION['messages'] ) ) $this->messages = $_SESSION['messages'];
-		
+
+
 		unset( $_SESSION['messages'] );
 		unset( $_SESSION['errors'] );
-		
+			
+			
 		// Load errors from querystring
 		if ( isset( $_GET['cuisine_error'] ) ) {
 			$this->add_error( esc_attr( $_GET['cuisine_error'] ) );
@@ -296,12 +369,12 @@ class Cuisine {
 	/**
 	 * Add an error
 	 */
-	function add_error( $error ) { $this->errors[] = apply_filters( 'cuisine_add_error', $error ); }
+	function add_error( $error ) { $this->errors[] = apply_filters( 'cuisine_add_error', $error ); $this->set_messages(); }
 	
 	/**
 	 * Add a message
 	 */
-	function add_message( $message ) { $this->messages[] = apply_filters( 'cuisine_add_message', $message ); }
+	function add_message( $message ) { $this->messages[] = apply_filters( 'cuisine_add_message', $message ); $this->set_messages(); }
 	
 	/** Clear messages and errors from the session data */
 	function clear_messages() {
@@ -325,16 +398,15 @@ class Cuisine {
 	function get_errors() { return (array) $this->errors; }
 	
 	/**
+	 * Clear errors
+	 */
+	function clear_errors() { $this->errors = array(); unset( $_SESSION['errors'] ); }
+
+	/**
 	 * Get messages
 	 */
 	function get_messages() { return (array) $this->messages; }
 	
-	/**
-	 * Output the errors and messages
-	 */
-	function show_messages() { 
-
-	}
 	
 	/**
 	 * Set session data for messages
@@ -343,11 +415,6 @@ class Cuisine {
 		$_SESSION['errors'] = $this->errors;
 		$_SESSION['messages'] = $this->messages;
 	}
-
-
-
-
-
 
 }
 

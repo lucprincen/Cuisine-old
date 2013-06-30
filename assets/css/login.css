@@ -1,8 +1,13 @@
-body.login{background:url('../images/tile.png');}
-#login{padding-top:40px;}
-#login h1 a{background:url('../images/login.png') no-repeat;height:159px;margin-bottom:20px;}
-.login .message{background:#abd4aa;border:1px solid rgba(0,0,0,.1);}
-.login #loginform, .login #lostpasswordform{background:#f3f2ed;border:1px solid #cbc9c0;box-shadow:0 4px 0 0 #f3f2ed, 0 4px 0 1px #cbc9c0, 0 10px 0 0 #f3f2ed, 0 10px 0 1px #cbc9c0;border-radius:10px;margin-bottom:20px;}
-.login #loginform input, .login #lostpasswordform input{border:1px solid #ccc;box-shadow:1px 1px 2px rgba(0,0,0,.15);-webkit-transition: all .3s ease; -moz-transition: all .3s ease; -ms-transition: all .3s ease; -o-transition: all .3s ease; transition: all .3s ease;}
-.login #loginform input:focus, .login #lostpasswordform input:focus{border:1px solid #aaa;box-shadow:1px 1px 3px rgba(0,0,0,.4);}
+html{height:100%;}
+body.login{background:#f3f3ee;height:100%;}
+#login{width:50%;height:100%;float:left;margin:0 0 0 50%;padding:80px 40px 0 40px;background:url('../images/login-title.png') #fff no-repeat 65px 40px;box-shadow:0 0 15px rgba(0,0,0,.2);-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}
+
+#login h1 a{background:url('../images/login.png') no-repeat;position:absolute;left:40px;top:50px;height:159px;margin-bottom:20px;}
+.login .message{background:#abd4aa;border:1px solid rgba(0,0,0,.1);margin-top:40px;width:86%;margin-left:30px;}
+.login #loginform, .login #lostpasswordform{margin-top:20px;background:transparent;box-shadow:none;border:0px;margin-bottom:20px;position:relative;}
+.login #loginform input, .login #lostpasswordform input{border:0;background:#f3f3ee;padding:8px 0 8px 10px;box-shadow:1px 1px 1px rgba(0,0,0,.3);-webkit-transition: all .3s ease; -moz-transition: all .3s ease; -ms-transition: all .3s ease; -o-transition: all .3s ease; transition: all .3s ease;}
+.login #loginform input:focus, .login #lostpasswordform input:focus{background:#45c1d7;box-shadow:1px 1px 1px rgba(0,0,0,.6);color:#fff;}
+.login input#wp-submit{background:#45c1d7 !important;padding:3px 6px 3px 6px;}
+.login input#wp-submit:hover{background:#3b3b3b !important;}
 .login #backtoblog a, .login #nav a{background:transparent !important;}
+.login #loginfom:before{content:'<h1>INLOGGEN</h1>';display:block;position:absolute;}

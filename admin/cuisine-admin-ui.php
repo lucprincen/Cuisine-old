@@ -93,7 +93,7 @@
 			//check if there are any plugins:
 			if( !empty( $plugins ) ){ ?>
 
-				<div class="cuisine-collection">
+				<div class="cuisine-collection cuisine-plugins">
 
 					<h2 class="cuisine-collection-title"><?php echo __('What would you like to edit?', 'cuisine');?></h2>
 
@@ -109,7 +109,7 @@
 					<?php endforeach;?>
 
 				</div>
-
+				<div class="clearfix"></div>
 <?php 		} //plugins empty check
 			
 			// allow plugins to create there own collection of icons:

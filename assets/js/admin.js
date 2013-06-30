@@ -10,7 +10,9 @@
 
     jQuery(document).ready(function(){
     
+        resizeCollections();
     
+
         // Media sort function
         jQuery('#sortable').sortable({
           handle: '.pin',
@@ -21,7 +23,7 @@
           }
         });
     
-      
+
         // Media trash function
         jQuery('.trash').click(function(){
             
@@ -95,7 +97,6 @@
         });
       
       
-      
         /**
         *   Cuisine media-image upload:
         */
@@ -144,8 +145,23 @@
         });
 
 
+        if( jQuery('.cuisine_error').length > 0 ){
+
+            var s = setTimeout( function(){ jQuery('.cuisine_error').fadeOut('fast');}, 4000 );
+
+        }
+
+
     }); // <= end document.ready
 
+
+    jQuery(window).resize(function(){
+        resizeCollections();
+    });
+
+    function resizeCollections(){
+        jQuery('.cuisine-collection.cuisine-plugins').css('height', jQuery(window).height()+'px')
+    }
   
     
     /**
@@ -287,4 +303,9 @@
         })
       }
     }
+
+
+ 
+
+
     

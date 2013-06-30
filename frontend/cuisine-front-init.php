@@ -22,10 +22,12 @@
 		// init image functions
 		require_once( 'cuisine-front-images.php' );
 
-		// init image functions
+		// init video functions
 		require_once( 'cuisine-front-videos.php' );
 
-	
+		// init color functions:
+		require_once( 'cuisine-front-color.php' );
+
 		// init excerpt functions
 		require_once( 'cuisine-front-excerpt.php' );
 	
@@ -41,26 +43,6 @@
 		// make sure we have clean code in Chef's themes:
 		require_once( 'cuisine-front-clean-code.php' );
 
-
-		// Register Cuisine frontend javascripts
-		$args = array(
-			'id'			=>	'cuisine_frontend',
-			'root_url'		=>	$cuisine->plugins->root_url('cuisine', true ).'assets/js/cuisine-front.js',
-			'on_page'		=>	'all'
-		);
-
-		$cuisine->theme->register_scripts( $args );
-
-		$args = array(
-		     'id'			=> 	'chef-front-script',
-		     'root_url'		=>	$cuisine->theme->root_url( 'scripts', true ).'script.js',
-		     'on_page'		=> 'all'
-		);
-
-		$cuisine->theme->register_scripts( $args );
-
-		if( isset( $post ) )
-			wp_localize_script( 'chef-front-script', 'post', array( 'ID' => $post->ID, 'post_title' => $post->post_title, 'slug' => $post->post_name, 'post_parent' => $post->post_parent, 'guid' => $post->guid ) );
 	}
 
 

@@ -42,6 +42,8 @@ add_shortcode('pilbutton', 'cuisine_pil_button');
 
 function cuisine_generate_button( $atts, $content = null ){
 
+	if( !isset( $atts['iconpos'] ) ) $atts['iconpos'] = 'right';
+
 	$html = '<a href="'.$atts['link'].'"';
 
 		if( isset( $atts['target'] ) )
@@ -54,10 +56,17 @@ function cuisine_generate_button( $atts, $content = null ){
 
 		$html .= '">';
 
-		if( isset( $atts['icon'] ) )
+		if( isset( $atts['icon'] ) && $atts['iconpos'] == 'left' )
 			$html .= '<span class="icon '.$atts['icon'].'"></span>';
 
-		$html .= $content .'</a>';
+		$html .= $content;
+
+
+		if( isset( $atts['icon'] ) && $atts['iconpos'] == 'right' )
+			$html .= '<span class="icon '.$atts['icon'].'"></span>';
+
+
+		$html .= '</a>';
 
 		return $html;
 
