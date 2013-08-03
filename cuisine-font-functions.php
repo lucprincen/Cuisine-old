@@ -31,4 +31,16 @@
 	}
 
 
+	function cuisine_get_google_font_url(){
+		global $cuisine;
+		
+		$responds = $cuisine->theme->get_google_font_url();
+
+		if( $responds != '' )
+			return $responds;
+
+		return false;
+	}
+
+
 ?>

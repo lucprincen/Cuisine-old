@@ -57,6 +57,8 @@
 	function cuisine_get_excerpt( $string, $limit = 0, $break = '.', $pad = '...' ){
 
 		$string = strip_tags($string);
+		$string = strip_shortcodes( $string );
+
 		
 		if( $limit == 0 ){
 

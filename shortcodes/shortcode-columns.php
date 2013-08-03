@@ -80,4 +80,16 @@ function cuisine_break( $atts, $content = null ){
 
 add_shortcode('break', 'cuisine_break');
 
+
+function cuisine_intro( $atts, $content = null ){
+  $html = '<div class="intro">';
+
+  $html .= do_shortcode( wpautop( $content ) );
+
+  $html .= '</div>';
+
+  return $html;
+}
+
+add_shortcode('intro', 'cuisine_intro');
 ?>

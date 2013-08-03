@@ -42,6 +42,7 @@
 			$cuisine->plugins->add_plugin_meta( $meta );
 	}
 
+
 	/**
 	*	RETURN THE HTML FOR THE METABOX
 	*
@@ -102,17 +103,13 @@
 		
 				<?php if( $media != null ):
 						
-						if (is_array($media) && count($media) > 0):
+						if ( is_array($media) && count($media) > 0 ):
 
 							foreach ( $media as $item):  
 
 								if(!isset($item['position'])) $item['position'] = $i;
 								if(!isset($item['type'])) $item['type'] = 'image';
 								if(!isset($item['link'])) $item['link'] = '';
-
-								$prefix = $metaname.'['.$i.']';
-
-								//if( isset( $item['url'] ) ) $item['url'] = str_replace('OLD-URL', 'NEW-URL', $item['url'] );
 				?>	
 
 				<li class="mitem" id="mitem-<?php echo $item['id']?>">
@@ -123,19 +120,19 @@
 						<img src="<?php echo $item['url']?>" class="mitem-img"/>
 					<?php elseif($item['type'] == 'video'):?>
 						<img src="<?php echo $item['vidthumb']?>" class="mitem-img"/>
-						<input type="hidden" name="<?php echo $prefix;?>[vidthumb]" value="<?php echo $item['vidthumb'];?>"/>
-						<input type="hidden" name="<?php echo $prefix;?>[vidtype]" value="<?php echo $item['vidtype'];?>"/>
+						<input type="hidden" name="<?php echo $metaname;?>[<?php echo $i;?>][vidthumb]" value="<?php echo esc_attr($item['vidthumb']);?>"/>
+						<input type="hidden" name="<?php echo $metaname;?>[<?php echo $i;?>][vidtype]" value="<?php echo esc_attr($item['vidtype']);?>"/>
 					<?php endif;?>
 					<div class="mitem-body">
-						<input type="hidden" name="<?php echo $prefix;?>[id]" value="<?php echo $item['id'];?>"/>
-						<input type="hidden" name="<?php echo $prefix;?>[url]" value="<?php echo $item['url'];?>"/>
-						<input type="hidden" name="<?php echo $prefix;?>[position]" value="<?php echo $item['position'];?>" class="mitem-position"/>
-						<input type="hidden" name="<?php echo $prefix;?>[type]" value="<?php echo $item['type'];?>"/>
+						<input type="hidden" name="<?php echo $metaname;?>[<?php echo $i;?>][id]" value="<?php echo esc_attr($item['id']);?>"/>
+						<input type="hidden" name="<?php echo $metaname;?>[<?php echo $i;?>][url]" value="<?php echo esc_attr($item['url']);?>"/>
+						<input type="hidden" name="<?php echo $metaname;?>[<?php echo $i;?>][position]" value="<?php echo esc_attr($item['position']);?>" class="mitem-position"/>
+						<input type="hidden" name="<?php echo $metaname;?>[<?php echo $i;?>][type]" value="<?php echo esc_attr($item['type']);?>"/>
 
-						<label>Titel:</label><input type="text" name="<?php echo $prefix;?>[title]" value="<?php echo $item['title'];?>" class="mitem-title"/>
-						<label>Beschrijving:</label><textarea name="<?php echo $prefix;?>[description]" class="mitem-description"><?php echo $item['description'];?></textarea>
+						<label>Titel:</label><input type="text" name="<?php echo $metaname;?>[<?php echo $i;?>][title]" value="<?php echo esc_attr($item['title']);?>" class="mitem-title"/>
+						<label>Beschrijving:</label><textarea name="<?php echo $metaname;?>[<?php echo $i;?>][description]" class="mitem-description"><?php echo esc_attr($item['description']);?></textarea>
 					<?php if( $item['type'] != 'video' ):?>
-						<label>Link:</label><input type="text" name="<?php echo $prefix;?>[link]" value="<?php echo $item['link']?>" class="mitem-link"/>
+						<label>Link:</label><input type="text" name="<?php echo $metaname;?>[<?php echo $i;?>][link]" value="<?php echo esc_attr($item['link']);?>" class="mitem-link"/>
 					<?php endif;?>
 
 					<?php $inputs = apply_filters( 'cuisine_media_inputs', array(), $item, $posttype );?>
@@ -144,9 +141,8 @@
 						<?php if( !isset( $input['value'] ) || $input['value'] == '' ) $input['value'] = ''; 
 						echo '<input type="'.esc_attr($input['type'] ).'" name="'.$metaname.'['.$i.']['.$input['name'].']" value="'.esc_attr($input['value']).'" class="mitem-input" />';
 						endforeach;?>
-
 					</div>
-				
+		
 					<div class="mitem-controls">
 						<div class="mitem-control pin" id="pin-<?php echo $item['id']?>"></div>
 						<div class="mitem-control trash" id="trash-<?php echo $item['id']?>"></div>

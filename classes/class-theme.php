@@ -74,6 +74,10 @@ class Cuisine_Theme {
 	/** THEME CUSTOMIZER MENU LINK ==========================================*/
 
 
+    /** Can be discarted after the 3.6 release *******************************/
+
+
+
 	/**
 	*	Register the customizer links:
 	*/
@@ -1097,36 +1101,53 @@ class Cuisine_Theme {
 
 	function get_google_fonts(){
 
-		//get the fonts set:
-		$fonts = $this->get_set_fonts();
-
-		//get all allowed google fonts :: we need the keys to check the real values
-		$gfonts = array_keys( cuisine_get_google_fonts() );
-
-
-		$in_html = array();
-
-		$html = '<link href="http://fonts.googleapis.com/css?family=';
-
-		//now loop through the fonts:
-		foreach($fonts as $font){
-			//if this is a google font:
-			if( in_array( $font, $gfonts) && !in_array( $font, $in_html ) ){
-				
-				//add it to the html:
-				$html .= $font.'|';
-
-				//add it to an array to prevent doubles:
-				$in_html[] = $font;
-			}
-		}
+		$html = '<link href="';
+		$html .= $this->get_google_font_url();
 
 		//check if there are any fonts added to the html:
-		if($html > '<link href="http://fonts.googleapis.com/css?family='){
+		if( $html > '<link href="' ){
 			
 			//echo the html: 
 			echo substr( $html, 0, -1).'" rel="stylesheet" type="text/css">'; 
 		}
+	}
+
+
+	/**
+	*	Gets the google font url:
+	*/
+
+	function get_google_font_url(){
+
+		$fonts = $this->get_set_fonts();
+
+		//get all allowed google fonts :: we need the keys to check the slug values
+		$gfonts = array_keys( cuisine_get_google_fonts() );
+
+
+		$in_string = array();
+
+		$string = 'http://fonts.googleapis.com/css?family=';
+
+		foreach($fonts as $font){
+
+			//if this is a google font:
+			if( in_array( $font, $gfonts) && !in_array( $font, $in_string ) ){
+				
+				//add it to the string:
+				$string .= $font.'|';
+
+				//add it to an array to prevent doubles:
+				$in_string[] = $font;
+			}
+		}
+
+		//check if there are any fonts added to the html:
+		if($string > 'http://fonts.googleapis.com/css?family=')
+			return substr( $string, 0, -1); 
+
+		return '';
+
 	}
 
 

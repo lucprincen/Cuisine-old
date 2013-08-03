@@ -266,16 +266,16 @@ class Cuisine {
 
 	function register_scripts(){
 
-		// Register Cuisine frontend javascripts
-		$args = array(
-			'id'			=>	'cuisine_responsive',
-			'url'			=> 	$this->asset_url.'/js/cuisine-responsive.js',
-			'root_url'		=>	$this->plugins->root_url('cuisine', true ).'assets/js/cuisine-responsive.js',
-			'on_page'		=>	'all'
-		);
+		//first, add jQuery:
+		if ( ! is_admin() || defined('DOING_AJAX') ){
 
-		$this->theme->register_scripts( $args );
-		
+			wp_deregister_script( 'jquery' );
+   			wp_register_script( 'jquery', "http" . ( $_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js", false, null, true );
+   			wp_enqueue_script( 'jquery' );
+
+   		}
+
+		// Register Cuisine frontend javascripts
 		$args = array(
 			'id'			=>	'cuisine_script',
 			'url'			=> 	$this->asset_url.'/js/cuisine-front.js',
@@ -285,6 +285,14 @@ class Cuisine {
 
 		$this->theme->register_scripts( $args );
 
+		$args = array(
+			'id'			=>	'cuisine_responsive',
+			'url'			=> 	$this->asset_url.'/js/cuisine-responsive.js',
+			'root_url'		=>	$this->plugins->root_url('cuisine', true ).'assets/js/cuisine-responsive.js',
+			'on_page'		=>	'all'
+		);
+
+		$this->theme->register_scripts( $args );
 
 		$args = array(
 		      'id'			=> 'cuisine_images',
@@ -306,8 +314,9 @@ class Cuisine {
 
 
 		if( isset( $post ) )
-			wp_localize_script( 'chef-front-script', 'post', array( 'ID' => $post->ID, 'post_title' => $post->post_title, 'slug' => $post->post_name, 'post_parent' => $post->post_parent, 'guid' => $post->guid ) );
+			wp_localize_script( 'jquery', 'post', array( 'ID' => $post->ID, 'post_title' => $post->post_title, 'slug' => $post->post_name, 'post_parent' => $post->post_parent, 'guid' => $post->guid ) );
 
+		wp_localize_script( 'jquery', 'ajaxurl', admin_url("admin-ajax.php"));
 	}
 
 

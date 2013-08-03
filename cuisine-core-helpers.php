@@ -138,6 +138,30 @@
 		return false;
 	}
 
+
+	/*
+	*	Check to see if this is a Cuisine overview page:
+	*/
+	function is_cuisine_page( $page ){
+
+		global $wp_query;
+
+		if( isset( $wp_query ) && !empty( $wp_query ) ){
+
+			if( isset( $wp_query->cuisine_slug ) && $wp_query->cuisine_slug == $page ){
+				return true;
+			}
+
+		}
+
+		if( is_page( $page ) ){
+			return true;
+		}
+
+		return false;
+
+	}
+
 	/**
 	*	Get post type:
 	*/

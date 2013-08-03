@@ -158,6 +158,9 @@
 		if( $pagenow == 'widgets.php' ){
 			wp_enqueue_style( 'thickbox' );
 			wp_enqueue_media();
+			//add the scripts for the general admin area:
+			wp_enqueue_script( 'cuisine_main_class', $cuisine->asset_url.'/js/cuisine.js', array('jquery', 'jquery-ui-sortable', 'thickbox' ), false, true  );
+
 
 		}else if( $pagenow == 'post.php' || $pagenow == 'post-new.php' || $pagenow == 'page.php' || $pagenow == 'page-new.php' ){
 			//if this post doesn't support featured images, include the media:
