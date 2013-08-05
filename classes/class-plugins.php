@@ -22,6 +22,9 @@ class Cuisine_Plugins {
 	var $redirect_list = array();
 	var $redirect_list_types = array();
 
+	var $rewrite_list = array();
+	var $template_list = array();
+
 	var $postextras = array();
 
 
@@ -565,29 +568,44 @@ class Cuisine_Plugins {
 	/*************************************************************************/
 
 
-	 /**
-	 * Register a redirect domain:
+	/**
+	 * Registers a rewrite request and then 
+	 *
+	 * @access public
+	 * @param string $slug ( the actual URL to rewrite )
+	 * @param string $type ( is it a page redirect or a post-type archive )
+	 * @param string $object ( the page slug or the post_type name (defaults to $slug) )
+	 * @param string $template ( optional; which template file to call )
+	 * @param array  $page_object ( it it's a page, a new page will be created with this data, if it's an archive; you can pass titles for seo and such. )
+	 * @return void
 	 */
+	function register_new_url( $slug, $type = 'post_type', $object = null, $template = null, $page_object = array() ){
 
-	function register_template_redirect( $slug, $type = null, $post_type = null, $page_object = array() ){
+		if( $object == null )
+			$object = $slug; //so if my url is /portfolio, look for post_type "portfolio"
 
 
-		if( $type == null )
-			$type = 'post_type';
+		//add this bunch to the template_list:
 
-		if( $post_type == null )
-			$post_type = $slug;
+		$args = array(
+		              'slug' 			=> $slug,
+		              'type' 			=> $type,
+		              'object' 			=> $object,
+		              'template_file'	=> $template,
+		              'page_object'		=> $page_object
+		);
 
-		
-		//don't add pages to the redirect list, they already have great permalink handling:
-		if( $type != 'page' ){
-			//add the slug to the redirect list:
-			$this->redirect_list[$type][] = $slug; 
-		}
 
-		$this->redirect_list_types[$type][ $slug ] = $post_type;
+		$this->template_list[$slug] = $args;
 
+
+		//if it's a page, then create the page if it doesn't exist yet:
 		if( $type == 'page' && $this->has_permalink_structure() ) $this->register_page_object( $slug, $page_object );
+
+
+		//pages don't need a custom rewrite:
+		if( $type != 'page' )
+			$this->rewrite_list[$slug] = $object;
 
 
 		//add the template_redirect action if it doesn't exist yet:
@@ -597,7 +615,7 @@ class Cuisine_Plugins {
 
 		}
 		
-		add_filter( 'rewrite_rules_array', array( &$this, 'add_template_rewrites') );
+		add_filter( 'rewrite_rules_array', array( &$this, 'add_rewrite_rules') );
 
 		//check if there's a rewrite filter in place:
 		if( !has_action( 'shutdown', array( &$this, 'flush_rewrites' ) ) ){
@@ -607,6 +625,220 @@ class Cuisine_Plugins {
 		}
 
 	}
+
+
+	/**
+	*	Add the new rewrite rules:
+	*/
+	function add_rewrite_rules($rules) {
+		
+		$newrules = array();
+		$types = $this->rewrite_list;
+
+
+		foreach( $types as $slug => $post_type ){
+
+			$newrules[$slug.'/?$'] = 'index.php?post_type='.$post_type;
+			$newrules[$slug.'/page/?([0-9]{1,})/?$'] = 'index.php?post_type='.$post_type.'&paged=$matches[1]';
+
+
+		}
+
+		return array_merge($newrules, $rules);
+	
+	}
+
+
+
+	/**
+	*	FLUSH THE REWRITES:
+	*/	
+	function flush_rewrites(){
+
+
+		//if we're in the admin:
+		if( is_admin() ){
+
+			$rewrites = $this->rewrite_list;
+			$rewritestring = '';
+
+			//create the rewrite string:
+			if( !empty( $rewrites ) ){
+				foreach( $rewrites as $slug => $rewrite ){
+					$rewritestring .= '|'.$slug.'|';
+				}
+			}
+
+			//check if there are new redirects:
+			$redirects = get_cuisine_setting( 'rewrites' );
+
+			if( empty( $redirects ) || $redirects != $rewritestring ){
+
+				//then flush the rewrite rules:
+				global $wp_rewrite;
+				$wp_rewrite->flush_rules();
+
+				//and update the redirects options:
+				update_cuisine_setting( 'rewrites', $rewritestring );
+			}
+
+		}
+	}
+
+
+
+	 /**
+	 * 	Add all template redirects:
+	 */
+
+	 function add_template_redirects(){
+
+	 	//get the global query:
+	 	global $wp_query, $cuisine;
+
+	 	//check if there's a global query:
+		if ( isset($wp_query->query_vars) ){
+
+			//then check if we're not servicing a robot or feed:
+			if( !is_robots() && !is_feed() && !is_trackback()  && !is_404() ){
+
+				//get the queries post type:
+				$posttype = $wp_query->query_vars['post_type'];
+
+				if( $posttype == '' && isset( $wp_query->post->post_type ) )
+					$posttype = $wp_query->post->post_type;
+
+				if( $posttype == '' && $wp_query->is_single == true )
+					$posttype = 'post';
+
+
+				$types = array_values( $this->rewrite_list );
+
+
+				//check if we are dealing with a post type overview or a single page:
+				if( ! empty( $posttype ) ){
+
+
+					//check if the post type is in the redirects list:
+					if( in_array( $posttype, $types ) ){
+
+						//it is, we are redirecting:
+						$wp_query->is_home = false;
+		
+						if( $posttype == 'post' )
+							$posttype = 'blog';
+		
+
+						//setup the template_info object, which gives us more than just
+						//the post_type to work with:
+						$template_info = array();
+						$slug = '';
+						foreach( $this->template_list as $item_slug => $list_item ){
+
+							if( $list_item['object'] == $posttype ){
+
+								$template_info = $list_item;
+								$slug = $item_slug;
+								break;
+
+							}
+
+						}
+
+
+						//populate WP_Query with some custom variables:
+						$wp_query->cuisine_slug = $slug;
+						if( isset( $template_info['page_object'] ) && !empty( $template_info['page_object'] ) ){
+
+							$values = $template_info['page_object'];
+
+							if( isset( $values['post_title'] ) )
+								$wp_query->cuisine_title = $values['post_title'];
+
+							if( isset( $values['post_content'] ) )
+								$wp_query->cuisine_content = $values['post_content'];
+
+						}
+
+
+
+						// Select the template file:
+						$template = $posttype;
+
+						if( isset( $template_info['template_file'] ) && !empty( $template_info['template_file'] ) )
+							$template = $template_info['template_file'];
+
+	
+						$custom_template_folder = apply_filters( 'cuisine_template_location', 'plugin-templates/');
+						$template = $custom_template_folder . $template;
+
+
+
+						//check for a single:
+						if( is_single() ){
+
+							$wp_query->is_custom_post_type_archive = false;
+							locate_template( array( $template.'-single.php', 'single.php', 'index.php' ), true );
+							die();
+							
+						//else it's an archive:
+						}else{
+		
+							//check if we're dealing with a paged querie:
+							if( $wp_query->query_vars['paged'] > 1 ){
+								$wp_query->is_404 = false;
+								$wp_query->is_paged = true;
+							}
+		
+							$wp_query->is_custom_post_type_archive = true;
+							locate_template( array( $template.'.php', 'index.php' ), true );
+							die();
+						}
+					
+					}else{
+						//else, it might be a page:
+						if( $posttype == 'page' ){
+							
+
+							//we need to compare the post slug to the title in the query:
+							$queried_slug = $wp_query->post->post_name;
+							
+							foreach( $this->template_list as $item_slug => $list_item ){
+
+								if( $item_slug == $queried_slug ){
+
+									$wp_query->cuisine_slug = $item_slug;
+
+									$template = $item_slug;
+
+									if( isset( $list_item['template_file'] ) && !empty( $list_item['template_file'] ) )
+										$template = $list_item['template_file'];
+
+	
+									$page_template_prefix = apply_filters( 'cuisine_page_template_prefix', 'plugin-templates/template-');
+									$template = $page_template_prefix . $template;		
+
+
+									//locate the template:
+									locate_template( array( $template.'.php', 'page.php', 'index.php' ), true );
+									die();
+
+								}
+
+							}
+
+						}
+					}
+				}
+			}
+		}
+	 }
+
+
+	 //Previous redirect function, now deprecated:
+	 function register_template_redirect( $slug, $type = 'post_type', $object = null, $page_object = array() ){
+	 	$this->register_new_url( $slug, $type, $object, null, $page_object );
+	 }
 
 
 
@@ -655,183 +887,6 @@ class Cuisine_Plugins {
 	}
 
 
-
-	 /**
-	 * 	Add all template redirects:
-	 */
-
-	 function add_template_redirects(){
-
-	 	//get the global query:
-	 	global $wp_query, $cuisine;
-
-	 	//check if there's a global query:
-		if ( isset($wp_query->query_vars) ){
-
-			//then check if we're not servicing a robot or feed:
-			if( !is_robots() && !is_feed() && !is_trackback()  && !is_404() ){
-
-				//get the queries post type:
-				$posttype = $wp_query->query_vars['post_type'];
-
-				if( $posttype == '' )
-					$posttype = $wp_query->post->post_type;
-
-				if( $posttype == '' && $wp_query->is_single == true )
-					$posttype = 'post';
-
-				$types = array_values( $this->redirect_list_types['post_type'] );
-
-
-				//check if we are dealing with a post type overview or a single page:
-				if( ! empty( $posttype ) ){
-
-
-					//check if the post type is in the redirects list:
-					if( in_array( $posttype, $types ) || $posttype == 'page' ){
-							
-						//it's a page:
-						if( $posttype == 'page' && !empty( $this->redirect_list_types['page'] ) ){
-							
-							$pages = $this->redirect_list_types['page'];
-
-							//we need to compare the post slug to the title in the query:
-							$queried_slug = $wp_query->post->post_name;
-							
-							//loop through the pages in the redirect array:
-							foreach( $pages as $slug => $page ){
-
-								//the page is the same as the queried object, we are redirecting:
-								if( $slug == $queried_slug ){
-
-									$wp_query->cuisine_slug = $page;
-
-									//create a template name out of the slug;
-									$template_file = str_replace(' ', '-', strtolower( $page ) );
-
-									//locate the template:
-									locate_template( array( 'plugin-templates/template-'.$template_file.'.php', 'page.php', 'index.php' ), true );
-									die();
-								}
-
-							}
-
-						// else it's a post or post_type:
-						}else if( in_array( $posttype, $types ) ){
-							//it is, we are redirecting:
-							$wp_query->is_home = false;
-		
-							if( $posttype == 'post' )
-								$posttype = 'blog';
-		
-
-							$wp_query->cuisine_slug = $posttype;
-
-
-							//check for a single:
-							if( is_single() ){
-								$wp_query->is_custom_post_type_archive = false;
-	
-	
-								locate_template( array( 'plugin-templates/'.$posttype.'-single.php', 'single.php', 'index.php' ), true );
-								die();
-							
-							//else it's an archive:
-							}else{
-		
-								//check if we're dealing with a paged querie:
-								if( $wp_query->query_vars['paged'] > 1 ){
-									$wp_query->is_404 = false;
-									$wp_query->is_paged = true;
-								}
-		
-								$wp_query->is_custom_post_type_archive = true;
-								locate_template( array( 'plugin-templates/'.$posttype.'.php', 'index.php' ), true );
-								die();
-							}
-						}
-					}
-				}
-			}
-		}
-	 }
-
-
-
-	 /**
-	 *	Add all template rewrites:
-	 */
-
-	function add_template_rewrites($rules) {
-		
-		$newrules = array();
-		$types = $this->redirect_list;
-
-		//for all registered types:
-		foreach( $types as $key => $type ){
-
-
-			// if the type isn't empty:
-			if( !empty( $type ) && $type != 'page' ){
-
-				//loop through the rewrites in the type:
-				foreach( $type as $rewrite ){
-
-					//get the slug:
-					$slug = $this->redirect_list_types[$key][ $rewrite ];
-		
-					//add the new rule:
-					$newrules[$rewrite.'/?$'] = 'index.php?post_type='.$slug;
-					$newrules[$rewrite.'/page/?([0-9]{1,})/?$'] = 'index.php?post_type='.$slug.'&paged=$matches[1]';
-				}
-			}
-		}	
-
-		//and add the new rules to the existing template rewrites:
-		return array_merge($newrules, $rules);
-	
-	}
-
-
-
-
-	/**
-	*	FLUSH THE REWRITES:
-	*/	
-
-	function flush_rewrites(){
-
-
-		//if we're in the admin:
-		if( is_admin() ){
-
-			$rewrites = $this->redirect_list;
-			$rewritestring = '';
-
-			//create the rewrite string:
-			if( !empty( $rewrites ) ){
-				foreach( $rewrites as $rewrite ){
-					$rewritestring .= implode('|', $rewrite ).'|';
-				}
-			}
-
-			//check if there are new redirects:
-			$redirects = get_cuisine_setting( 'rewrites' );
-
-
-			if( empty( $redirects ) || $redirects != $rewritestring ){
-
-
-				//then flush the rewrite rules:
-				global $wp_rewrite;
-				$wp_rewrite->flush_rules();
-
-				//and update the redirects options:
-				update_cuisine_setting( 'rewrites', $rewritestring );
-			}
-
-		}
-	}
 
 
 

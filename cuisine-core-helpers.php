@@ -57,6 +57,24 @@
 	}
 
 
+	/**************************************************/
+	/** Plugin Helpers ********************************/
+	/**************************************************/
+
+	function cuisine_register_rewrite( $slug, $type, $object = null, $template = null, $page_object = array() ){
+		global $cuisine;
+
+		$cuisine->plugins->register_new_url( $slug, $type, $object, $template, $page_object );
+	}
+
+
+	function cuisine_add_url( $slug, $type, $object = null, $template = null, $page_object = array() ){
+		global $cuisine;
+
+		$cuisine->plugins->register_new_url( $slug, $type, $object, $template, $page_object );
+	}
+
+
 
 	/**************************************************/
 	/** Theme Helpers *********************************/

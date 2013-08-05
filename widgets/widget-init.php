@@ -37,6 +37,9 @@
 		//button
 		include('widget-button.php');
 
+		//share
+		include('widget-share.php');
+
 	}
 
 
