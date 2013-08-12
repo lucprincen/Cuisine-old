@@ -180,6 +180,42 @@
 
 	}
 
+
+	function cuisine_get_post_by_slug( $slug, $type = 'post' ){
+
+		if( $type != 'page' ){
+			
+			global $wpdb;
+
+         	
+			$args=array(
+				'name' => $slug,
+				'post_type' => $type,
+				'post_status' => 'publish',
+				'showposts' => 1,
+			);
+			
+			$posts = get_posts($args);
+
+         	if ( $posts )  
+            	return $posts[0]; 
+
+			
+			return null;
+
+		}else{
+
+			$page = get_page_by_path( $page_slug );
+
+			if ( $page )
+				return $page;
+			
+			return null;
+			
+		}
+
+	}
+
 	/**
 	*	Get post type:
 	*/

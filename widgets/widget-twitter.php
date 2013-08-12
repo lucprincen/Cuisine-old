@@ -157,7 +157,7 @@ class cuisine_widget_twitter extends WP_Widget {
 			    <?php foreach($tweets as $t) : ?>
 			        <li><?php echo $t['text']; ?>
 			            <br/><em>
-			            <a href="http://www.twitter.com/<?php echo $name; ?>" target="_blank" title="Follow <?php echo $name; ?> on Twitter [Opens new window]"><?php echo human_time_diff($t['time'], current_time('timestamp')); ?> ago</a>
+			            <a href="http://www.twitter.com/<?php echo $name; ?>" target="_blank" title="Volf <?php echo $name; ?> op Twitter"><?php echo human_time_diff($t['time'], current_time('timestamp')); ?> geleden</a>
 			            </em>
 			        </li>
 			    <?php endforeach; ?>
