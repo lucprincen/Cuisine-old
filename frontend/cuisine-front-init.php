@@ -28,6 +28,9 @@
 		// init color functions:
 		require_once( 'cuisine-front-color.php' );
 
+		// init query functions:
+		require_once( 'cuisine-front-query.php' );
+
 		// init excerpt functions
 		require_once( 'cuisine-front-excerpt.php' );
 	

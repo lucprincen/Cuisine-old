@@ -44,10 +44,12 @@ class cuisine_widget_share extends WP_Widget {
 
 			?>
 			<div class='post-reactions'>
+				<?php if( comments_open() ):?>
 				<a class="post-counter post-social-counter post-comments" href="#comments">
 					<i class="icon-comment"></i>
 					<p><?php comments_number( '0', '1', '%' );?></p>
 				</a>
+				<?php endif;?>
 				<a class="post-counter post-social-counter post-tweets" data-href="<?php echo $twlink;?>" target="_blank" data-postid="<?php the_ID();?>" data-count="<?php echo $socialcounts['tw'];?>"> 
 					<i class="icon-twitter"></i>
 					<p><?php echo $socialcounts['tw'];?></p>
