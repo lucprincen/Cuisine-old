@@ -1158,7 +1158,7 @@ class Cuisine_Theme {
 	function get_set_fonts(){
 
 		//get the options:
-		$options = $this->get_theme_style();
+		$options = $this->get_theme_style( true );
 
 		//set the empty variables:
 		$fonts = array();

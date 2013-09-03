@@ -232,8 +232,8 @@
 	function cuisine_get_nonce(){
 
 		//first, check if we're dealing with a valid cuisine session:
-		if( !cuisine_is_valid_session() )
-			return false;
+		//if( !cuisine_is_valid_session() )
+		//	return false;
 
 		global $cuisine;
 		$cuisine->plugins->get_plugin_nonce();
