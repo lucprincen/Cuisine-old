@@ -92,4 +92,15 @@ function cuisine_intro( $atts, $content = null ){
 }
 
 add_shortcode('intro', 'cuisine_intro');
+
+
+function cuisine_centered($atts, $content = null){
+  
+    $content = preg_replace('#^<\/p>|<p>$#', '', $content);
+    return '<div class="row-fluid  content-row"><div class="span6 offset3">' . do_shortcode($content) . '</div></div>';
+}
+  
+add_shortcode("centered", "cuisine_centered");  
+
+
 ?>

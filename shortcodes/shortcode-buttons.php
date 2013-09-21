@@ -49,6 +49,9 @@ function cuisine_generate_button( $atts, $content = null ){
 		if( isset( $atts['target'] ) )
 			$html .= ' target="'.$atts['target'].'"';
 
+		if( isset( $atts['color'] ) )
+			$html .= ' style="background-color:'.$atts["color"].'"';
+
 		$html .= ' class="button';
 
 			if( isset($atts['size'] ) )
