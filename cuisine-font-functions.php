@@ -8,7 +8,7 @@
 	}
 
 	function cuisine_get_google_fonts(){
-		$fonts = array('Alice' => 'Alice', 'Antic' => 'Antic', 'Ruluko' => 'Rukolo', 'Marko+One' => 'Marko One', 'Voltaire' => 'Voltaire', 'Capriola' => 'Capriola', 'Advent+Pro' => 'Advent Pro', 'Ropa+Sans' => 'Ropa Sans', 'Droid+Sans' => 'Droid Sans', 'Lobster' => 'Lobster', 'Open+Sans:400,600,700,300' => 'Open Sans', 'Stoke:300,400' => 'Stoke', 'Montserrat:400,700' => 'Montserrat', 'Gabriela' => 'Gabriela', 'Lato:300,400,700,900' => 'Lato', 'Crete+Round' => 'Crete Round', 'PT+Sans:400,700' => 'PT Sans');
+		$fonts = array('Alice' => 'Alice', 'Antic' => 'Antic', 'Ruluko' => 'Rukolo', 'Marko+One' => 'Marko One', 'Voltaire' => 'Voltaire', 'Capriola' => 'Capriola', 'Advent+Pro' => 'Advent Pro', 'Ropa+Sans' => 'Ropa Sans', 'Droid+Sans' => 'Droid Sans', 'Lobster' => 'Lobster', 'Open+Sans:400,600,700,300' => 'Open Sans', 'Stoke:300,400' => 'Stoke', 'Montserrat:400,700' => 'Montserrat', 'Gabriela' => 'Gabriela', 'Lato:300,400,700,900' => 'Lato', 'Crete+Round' => 'Crete Round', 'PT+Sans:400,700' => 'PT Sans', , 'Yanone+Kaffeesatz:400,300,700,200' => 'Yanone Kaffeesatz');
 		asort( $fonts );
 		return $fonts;
 	}
