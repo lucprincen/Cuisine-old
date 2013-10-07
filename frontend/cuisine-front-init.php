@@ -25,9 +25,6 @@
 		// init video functions
 		require_once( 'cuisine-front-videos.php' );
 
-		// init color functions:
-		require_once( 'cuisine-front-color.php' );
-
 		// init query functions:
 		require_once( 'cuisine-front-query.php' );
 

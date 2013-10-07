@@ -872,7 +872,7 @@ class Cuisine_Theme {
 			//Check if there's anything to minify, if so... do it:
 			if( !empty( $to_minify ) ){
 
-				$name = $this->get_minified_js_filename();
+				$name = $this->get_minified_filename('script');
 
 				//generate the root and url paths:
 				$filepath = $this->root_url( 'scripts', true ).$name;
@@ -911,23 +911,6 @@ class Cuisine_Theme {
 	}
 
 
-	/**
-	*	Minify JS:
-	*/
-	function minify_js( $scripts ){
-
-
-
-		
-	//	$depsvars = $this->get_minified_js_deps( $scripts );
-	//	$deps = $depsvars['deps'];
-	//	$vars = $depsvars['vars'];
-
-		
-		//include the minifier script:
-	
-
-	}
 
 
 	function get_minified_js_scripts(){
@@ -954,21 +937,33 @@ class Cuisine_Theme {
 	*/
 	function get_minified_js_path(){
 
-		return $this->url( 'scripts', true ).$this->get_minified_js_filename();
+		return $this->url( 'scripts', true ).$this->get_minified_filename('script');
 	
 	}
 
 	/**
 	*	Get the minified js filename:
 	*/
-	function get_minified_js_filename(){
+	function get_minified_filename( $type = 'script' ){
 		//get the theme object:
 		$themeobj = wp_get_theme();
 
 		//create the name:
-		$name = 'script_'.str_replace( ' ', '_', $themeobj->stylesheet ).'.min.js';
+		if( $type == 'script' ){
+			$name = 'script_'.str_replace( ' ', '_', $themeobj->stylesheet ).'.min.js';
+		}else{
+			$name = 'style_'.str_replace( ' ', '_', $themeobj->stylesheet ).'.min.css';
+		}
+		
 
 		return $name;
+	}
+
+	/**
+	*	Deprecated function, replaced by get_minified_filename
+	*/
+	function get_minified_js_filename(){
+		return $this->get_minified_filename( 'script' );
 	}
 
 
@@ -1003,6 +998,49 @@ class Cuisine_Theme {
 
 	}
 
+
+	/**
+	*	A function to generate a static stylesheet from our style.php
+	*	Prevents loading in WP for a second time in style.php
+	*/
+	function generate_stylesheet(){
+
+		$css = file_get_contents( cuisine_template_url().'/style.php' );	
+
+		$name = $this->get_minified_filename('style');
+		$filepath = $this->root_url( 'theme', true ).$name;
+
+		if( file_put_contents( $filepath, $css ) ){
+			
+			return 'success-minify';
+				
+		}else{
+	
+			return 'fail-minify';
+
+		}
+	}
+
+
+	/**
+	*	Return the stylesheet url based on Cuisine's production mode setting
+	*/
+	function stylesheet_url(){
+
+		global $cuisine;
+
+		if( $cuisine->production_mode ){
+
+			$filename = $this->get_minified_filename('style');
+			return cuisine_template_url().'/'.$filename;
+
+		}else{
+
+			return cuisine_template_url().'/style.php';
+
+		}
+
+	}
 
 
 
@@ -1122,25 +1160,25 @@ class Cuisine_Theme {
 		$fonts = $this->get_set_fonts();
 
 		//get all allowed google fonts :: we need the keys to check the slug values
-		$gfonts = array_keys( cuisine_get_google_fonts() );
-
+		$gfonts = cuisine_get_google_fonts();
 
 		$in_string = array();
 
 		$string = 'http://fonts.googleapis.com/css?family=';
 
-		foreach($fonts as $font){
+		//loop through each google font to see which one to include;
+		foreach( $gfonts as $key => $gfont ){
 
-			//if this is a google font:
-			if( in_array( $font, $gfonts) && !in_array( $font, $in_string ) ){
-				
-				//add it to the string:
-				$string .= $font.'|';
+			if( in_array( $gfont, $fonts ) ){
 
-				//add it to an array to prevent doubles:
-				$in_string[] = $font;
+				$string .= $key.'|';
+				$in_string[] = $gfont;
+
 			}
+
 		}
+		
+		$string = apply_filters( 'cuisine_google_font_url', $string, $in_string );
 
 		//check if there are any fonts added to the html:
 		if($string > 'http://fonts.googleapis.com/css?family=')
@@ -1171,7 +1209,7 @@ class Cuisine_Theme {
 
 			//the array key ends with 'font-family':
 			if( substr( $keys[$i], -11 ) == 'font-family' )
-				$fonts[] = $option;
+				$fonts[] = str_replace( "'", "", $option ); //remove trailing ' '
 
 			$i++;
 		}

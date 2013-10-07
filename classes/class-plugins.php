@@ -136,6 +136,7 @@ class Cuisine_Plugins {
 
 	function do_save_post( $post_id ){
 
+		do_action( 'cuisine_before_save_post' );
 
       	//check if there is data to save:
 		if( !empty($this->plugin_data_to_save ) ){
@@ -201,7 +202,12 @@ class Cuisine_Plugins {
 			}
 
 
-		}	
+			do_action( 'cuisine_save_post' );
+
+
+		}
+
+		do_action( 'cuisine_after_save_post' );	
 	}
 
 
@@ -223,6 +229,8 @@ class Cuisine_Plugins {
 				$values = cuisine_sort_array_by( $values, $item['orderby'], $item['order'] );
 
 			update_post_meta( $post_id, $item['key'], $values );
+		
+			do_action( 'cuisine_saved_'.$item['key'], $values );
 		}
 
 	}

@@ -3,11 +3,11 @@
  * Plugin Name: Cuisine
  * Plugin URI: http://www.chefduweb.nl/cuisine/
  * Description: Cuisine contains the basic framework for Chef du Web. Comunication between plugins and themes and loads of admin & frontend helpers
- * Version: 1.2
+ * Version: 1.3
  * Author: Chef du Web
  * Author URI: http://www.chefduweb.nl
  * Requires at least: 3.5
- * Tested up to: 3.5.1
+ * Tested up to: 3.6.1
  * 
  * Text Domain: cuisine
  * Domain Path: /languages/
@@ -122,6 +122,8 @@ class Cuisine {
 		include( 'cuisine-core-functions.php' );				// Contains core functions for the front/back end
 		include( 'cuisine-font-functions.php' );				// Contains all the font-functions
 		include( 'cuisine-core-helpers.php');					// Contains all the helpers to make life a little easier.
+		include( 'cuisine-stylesheet-helpers.php' );			// Contains css-functions to be used in the theme's style.php
+
 
 		//Init widgets:
 		include( 'widgets/widget-init.php' );					// Widget classes
@@ -269,9 +271,9 @@ class Cuisine {
 		//first, add jQuery:
 		if ( ! is_admin() ){
 
-			wp_deregister_script( 'jquery' );
-   			wp_register_script( 'jquery', "http" . ( $_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js", false, null, true );
-   			wp_enqueue_script( 'jquery' );
+	//		wp_deregister_script( 'jquery' );
+   	//		wp_register_script( 'jquery', "http" . ( $_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js", false, null, true );
+   	// 		wp_enqueue_script( 'jquery' );
 
    		}
 

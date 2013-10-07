@@ -117,6 +117,12 @@
 		$cuisine->theme->register_scripts( $scripts );
 	}
 
+	function cuisine_stylesheet_url(){
+		global $cuisine;
+		return $cuisine->theme->stylesheet_url();
+
+	}
+
 
 
 	//A quick function to compare 2 variables and output some text:
@@ -131,6 +137,9 @@
 		}
 
 	} 
+
+	
+
 
 
 	/**************************************************/
@@ -247,7 +256,6 @@
 		$cuisine->plugins->register_post_extra( $id, $label, $func, $js, $priority, $args );
 
 	}
-
 
 
 
