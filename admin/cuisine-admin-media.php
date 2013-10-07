@@ -15,9 +15,10 @@
 	*	SETUP A META BOX FOR MEDIA
 	*
  	* @access public
+ 	* @param string post type
+ 	* @param array which types
 	* @return void
 	*/
-
 	function cuisine_media_init( $post_type, $include = array( 'image', 'video', 'text' ), $label = '' ){
 
 		global $cuisine;

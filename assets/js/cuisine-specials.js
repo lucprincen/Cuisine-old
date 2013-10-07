@@ -24,8 +24,8 @@
 
     			//toggle div:
     			var id = jQuery( this ).data('id');
-    			jQuery( '.post-extra' ).hide();
-    			jQuery( '#pe_'+id ).fadeIn('fast');
+    			jQuery( '.post-extra' ).removeClass('active');
+    			jQuery( '#pe_'+id ).addClass('active');
 
     			//get the default value (if set)
     			PostExtras.setOutputValue( jQuery( this ).data('default') );
@@ -34,10 +34,9 @@
 
             //Send the output to the editor, when the insertBtn is clicked:
     		jQuery('#insertBtn').click( function(){
-
-    			PostExtras.setOutputValue( jQuery( '.cuisine_special_tab.active' ).data('default') );
                 var ret = jQuery('#post-extra-output').val();
-
+    			PostExtras.setOutputValue( jQuery( '.cuisine_special_tab.active' ).data('default') );                
+                var ret = jQuery('#post-extra-output').val();
                 window.send_to_editor( ret );
     			
 
@@ -45,6 +44,7 @@
 
 
     		this.Columns.init();
+            this.Buttons.init();
     	}
 
 
@@ -70,11 +70,73 @@
 
         this.Buttons = new function(){
 
+            var label = 'Button';
+            var labelString = '';
+            var icon = '';
+            var iconString = '<span class="cuisine-no-icon"></span>';
+            var iconCode = '';
+
             this.init = function(){
+
+
+                this.updateLabel();
+
+                jQuery( '#button-label' ).live( 'keyup blur', function(){
+
+                    PostExtras.Buttons.updateLabel();
+
+                });
+
+                jQuery( '#button-icon' ).live( 'change', function(){
+                    PostExtras.Buttons.updateLabel();
+                })
+
+            }
+
+            this.updateLabel = function(  ){
+
+                label = jQuery('#button-label').val();
+                this.updateIcon();
+
+                labelString = iconString + label;
+                jQuery('#livepreviewbutton').html( labelString );
+
+            }
+
+            this.updateIcon = function(){
+
+                icon = jQuery('#button-icon').val();
+
+                if( icon === 'none' ){
+
+                    iconString = '<span class="cuisine-no-icon"></span>';
+                    iconCode = '';
+
+                }else{
+
+                    iconString = '<i class="'+icon+'"></i>';
+
+                    _icon = icon.replace('icon-', '' );
+                    iconCode = '[icon type="'+_icon+'"] ';
+
+                }
 
             }
 
 
+            this.output = function(){
+
+                var link = jQuery('#button-link').val();
+                var html = '[button link="'+link+'"]';
+
+                if( icon !== 'none')
+                    html += iconCode;
+
+                html += label+'[/button]';
+
+
+                return html;
+            }
         }
 
 
@@ -112,11 +174,11 @@
                     var amount = jQuery(this).data('amount');
                     if( amount != null && amount != undefined ){
         
-                        html += '[column span="'+amount+'"][/column]';
+                        html += '[column span="'+amount+'"] [/column]';
                 
                     }else{
         
-                        html += '[column span="1"][/column]';
+                        html += '[column span="1"] [/column]';
                     
                     }
         
@@ -178,6 +240,8 @@
                     html += this.calc();
 
                 html += '[/row]';
+
+                return html;
             }
 
 
@@ -214,6 +278,13 @@
     function cuisine_columns_output(){
 
         return PostExtras.Columns.output();
+
+    }
+
+    /* Buttons: */
+    function cuisine_buttons_output(){
+
+        return PostExtras.Buttons.output();
 
     }
 

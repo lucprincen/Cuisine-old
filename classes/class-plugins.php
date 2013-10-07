@@ -228,9 +228,11 @@ class Cuisine_Plugins {
 			if( isset( $item['orderby'] ) && is_array( $item['value'] ) )
 				$values = cuisine_sort_array_by( $values, $item['orderby'], $item['order'] );
 
-			update_post_meta( $post_id, $item['key'], $values );
+			do_action( 'cuisine_before_save', $item['key'], $item, $values );
+
+			update_post_meta( $post_id, $item['key'], $item, $values );
 		
-			do_action( 'cuisine_saved_'.$item['key'], $values );
+			do_action( 'cuisine_saved_'.$item['key'], $item, $values );
 		}
 
 	}
@@ -511,29 +513,45 @@ class Cuisine_Plugins {
 	*/
 	function post_extra_functions(){
 
-		if( !empty( $this->postextras ) ){
+		if( empty( $this->postextras ) )
+			return false;
 
-			foreach( $this->postextras as $extra ){
+		$this->postextras = cuisine_sort_array_by( $this->postextras, 'priority', 'ASC' );
 
-				if( function_exists( $extra['func'] ) ){
+		$i = 0; 
 
-					echo '<div class="post-extra" id="pe_'.$extra['id'].'" data-id="'.$extra['id'].'">';
+		foreach( $this->postextras as $extra ){
 
-						call_user_func( $extra['func'], $extra['args'] );
+			if( function_exists( $extra['func'] ) ){
 
-					echo '</div>';
+				$class = 'post-extra';
+				if( $i == 0 )
+					$class .= ' active';
+
+				echo '<div class="'.$class.'" id="pe_'.$extra['id'].'" data-id="'.$extra['id'].'">';
+
+					do_action( 'cuisine_post_extra_before' );
+					do_action( 'cuisine_post_extra_before_'.$extra['id'] );
+
+					call_user_func( $extra['func'], $extra['args'] );
+
+					do_action( 'cuisine_post_extra_after' );
+					do_action( 'cuisine_post_extra_after_'.$extra['id'] );
+
+				echo '</div>';
 
 
-					if( !empty( $extra['js'] ) ){
+				if( !empty( $extra['js'] ) ){
 
-						foreach( $extra['js'] as $url ){
+					foreach( $extra['js'] as $url ){
 
-							wp_enqueue_script( $extra['id'].'_js', $url, array(), null, true );
-
-						}
+						wp_enqueue_script( $extra['id'].'_js', $url, array(), null, true );
 
 					}
+
 				}
+
+				$i++;
 			}
 		}
 	}

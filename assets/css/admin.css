@@ -179,7 +179,8 @@ body.simple-view #wp-content-editor-container{background:#ffffff;}
 .cuisine_post_extras{position:relative;height:100%;}
 
 .cuisine_post_extras_tabs{width:100%;display:block;height:30px;}
-.post-extra{display:none;width:100%;display:block;}
+.post-extra{display:none;width:100%;}
+.post-extra.active{display:block;}
 .cuisine_post_extras_tab_list{list-style:none;}
 .cuisine_special_tab{float:left;padding:7px 10px 7px 10px;border-top-left-radius:5px;border-top-right-radius:5px;border:1px solid #eee;background:#eee;margin-right:1px;}
 .cuisine_special_tab.active{background:#fff;border-bottom:0;}
@@ -187,6 +188,9 @@ body.simple-view #wp-content-editor-container{background:#ffffff;}
 .cuisine_post_extras_output{width:100%;position:absolute;bottom:0;padding:20px;margin-left:0px;left:0;background:#eee;-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}
 .cuisine_post_extras_output input{float:right;margin-right:20px;}
 
+.cuisine-button{display: inline-block; padding: 12px 20px 12px 20px;font-size:20px;color: #fff !important; background-color:#444;border-radius:5px; white-space: nowrap; overflow: visible; cursor: pointer; text-decoration: none; outline: none; position: relative; zoom: 1;}
+.cuisine-button i{color:#fff !important;margin-left:0;margin-right:0;padding-right:10px;}
+.cuisine-no-icon{display:inline-block;width:0;height:0;}
 
 	/* Post extra specifics: */
 	.column-top{width:100%;padding:20px 0 10px 0;display:block;}

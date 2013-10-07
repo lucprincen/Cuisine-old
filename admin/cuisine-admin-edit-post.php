@@ -27,6 +27,7 @@
 
         if( $is_post_edit_page ){
 			add_thickbox();
+            wp_enqueue_style( 'fontawesome', '//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css' );
 			add_action( 'admin_footer',  'cuisine_mce_popup' );
 		}
 
@@ -36,13 +37,12 @@
             'cuisine-columns',              // id
             __('Columns', 'cuisine'),       // label
             'cuisine_post_extras_columns',  // function
-            array(),                        // js files needed
-            null,                           // priority
-            array()                         // arguments
+            array(),                        // js files needed (optional)
+            null,                           // priority (optional)
+            array()                         // arguments (optional)
         );
 
         cuisine_register_post_extra( 'cuisine-buttons', __('Buttons', 'cuisine'), 'cuisine_post_extras_buttons' );
-
 
 	}
 	
@@ -122,30 +122,43 @@
     }
 
     function cuisine_post_extras_buttons(){
+
+        $icons = cuisine_get_fontawesome_icons();
         ?>
         <div class="post-extra-row">
             <strong><?php _e('Here you can easily add a button.', 'cuisine' );?></strong>
             <p><?php _e( 'Add a link, button-text and other stuff!', 'cuisine');?></p>
 
-            <label><?php _e( 'Link URL', 'cuisine' );?></label>
-            <input type="text" id="button-link"/>
+            <label class="cuisine_label label_top"><?php _e( 'Link URL', 'cuisine' );?></label>
+            <input type="text" id="button-link" class="cuisine_input"/>
 
+            <label class="cuisine_label label_top"><?php _e( 'Button text', 'cuisine' );?></label>
+            <input type="text" id="button-label" value="Button" class="cuisine_input" />
 
-            <label><?php _e( 'Button text', 'cuisine' );?></label>
-            <input type="text" id="button-text" value="Button" />
-
+            <label class="cuisine_label label_top"><?php _e( 'Icon', 'cuisine' );?></label>
+            <select id="button-icon">
+                <option value="none"><?php _e( 'No icon','cuisine' );?></option
+                <?php 
+                foreach( $icons as $i ){
+                    echo '<option value="icon-'.$i.'">'. ucwords( str_replace( '-',' ',  $i ) ).'</option>';
+                }?>
+            </select> 
+            <br/>
             <hr/>
+            <br/>
         </div>
 
-        <!-- 
+        
         <div class="post-extra-row">
-            <strong><?php _e( 'Live preview','cuisine' );?></strong>
+            <strong><?php _e( 'Live preview','cuisine' );?></strong><br/><br/>
 
-            <a href="#" class="button" id="livepreviewbutton"> 
+            <a href="#" class="cuisine-button" id="livepreviewbutton"></a>
 
-        </div>-->
+        </div>
         <?php
     }
+
+
 
 
 

@@ -62,7 +62,7 @@ function cuisine_generate_button( $atts, $content = null ){
 		if( isset( $atts['icon'] ) && $atts['iconpos'] == 'left' )
 			$html .= '<span class="icon '.$atts['icon'].'"></span>';
 
-		$html .= $content;
+		$html .= do_shortcode( $content );
 
 
 		if( isset( $atts['icon'] ) && $atts['iconpos'] == 'right' )
@@ -74,4 +74,7 @@ function cuisine_generate_button( $atts, $content = null ){
 		return $html;
 
 }
+
+
+
 ?>
