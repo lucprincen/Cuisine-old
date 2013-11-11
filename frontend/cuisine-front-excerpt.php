@@ -88,5 +88,29 @@
 	}
 
 
+	function cuisine_content_before_more( $content, $limit = 120, $break = '.', $pad = '...'  ){
+                
+		$string = explode( 'id="more-', $content );
+		if( count( $string ) > 1 ){
+
+			return $string[0];
+
+		}else{
+
+			return cuisine_get_excerpt( $content, $limit, $break, $pad );
+
+		}
+    }
+
+ 	function cuisine_content_after_more( $content ){
+
+    	$string = explode( '<!--more-->', $content );
+    	if( count( $string ) > 1 ){
+    		return $string[1];
+    	}
+
+    	return '';
+
+    }
 
 ?>

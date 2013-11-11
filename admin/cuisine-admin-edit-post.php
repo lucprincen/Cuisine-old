@@ -22,7 +22,7 @@
 	*/
 	cuisine_init_post_extras();
 	function cuisine_init_post_extras(){
-		global $pagenow;
+		global $pagenow, $cuisine;
         $is_post_edit_page = in_array( $pagenow, array('post.php', 'page.php', 'page-new.php', 'post-new.php'));
 
         if( $is_post_edit_page ){
@@ -37,7 +37,7 @@
             'cuisine-columns',              // id
             __('Columns', 'cuisine'),       // label
             'cuisine_post_extras_columns',  // function
-            array(),                        // js files needed (optional)
+            array( $cuisine->asset_url.'/js/plugins/drag-select.min.js'), // js files needed (optional)
             null,                           // priority (optional)
             array()                         // arguments (optional)
         );
@@ -103,7 +103,7 @@
             <div class="clearfix"></div>
         </div>
 
-        <div class="columns-row">
+        <div class="columns-row" id="the-columns">
             <div class="column-block selectable single">1</div>
             <div class="column-block selectable single">2</div>
             <div class="column-block selectable single">3</div>

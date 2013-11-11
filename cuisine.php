@@ -269,11 +269,11 @@ class Cuisine {
 	function register_scripts(){
 
 		//first, add jQuery:
-		if ( ! is_admin() ){
+		if ( ! is_admin()  && ! defined('DOING_AJAX') && apply_filters( 'cuisine_jquery_cdn', true ) ){
 
-	//		wp_deregister_script( 'jquery' );
-   	//		wp_register_script( 'jquery', "http" . ( $_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js", false, null, true );
-   	// 		wp_enqueue_script( 'jquery' );
+			wp_deregister_script( 'jquery' );
+   			wp_register_script( 'jquery', "http" . ( $_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js", false, null, true );
+   	 		wp_enqueue_script( 'jquery' );
 
    		}
 

@@ -65,7 +65,8 @@
 			'Raleway:400,600,700' => 'Raleway',
 			'Nunito:400,700' => 'Nunito',
 			'Merriweather:400,700,900' => 'Merriweather',
-			'Pacifico' => 'Pacifico'
+			'Pacifico' => 'Pacifico',
+			'Bitter:400,700,400italic' => 'Bitter'
 		);
 		asort( $fonts );
 		return $fonts;

@@ -94,14 +94,14 @@ class cuisine_widget_twitter extends WP_Widget {
 
 			// If excluding replies, we need to fetch more than requested as the
 			// total is fetched first, and then replies removed.
-			$totalToFetch = ($excludeReplies) ? max(50, $numTweets * 3) : $numTweets;
+			$totalToFetch = ($exclude_replies) ? max(50, $numTweets * 3) : $numTweets;
 			
 			$fetchedTweets = $connection->get(
 				'statuses/user_timeline',
 				array(
 					'screen_name'     => $name,
 					'count'           => $totalToFetch,
-					'exclude_replies' => $excludeReplies
+					'exclude_replies' => $exclude_replies
 				)
 			);
 			  

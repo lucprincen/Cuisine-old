@@ -230,7 +230,7 @@ class Cuisine_Plugins {
 
 			do_action( 'cuisine_before_save', $item['key'], $item, $values );
 
-			update_post_meta( $post_id, $item['key'], $item, $values );
+			update_post_meta( $post_id, $item['key'], $values );
 		
 			do_action( 'cuisine_saved_'.$item['key'], $item, $values );
 		}

@@ -149,6 +149,8 @@
 
             this.init = function(){
 
+
+
                  jQuery( '.column-block.selectable' ).live( 'click', function(){
         
                      jQuery( this ).removeClass( 'selectable' );
@@ -161,6 +163,13 @@
                      e.preventDefault();
         
                      PostExtras.Columns.create();
+                 });
+
+                 jQuery( '#resetColumnsButton' ).click(function( e ){
+
+                    e.preventDefault();
+                    PostExtras.Columns.reset();
+
                  })
         
             }
@@ -205,7 +214,8 @@
                 classes['12'] = 'twelve';
         
                 var amount = jQuery('.column-block.selected' ).length;
-        
+            
+
                 var f = PostExtras.Columns.first();
                 var last = f + ( amount- 1 );
         
@@ -241,7 +251,39 @@
 
                 html += '[/row]';
 
+                PostExtras.Columns.reset();
                 return html;
+            }
+
+            this.reset = function(){
+
+                var html = '';
+
+                for( var i = 1; i < 13; i++ ){
+
+                    html += '<div class="column-block selectable single">'+i+'</div>'
+
+                }
+
+                jQuery( '.columns-row' ).html('');
+                jQuery( '.columns-row' ).append( html );
+
+                PostExtras.Columns.resetDragEvent();
+            }
+
+            this.resetDragEvent = function(){
+
+                jQuery('#the-columns').dragToSelect({
+                    selectables: 'div.selectable',
+                    onHide: function(){
+
+                        jQuery('.column-block.selected').each(function(){
+                            jQuery(this).removeClass('selectable');
+                        })
+                
+                    }
+                });
+
             }
 
 
