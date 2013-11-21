@@ -31,6 +31,8 @@
 
             }
 
+            jQuery(document).trigger('cuisine-images-loaded');
+
         }
 
 

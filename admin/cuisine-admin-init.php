@@ -32,6 +32,9 @@
 			include( 'cuisine-admin-media.php' );	
 			include( 'cuisine-admin-edit-post.php' ); 	
 			include( 'cuisine-admin-install.php' );
+		
+			//remove the ability to edit files from WordPress
+			define('DISALLOW_FILE_EDIT', TRUE);
 		}
 	}
 
@@ -181,6 +184,11 @@
 		//add the general admin styles & scripts
 		wp_enqueue_style( 'cuisine_admin', $cuisine->asset_url.'/css/admin.css' );
 		wp_enqueue_script( 'cuisine_admin', $cuisine->asset_url.'/js/admin.js', array('jquery', 'jquery-ui-sortable', 'thickbox' ), false, true  );
+
+
+		//little security-measure:
+		//stop WordPress from displaying the theme editor:
+		remove_action('admin_menu', '_add_themes_utility_last', 101);
 
 	}
 

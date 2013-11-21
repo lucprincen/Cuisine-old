@@ -28,8 +28,7 @@
 		$cuisine->plugins->get_plugin_nonce();
 		
 
-	?>	
-	<h2><?php _e('Cuisine Options', 'cuisine');?></h2>
+?><h2><?php _e('Cuisine Options', 'cuisine');?></h2>
 			
 		<?php if( current_user_can( 'toggle_production_mode' ) ):?>
 		<a class="cuisine_form_section cuisine_production_section <?php echo $prod_class;?>" href="<?php echo admin_url();?>admin.php?page=cuisine_options&toggle_production_mode=true">
@@ -38,10 +37,10 @@
 
 			if( $cuisine->production_mode ){
 				echo '<p>'.__('website is functioning normally in', 'cuisine').' <strong>'.__('PRODUCTION MODE', 'cuisine').'</strong></p>';
-				echo '<p class="warning_txt">Click this bar to toggle it back to development mode.</p>';
+				echo '<p class="warning_txt">'.__('Click this bar to toggle it back to development mode.', 'cuisine').'</p>';
 			}else{
 				echo '<p>'.__('website might be a bit unstable because it\'s in', 'cuisine').' <strong>'.__('DEVELOPMENT MODE').'</strong></p>';
-				echo '<p class="warning_txt">Click this bar to toggle it to production mode.</p>';
+				echo '<p class="warning_txt">'.__('Click this bar to toggle it to production mode.', 'cuisine').'</p>';
 			}
 			?>
 		</a>
