@@ -138,7 +138,7 @@ body.simple-view #wp-content-editor-container{background:#ffffff;}
 	.cuisine_label.label_left{clear:both;width:100%;}
 	.cuisine_label.label_left p{width:100px;display:inline-block;}
 	.cuisine_label.label_left input{display:inline;margin-left:20px;}
-	.cuisine_label.label_top{clear:both;width:100%;}
+	.cuisine_label.label_top{clear:both;width:100%;margin-left:0;}
 
 	#normal-sortables .cuisine_label.label_left input{min-width:300px;}
 	
@@ -191,6 +191,7 @@ body.simple-view #wp-content-editor-container{background:#ffffff;}
 .cuisine-button{display: inline-block; padding: 12px 20px 12px 20px;font-size:20px;color: #fff !important; background-color:#444;border-radius:5px; white-space: nowrap; overflow: visible; cursor: pointer; text-decoration: none; outline: none; position: relative; zoom: 1;}
 .cuisine-button i{color:#fff !important;margin-left:0;margin-right:0;padding-right:10px;}
 .cuisine-no-icon{display:inline-block;width:0;height:0;}
+.cuisine-button.no-border{border:0;}
 
 	/* Post extra specifics: */
 	.column-top{width:100%;padding:20px 0 10px 0;display:block;}

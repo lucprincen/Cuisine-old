@@ -10,12 +10,12 @@
  * @package 	Cuisine
  */
 
-function cuisine_row($atts, $content = null){
+function cuisine_create_row($atts, $content = null){
    $content = preg_replace('#^<\/p>|<p>$#', '', $content);
    return '<div class="row-fluid">' . do_shortcode($content) . '</div>';
  }
 
-add_shortcode("row", "cuisine_row");
+add_shortcode("row", "cuisine_create_row");
 
 
 function cuisine_span($atts, $content = null){

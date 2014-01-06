@@ -702,7 +702,7 @@ class Cuisine_Theme {
 	/**
 	*	Register the scripts that need to be added in the footer:
 	*/
-	function register_scripts($script){
+	function register_scripts( $script ){
 
 		//add dependencies and variables if not set:
 		if( empty( $script['deps'] ) )
@@ -714,6 +714,9 @@ class Cuisine_Theme {
 		//default the page on which to load this script to 'all'
 		if( empty( $script['on_page'] ) )
 			$script['on_page'] = 'all';
+
+		if( !isset( $script['load_on_mobile'] ) )
+			$script['load_on_mobile'] = true;
 
 		//add the type of page on which to load the script ( single, archive, post_type_archive )
 		if( empty( $script['page_type'] ) || $script['page_type'] == '' ){
@@ -796,12 +799,15 @@ class Cuisine_Theme {
 				//check if on this page / single post or archive on which to load:
 				if( $script['on_page'] == 'all' || $this->is_correct_enqueue_page( $script['on_page'], $script['page_type'] ) ){
 				
+					if( !$script['load_on_mobile'] && is_mobile() )
+						continue;
+
 					if( isset( $script['url'] ) ){
 						//enqueue the script:
 		 				wp_enqueue_script( $script['id'], $script['url'], $script['deps'], $script['vars'], true );
-
+	
 					}else{
-						echo 'SCRIPT URL NOT FOUND:'. $script['id'];
+						echo '<!-- SCRIPT URL NOT FOUND:'. $script['id'].'-->';
 					}
 
 	 			}
@@ -1076,7 +1082,7 @@ class Cuisine_Theme {
 			$options = array_merge($options, $this->get_theme_defaults() );
 	
 			//then the options from the database:
-			$options = array_merge( $options, get_option( 'cuisine_theme_options', true ) );
+			$options = array_merge( $options, get_option( 'cuisine_theme_options', array() ) );
 				
 			//(we've overwritten some styles by now by order of importance; defaults from plugins, defaults from theme and info from the database.)
 	

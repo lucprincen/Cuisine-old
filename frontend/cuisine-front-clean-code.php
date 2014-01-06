@@ -16,5 +16,41 @@
 	}
 	
 
+	/**
+	*	Generate a fluid bootstrap row based on the current loop:
+	*/
+	function cuisine_row( $class = '' ){
+
+		global $current_row_item, $current_total_item;
+
+		if( !isset( $current_row_item ) && $current_total_item ){
+			$GLOBALS['current_row_item'] = 0;
+			$GLOBALS['current_total_item'] = 0;
+			global $current_row_item, $current_total_item;
+		}
+
+		if( $current_row_item == 0 )
+			echo '<div class="row-fluid '.$class.'">';
+
+	}
+
+
+	/**
+	*	Generate a fluid bootstrap row based on the current loop:
+	*/
+	function cuisine_row_close( $items, $a_query = null ){
+		
+		$GLOBALS['current_row_item']++;
+		$GLOBALS['current_total_item']++;
+		global $current_row_item, $current_total_item, $wp_query;
+		if( $a_query == null ) $a_query = $wp_query;
+
+		if( $current_row_item == $items || $current_total_item == $a_query->found_posts ){
+			$GLOBALS['current_row_item'] = 0;
+			echo '</div>';
+		}
+
+	}
+
 
 ?>

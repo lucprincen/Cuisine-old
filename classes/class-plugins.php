@@ -814,6 +814,7 @@ class Cuisine_Plugins {
 							if( $wp_query->query_vars['paged'] > 1 ){
 								$wp_query->is_404 = false;
 								$wp_query->is_paged = true;
+								$wp_query->template = $template;
 							}
 		
 							$wp_query->is_custom_post_type_archive = true;
