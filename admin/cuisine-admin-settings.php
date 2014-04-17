@@ -64,6 +64,7 @@
 
 				$settings = array(
 
+					'simple_view'		=> true,
 					'show_pages_front'	=> true,
 					'icon_size'			=> '120',
 
@@ -161,6 +162,12 @@
 
 	function cuisine_sanitize_options(){
 		$values = array();
+
+		if( !isset( $_POST['cuisine_simple_view' ] ) ){
+			$values['cuisine_simple_view'] = false;
+		}else{
+			$values['cuisine_simple_view'] = true;
+		}
 
 		if( !isset($_POST['cuisine_show_pages'] ) ){
 			$values['show_pages_front'] = false;

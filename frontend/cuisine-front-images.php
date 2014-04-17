@@ -103,7 +103,7 @@
 		}
 
 		$src = wp_get_attachment_image_src( get_post_thumbnail_id( $pid ), $size );
-		return $src[0];
+		return apply_filters( 'cuisine_thumb_src', $src[0] );
 
 	}
 
@@ -125,7 +125,7 @@
 		}
 
 		$src = wp_get_attachment_image_src( $pid, $size );
-		return $src[0];
+		return apply_filters( 'cuisine_thumb_src', $src[0] );
 
 	}
 

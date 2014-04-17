@@ -65,7 +65,7 @@ if( !function_exists( 'boxshadow' ) ){
 if( !function_exists( 'transition' ) ){
 
     function transition( $seconds = '.3s' ){
-        echo '-webkit-transition: all '.$seconds.' ease; -moz-transition: all '.$seconds.' ease; -ms-transition: all '.$seconds.' ease; -o-transition: all '.$seconds.' ease; transition: all '.$secongd.' ease;';
+        echo '-webkit-transition: all '.$seconds.' ease; -moz-transition: all '.$seconds.' ease; -ms-transition: all '.$seconds.' ease; -o-transition: all '.$seconds.' ease; transition: all '.$seconds.' ease;';
     }
 
 }

@@ -48,7 +48,10 @@
 
 		<div class="cuisine_form_section">
 			<h3><?php _e('First admin page', 'cuisine');?></h3>
-		
+			
+			<label>
+				<input type="checkbox" name="cuisine_simple_view" <?php checked( $s['simple_view'], true );?>/> <?php _e( 'Enabled Simple View', 'cuisine' );?></label>
+
 			<label>
 				<input type="checkbox" name="cuisine_show_pages" <?php checked( $s['show_pages_front'], true );?>/> <?php _e( 'Show all pages directly', 'cuisine' );?></label>
 

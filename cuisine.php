@@ -214,7 +214,7 @@ class Cuisine {
 		}
 
 		// Init user roles
-		$this->init_user_roles();
+		$this->add();
 				
 		// Init action
 		do_action( 'cuisine_init' );
@@ -241,7 +241,7 @@ class Cuisine {
 	/**
 	 * Init Cuisine user roles
 	 **/
-	function init_user_roles() {
+	function add() {
 		global $wp_roles;
 	
 		if ( class_exists('WP_Roles') ) if ( ! isset( $wp_roles ) ) $wp_roles = new WP_Roles();	

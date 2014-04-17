@@ -73,6 +73,10 @@
 		}
 	}
 
+	function cuisine_remove_whitespace( $string ){
+		return preg_replace('~>\s+<~', '><', $string );
+	}
+
 	/**
 	*	Create a relative time:
 	*/
