@@ -62,4 +62,17 @@
 
 	}
 
+
+
+	/**
+	* Get a template file (while still being able to use variables)
+	* 
+	* @access public
+	* @return void
+	**/
+
+	function cuisine_template_part( $string ){
+		include( locate_template( $string ) );
+	}
+
 ?>
