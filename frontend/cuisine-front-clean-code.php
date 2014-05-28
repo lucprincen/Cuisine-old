@@ -53,4 +53,16 @@
 	}
 
 
+	
+	/**
+	*	Cleanup inline styles:
+	*/
+	add_filter( 'the_content', 'cuisine_no_inline_styles_dangit' );
+
+	function cuisine_no_inline_styles_dangit( $string ){
+		return preg_replace( '/(<[^>]+) style=".*?"/i', '$1', $string );
+	}
+
+
+
 ?>

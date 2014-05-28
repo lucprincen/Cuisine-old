@@ -3,8 +3,8 @@ Contributors: chefduweb, towonder
 Tags: framework, development, simple-view, easy wp
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=paypal@chefduweb.com&item_name=Donation+for+Cuisine
 Requires at least: 3.5
-Tested up to: 3.6.1
-Stable tag: 1.3
+Tested up to: 3.9.1
+Stable tag: 1.3.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 

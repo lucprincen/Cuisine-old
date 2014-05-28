@@ -62,11 +62,9 @@ class Cuisine_Theme {
 	*/
 	function init_theme_admin(){
 
-		if( $this->is_cuisine_enabled_theme() ){
-
-			//setup links to the customizer:
-			$this->setup_customizer_links();
-		}
+		//setup links to the customizer:
+		$this->setup_customizer_links();
+		
 	}
 
 
@@ -664,20 +662,8 @@ class Cuisine_Theme {
 
 
 	function is_cuisine_enabled_theme(){
-
-		$theme = wp_get_theme();
-		$tags = $theme->{'Tags'};
-
-		if( strtolower($theme->Author) == 'Chef du Web')
-			return true;
-
-		if( in_array( 'chef du web', $tags) || in_array( 'Chef du Web', $tags) || in_array( 'Chef du web', $tags ) )
-			return true;
-
-		if( in_array( 'cuisine enabled', $tags ) || in_array( 'Cuisine Enabled', $tags ) || in_array( 'Cuisine enabled', $tags ) )
-			return true;
-
-		return false;
+		_deprecated_function( __CLASS__ . '::' . __METHOD__, '1.3' );
+		return true;
 	}
 
 
@@ -969,6 +955,7 @@ class Cuisine_Theme {
 	*	Deprecated function, replaced by get_minified_filename
 	*/
 	function get_minified_js_filename(){
+		_deprecated_function( __CLASS__ . '::' . __METHOD__, '1.3', array( &$this, 'get_minified_filename' ) );
 		return $this->get_minified_filename( 'script' );
 	}
 

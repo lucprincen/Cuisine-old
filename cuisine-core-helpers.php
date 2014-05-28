@@ -124,6 +124,20 @@
 	}
 
 
+	//a function to quickly register a script:
+	function cuisine_register_script( $id, $baseurl, $onpage = 'all' ){
+
+		global $cuisine;
+		$args = array(
+			'id'		=> $id,
+			'url'		=> $cuisine->theme->url('scripts').'/'.$baseurl,
+			'root_url'	=> $cuisine->theme->root_url('scripts').'/'.$baseurl,
+			'on_page'	=> $onpage
+		);
+			
+		$cuisine->theme->register_scripts( $args );
+	}
+	
 
 	//A quick function to compare 2 variables and output some text:
 	function cuisine_current( $first, $second, $raw = true, $class = 'current' ){
