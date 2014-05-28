@@ -13,6 +13,7 @@
 
 	/**
 	 * Get available fonts
+	 * @access public
 	 * @return Array all fonts available in Cuisine.
 	 */
 	function cuisine_get_all_fonts(){
@@ -23,6 +24,7 @@
 
 	/**
 	 * Generate a clean font name for CSS
+	 * @access public
 	 * @param  String $name -> the font name.
 	 * @return String -> the sanatized font name.
 	 */
@@ -37,6 +39,7 @@
 
 	/**
 	 * Generate the correct import url for google fonts
+	 * @access public
 	 * @return String if found, else false 
 	 */
 	function cuisine_get_google_font_url(){
@@ -53,6 +56,7 @@
 
 	/**
 	 * All Google Fonts Cuisine deems nice enough.
+	 * @access public
 	 * @return Array key -> value pairs of all fonts.
 	 */
 	function cuisine_get_google_fonts(){
@@ -97,6 +101,7 @@
 
 	/**
 	 * System font returner
+	 * @access public
 	 * @return Array key -> value pairs of systemfonts:
 	 */
 	function cuisine_get_basic_fonts(){
@@ -108,6 +113,7 @@
 
 	/**
 	 * An array of possible fontawesome icons:
+	 * @access public
 	 * @return Array fontawesome class names.
 	 */
 	function cuisine_get_fontawesome_icons(){

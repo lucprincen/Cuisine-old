@@ -108,9 +108,11 @@ class Cuisine {
 
 
 
+	
 	/**
 	 * Include required core files
-	 **/
+	 * @return void
+	 */
 	function includes() {
 
 		//Specifics:
@@ -145,7 +147,8 @@ class Cuisine {
 
 	/**
 	 * Include required admin files
-	 **/
+	 * @return void
+	 */
 	function admin_includes() {
 		include( 'admin/cuisine-admin-init.php' );				// Takes care of the 'open' admin functions
 		include( 'classes/class-updates.php');					// Update functions
@@ -153,31 +156,33 @@ class Cuisine {
 
 	}
 
+
+
 	/**
 	 * Include required frontend files
-	 **/
+	 * @return void
+	 */
 	function frontend_includes() {
 		include( 'frontend/cuisine-front-init.php' );			// All Frontend functions
 
-		
-		
 	}
 	
 
 
 	/**
 	 * Install upon activation
-	 **/
+	 * @return void
+	 */
 	function install() {
 		if ( get_option('cuisine_db_version') != $this->version ) 
 			add_action( 'init', 'install_cuisine', 1 );
 	}
 
 
-
 	/**
 	 * Init Cuisine when WordPress Initialises
-	 **/
+	 * @return void
+	 */
 	function init() {
 
 		// Set up localisation
@@ -227,9 +232,11 @@ class Cuisine {
 	}
 
 
+
 	/**
 	 * Localisation
-	 **/
+	 * @return void
+	 */
 	function load_plugin_textdomain() {
 		// Note: the first-loaded translation file overrides any following ones if the same translation is present
 		$locale = apply_filters( 'plugin_locale', get_locale(), 'cuisine' );
@@ -240,6 +247,7 @@ class Cuisine {
 
 	/**
 	 * Init Cuisine user roles
+	 * @return void
 	 **/
 	function add() {
 		global $wp_roles;
@@ -266,6 +274,10 @@ class Cuisine {
 	/** Register front-end scripts ********************************************/
 	/**************************************************************************/
 
+	/**
+	 * Register front end scripts:
+	 * @return void
+	 */
 	function register_scripts(){
 
 		global $pagenow;
@@ -332,6 +344,7 @@ class Cuisine {
 	
 	/**
 	 * Get the plugin url
+	 * @return String (url)
 	 */
 	function get_plugin_url() { 
 		if ( $this->plugin_url ) return $this->plugin_url;
@@ -340,6 +353,7 @@ class Cuisine {
 	
 	/**
 	 * Get the plugin path
+	 * @return String (url)
 	 */
 	function get_plugin_path() { 	
 		if ( $this->plugin_path ) return $this->plugin_path;
@@ -348,6 +362,7 @@ class Cuisine {
 	 
 	/**
 	 * Ajax URL
+	 * @return String (url)
 	 */ 
 	function ajax_url() { 
 		return str_replace( array('https:', 'http:'), '', admin_url( 'admin-ajax.php' ) );
@@ -361,6 +376,7 @@ class Cuisine {
     
     /**
 	 * Load Messages
+	 * @return void
 	 */
 	function load_messages() { 
 
@@ -381,15 +397,31 @@ class Cuisine {
 
 	/**
 	 * Add an error
+	 * @return void
 	 */
-	function add_error( $error ) { $this->errors[] = apply_filters( 'cuisine_add_error', $error ); $this->set_messages(); }
+	function add_error( $error ) { 
+
+		$this->errors[] = apply_filters( 'cuisine_add_error', $error );
+		$this->set_messages();
+
+	}
 	
 	/**
 	 * Add a message
+	 * @return void
 	 */
-	function add_message( $message ) { $this->messages[] = apply_filters( 'cuisine_add_message', $message ); $this->set_messages(); }
+	function add_message( $message ) { 
+
+		$this->messages[] = apply_filters( 'cuisine_add_message', $message );
+		$this->set_messages();
+
+	}
 	
-	/** Clear messages and errors from the session data */
+
+	/**
+	 * Clear messages and errors from the session data
+	 * @return void
+	 */
 	function clear_messages() {
 		$this->errors = $this->messages = array();
 		unset( $_SESSION['messages'], $_SESSION['errors'] );
@@ -397,32 +429,49 @@ class Cuisine {
 	
 	/**
 	 * Get error count
+	 * @return Int number of erros
 	 */
-	function error_count() { return sizeof($this->errors); }
+	function error_count() { 
+		return sizeof($this->errors);
+	}
 	
 	/**
 	 * Get message count
+	 * @return Int number of messages
 	 */
-	function message_count() { return sizeof($this->messages); }
+	function message_count() { 
+		return sizeof($this->messages);
+	}
 	
 	/**
 	 * Get errors
+	 * @return Array errors
 	 */
-	function get_errors() { return (array) $this->errors; }
+	function get_errors() { 
+		return (array) $this->errors;
+	}
 	
 	/**
 	 * Clear errors
+	 * @return void
 	 */
-	function clear_errors() { $this->errors = array(); unset( $_SESSION['errors'] ); }
+	function clear_errors() { 
+		$this->errors = array(); 
+		unset( $_SESSION['errors'] );
+	}
 
 	/**
 	 * Get messages
+	 * @return Array messages
 	 */
-	function get_messages() { return (array) $this->messages; }
+	function get_messages() { 
+		return (array) $this->messages;
+	}
 	
 	
 	/**
 	 * Set session data for messages
+	 * @return void
 	 */
 	function set_messages() {
 		$_SESSION['errors'] = $this->errors;

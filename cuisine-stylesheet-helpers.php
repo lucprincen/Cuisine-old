@@ -16,11 +16,13 @@
 /** Stylesheet Helpers ****************************/
 /**************************************************/
 
-/**
-*	Simple function to make style-echoing a little easier
-*/
-if( !function_exists( '_s' ) ){
 
+if( !function_exists( '_s' ) ){
+	/**
+	*	Simple function to make style-echoing a little easier
+	*	@access public
+	*	@return String style element
+	*/
 	function _s( $type ){
 
         global $style;
@@ -30,11 +32,13 @@ if( !function_exists( '_s' ) ){
 
 }
 
-/**
-*	Function for quick box-sizing settings:
-*/
-if( !function_exists( 'borderbox' ) ){
 
+if( !function_exists( 'borderbox' ) ){
+	/**
+	*	Function for quick box-sizing settings:
+	*	@access public
+	*	@return String box-sizing css
+	*/
     function borderbox(){
         echo '-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;';
     }
@@ -42,11 +46,13 @@ if( !function_exists( 'borderbox' ) ){
 }
 
 
-/**
-*	Generate a neat box-shadow
-*/
-if( !function_exists( 'boxshadow' ) ){
 
+if( !function_exists( 'boxshadow' ) ){
+	/**
+	*	Generate a neat box-shadow
+	*	@access public
+	*	@return String box-shadow css
+	*/
     function boxshadow($string, $trailinglinebreak = false){
         $css =  '-webkit-box-shadow:'.$string.';';
         $css .= '-moz-box-shadow:'.$string.';';
@@ -59,11 +65,13 @@ if( !function_exists( 'boxshadow' ) ){
 }
 
 
-/**
-*	Set a css transition:
-*/
-if( !function_exists( 'transition' ) ){
 
+if( !function_exists( 'transition' ) ){
+	/**
+	*	Set a css transition:
+	*	@access public
+	*	@return String transition css
+	*/
     function transition( $seconds = '.3s' ){
         echo '-webkit-transition: all '.$seconds.' ease; -moz-transition: all '.$seconds.' ease; -ms-transition: all '.$seconds.' ease; -o-transition: all '.$seconds.' ease; transition: all '.$seconds.' ease;';
     }
@@ -71,11 +79,13 @@ if( !function_exists( 'transition' ) ){
 }
 
 
-/**
-*	Unset a transition:
-*/
-if( !function_exists( 'transitionnone' ) ){
 
+if( !function_exists( 'transitionnone' ) ){
+	/**
+	*	Unset a transition:
+	*	@access public
+	*	@return String no transition css
+	*/
     function transitionnone(){
         echo '-webkit-transition:none; -moz-transition:none; -ms-transition:none; -o-transition:none; transition:none;';
     }
@@ -83,11 +93,13 @@ if( !function_exists( 'transitionnone' ) ){
 }
 
 
-/**
-*	Calculate a new font-size:
-*/
-if( !function_exists( 'set_font_size' ) ){
 
+if( !function_exists( 'set_font_size' ) ){
+	/**
+	*	Calculate a new font-size:
+	*	@access public
+	*	@return String font-size css
+	*/
     function set_font_size( $size, $minmax = 0 ){
 
         $t = '+';
@@ -118,11 +130,14 @@ if( !function_exists( 'set_font_size' ) ){
 }
 
 
-/**
-*	Simple minify-css function:
-*/
+
 if( !function_exists( 'trim_css' ) ){
 
+	/**
+	*	Simple minify-css function:
+	* 	@access public
+	*	@return String minified css
+	*/
     function trim_css( $css ){
         return str_replace('; ',';',str_replace(' }','}',str_replace('{ ','{',str_replace(array("\r\n","\r","\n","\t",'  ','    ','    '),"",preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!','',$css)))));
 

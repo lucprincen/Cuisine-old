@@ -933,6 +933,23 @@ class Cuisine_Plugins {
 
 
 	/**
+	 * GET THE REGULAR URL:
+	 */
+	
+	function url( $slug = '', $trail ){
+
+		$url = get_bloginfo('url').'/wp-content/plugins';
+
+		if( $slug != '' ) $url .= '/'.$slug;
+
+		if( $trail ) $url .= '/';
+
+		return $url;		
+
+	}
+
+
+	/**
 	*	GET ROOT URLS:
 	*/
 

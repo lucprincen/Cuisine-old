@@ -1,7 +1,11 @@
 <?php
 
 	/**
-	*	Create a code:
+	*	Generate a code:
+	*	
+	*	@access public
+	*	@param  Int string length
+	*	@return  String with a unique code
 	*/
 	function cuisine_create_code( $len = 10 ){
 		
@@ -27,8 +31,14 @@
 
 
 	/**
-	*	SORT AN ARRAY BY A FIELD:
-	*/
+	 * Sort an Array by a field
+	 * 
+	 * @access public
+	 * @param  Array $data  Input array
+	 * @param  String $field Field to sort on
+	 * @param  String $order ASC/DESC
+	 * @return Array (sorted)
+	 */
 	function cuisine_sort_array_by( $data, $field, $order = null ){
 	
 		if( $order == null || $order == 'ASC' ){
@@ -45,6 +55,9 @@
 
 	/**
 	*	Function to make parsing out data a bit more pleasant:
+	* @access public
+	* @param Object (whatever)
+	* @return  a nicely formatted Object.
 	*/
 	function cuisine_dump( $obj ){
 		echo '<pre>';
@@ -56,14 +69,21 @@
 
 	/**
 	*	Make links in strings clickable:
+	* @access public
+	* @param  String text to filter
+	* @return  String (html) with clickable links
 	*/
 	function cuisine_make_links_clickable( $text ){
     	return preg_replace('!(((f|ht)tp://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', '<a href="$1">$1</a>', $text);
 	}
 
 
+
 	/**
 	*	Check if something is plural:
+	*	@access public
+	*	@param  Int number
+	*	@return  bool
 	*/
 	function cuisine_is_plural( $num ) {
 		if ( $num != 1 ){
@@ -73,12 +93,24 @@
 		}
 	}
 
+
+
+	/**
+	 * Remove whitespace between html tags
+	 * @param  String (html)
+	 * @return String (html) - without whitespace
+	 */
 	function cuisine_remove_whitespace( $string ){
 		return preg_replace('~>\s+<~', '><', $string );
 	}
 
+
+
 	/**
 	*	Create a relative time:
+	* @access public
+	* @param  String time / data
+	* @return  String relative time
 	*/
 	function cuisine_relative_time($date) {
 
@@ -143,15 +175,5 @@
 
 	}
 
-
-
-	// validate functions:
-
-
-		// is_valid_email
-
-		// is_valid url
-
-		// is_number
 
 ?>
