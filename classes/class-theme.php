@@ -1015,10 +1015,15 @@ class Cuisine_Theme {
 	}
 
 
+
 	/**
-	*	Return the stylesheet url based on Cuisine's production mode setting
-	*/
-	function stylesheet_url(){
+	 * Return the stylesheet url based on Cuisine's production mode setting
+	 *
+	 * @access public
+	 * @param  String type of file to return, defaults to style.php
+	 * @return String (url)
+	 */
+	function stylesheet_url( $type = 'php' ){
 
 		global $cuisine;
 
@@ -1029,10 +1034,20 @@ class Cuisine_Theme {
 
 		}else{
 
-			return cuisine_template_url().'/style.php';
+			$url = cuisine_template_url().'/style.php';
 
+			if( $type == 'sass' ){
+
+				$url = cuisine_template_url().'/css/main.min.css';
+
+			}else if( $type == 'css' ){
+
+				$url = cuisine_template_url().'/css/main.css';
+
+			}
+
+			return $url;
 		}
-
 	}
 
 

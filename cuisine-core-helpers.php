@@ -21,6 +21,7 @@
 
 	/**
 	*	Check if a plugin is registered with cuisine:
+	*	
 	*	@access public
 	*	@return bool 
 	*/
@@ -33,6 +34,7 @@
 
 	/**
 	*	Check if a theme is compatible with all plugins
+	*	
 	*	@access public
 	*	@return  bool
 	*/
@@ -43,11 +45,11 @@
 
 	/** 
 	*	Check if a theme has a capability:
+	*	
 	*	@access public
 	*	@param  String plugin slug
 	*	@return bool
 	*/
-
 	function cuisine_has_capability( $slug ){
 		global $cuisine;
 		return $cuisine->intergrations->is_theme_capable( $slug );
@@ -56,10 +58,10 @@
 
 	/**
 	*	Check if a theme is Cuisine capable
+	*	
 	*	@access public
 	*	@return  bool
 	*/
-
 	function is_cuisine_theme(){
 		global $cuisine;
 		return $cuisine->theme->is_cuisine_enabled_theme();
@@ -72,6 +74,7 @@
 
 	/**
 	 * Add a rewrite:
+	 * 
 	 * @access public
 	 * @param  String $slug        The url to rewrite
 	 * @param  String $type        post_type or page (default: post_type)
@@ -89,6 +92,7 @@
 
 	/**
 	 * Add a rewrite:
+	 * 
 	 * @access public
 	 * @param  String $slug        The url to rewrite
 	 * @param  String $type        post_type or page (default: post_type)
@@ -112,6 +116,7 @@
 
 	/**
 	 * Get the current theme's style:
+	 * 
 	 * @access public
 	 * @param  boolean $sanitize Sanatize css
 	 * @return String (css)
@@ -123,6 +128,7 @@
 
 	/**
 	 * Does the current theme have a style?
+	 * 
 	 * @access public
 	 * @return bool
 	 */
@@ -133,6 +139,7 @@
 
 	/**
 	 * Get the google font link
+	 * 
 	 * @access public
 	 * @return String (url)
 	 */
@@ -143,6 +150,7 @@
 
 	/**
 	 * Get the site url (basically the same as get_bloginfo( url ) );
+	 * 
 	 * @access public
 	 * @return String (url)
 	 */
@@ -153,6 +161,7 @@
 
 	/**
 	 * Get the template url (basically the same as get_bloginfo( template_url ) );
+	 * 
 	 * @access public
 	 * @return String (url)
 	 */
@@ -163,6 +172,7 @@
 
 	/**
 	 * Url for the Cuisine plugin
+	 * 
 	 * @access public
 	 * @return String (url)
 	 */
@@ -174,6 +184,7 @@
 
 	/**
 	 * Register multiple scripts at once
+	 * 
 	 * @access public
 	 * @param  Array :: see classes/theme -> register_scripts
 	 * @return void
@@ -185,18 +196,21 @@
 
 	/**
 	 * Get the stylesheet url (depends on production mode on/off)
+	 * 
 	 * @access public
+	 * @param String type of file to return, defaults to style.php
 	 * @return String (url)
 	 */
-	function cuisine_stylesheet_url(){
+	function cuisine_stylesheet_url( $string = 'php' ){
 		global $cuisine;
-		return $cuisine->theme->stylesheet_url();
+		return $cuisine->theme->stylesheet_url( $string );
 
 	}
 
 
 	/**
 	 * Quickly register a script
+	 * 
 	 * @access public
 	 * @param  String $id      script unique identifier
 	 * @param  String $itemurl js file locations
@@ -204,6 +218,8 @@
 	 * @return String          plugin-slug or theme
 	 */
 	function cuisine_register_script( $id, $itemurl, $onpage = 'all', $type = 'theme' ){
+
+		global $cuisine;
 
 		if( $type == 'theme' ){
 			$url = $cuisine->theme->url('scripts').'/';
@@ -258,6 +274,7 @@
 
 	/**
 	*	Get a post id by the $_GET['post'] parameter or the global $post object
+	*	
 	*	@access public
 	*	@return  Int post ID
 	*/	
@@ -279,6 +296,7 @@
 
 	/**
 	*	Check to see if this is a Cuisine overview page:
+	*	
 	*	@access public
 	*	@return bool is this a cuisine-generated page?
 	*/
@@ -304,6 +322,7 @@
 
 	/**
 	 * Gets a postobject by slug
+	 * 
 	 * @access public
 	 * @param  String $slug the posts slug
 	 * @param  String $type the post_type
@@ -346,6 +365,7 @@
 
 	/**
 	*	Check if this is the current post_type (in the admin)
+	*	
 	*	@access public
 	*	@param  String post_type
 	*	@return bool is this the current post_type?
@@ -357,6 +377,7 @@
 
 	/**
 	*	Get a nonce for a certain page:
+	*	
 	*	@access public
 	*	@return String ( nonce HTML )
 	*/
@@ -371,6 +392,7 @@
 
 	/**
 	 * Register a post extra
+	 * 
 	 * @param  String $id       unique identifier
 	 * @param  String $label    Label
 	 * @param  String $func     the function to call

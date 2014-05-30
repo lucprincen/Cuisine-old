@@ -71,6 +71,19 @@ jQuery(document).ready(function($){
 });
 
 
+function doSmartEmpty(id, string){
+	if($(id).val() == string){
+		$(id).val('');
+		$(id).focus();
+		$(id).bind('blur', function(){
+			if($(id).val() == ''){
+				$(id).val(string);
+			}
+		})
+	}
+}
+
+
 var body = document.body, timer;
 window.addEventListener('scroll', function() {
 	
@@ -86,14 +99,27 @@ window.addEventListener('scroll', function() {
 }, false);
 
 
-function doSmartEmpty(id, string){
-	if($(id).val() == string){
-		$(id).val('');
-		$(id).focus();
-		$(id).bind('blur', function(){
-			if($(id).val() == ''){
-				$(id).val(string);
-			}
-		})
-	}
-}
+
+
+// Avoid `console` errors in browsers that lack a console.
+(function() {
+    var method;
+    var noop = function () {};
+    var methods = [
+        'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
+        'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
+        'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
+        'timeStamp', 'trace', 'warn'
+    ];
+    var length = methods.length;
+    var console = (window.console = window.console || {});
+
+    while (length--) {
+        method = methods[length];
+
+        // Only stub undefined methods.
+        if (!console[method]) {
+            console[method] = noop;
+        }
+    }
+}());
