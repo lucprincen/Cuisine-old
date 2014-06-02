@@ -43,6 +43,9 @@
 		// make sure we have clean code in Chef's themes:
 		require_once( 'cuisine-front-clean-code.php' );
 
+		//breadcrumbs:
+		require_once( 'cuisine-front-breadcrumbs.php' );
+
 	}
 
 

@@ -9,6 +9,7 @@
  */
 class Cuisine_Posttypes {
 
+	var $registered = array();
 
 	/**
 	* Register a post type
@@ -19,6 +20,14 @@ class Cuisine_Posttypes {
 			$slug = strtolower( $plural );
 
 		$vars = $this->set_defaults( $vars );
+
+		$this->registered[$type] = array(
+										'name'		=> $type,
+										'singular'	=> $singular,
+										'plural'	=> $plural,
+										'slug'		=> $slug
+		);
+
 
 		$args = array(
 			'labels'			=> array(
