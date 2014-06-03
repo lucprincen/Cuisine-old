@@ -301,6 +301,17 @@ class Cuisine {
 
 		$this->theme->register_scripts( $args );
 
+
+		$args = array(
+			'id'			=>	'cuisine_grid',
+			'url'			=> 	$this->asset_url.'/js/cuisine-grid.js',
+			'root_url'		=>	$this->plugins->root_url('cuisine', true ).'assets/js/cuisine-grid.js',
+			'on_page'		=>	'all'
+		);
+
+		$this->theme->register_scripts( $args );
+		
+
 		$args = array(
 			'id'			=>	'cuisine_responsive',
 			'url'			=> 	$this->asset_url.'/js/cuisine-responsive.js',
