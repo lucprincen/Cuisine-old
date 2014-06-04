@@ -640,9 +640,10 @@ class Cuisine_Theme {
 				'description'   => '',
 				'before_widget' => '<li id="%1$s" class="'.$area['class'].'">',
 				'after_widget'  => '</li>',
-				'before_title'  => '<h2 class="'.$area['title-class'].'">',
-				'after_title'   => '</h2>' );
-				
+				'before_title'  => ( isset( $area['before_title'] ) ? $area['before_title'] : '<h2 class="'.$area['title-class'].'">' ),
+				'after_title'   => ( isset( $area['after_title'] ) ? $area['after_title'] : '</h2>' )
+			);
+
 			register_sidebar($args);
 		}
 	}
