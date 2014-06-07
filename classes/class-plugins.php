@@ -750,10 +750,7 @@ class Cuisine_Plugins {
 
 						//it is, we are redirecting:
 						$wp_query->is_home = false;
-		
-						if( $posttype == 'post' )
-							$posttype = 'blog';
-		
+				
 
 						//setup the template_info object, which gives us more than just
 						//the post_type to work with:
