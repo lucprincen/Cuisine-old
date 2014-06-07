@@ -26,24 +26,47 @@
 		global $cuisine;
 		$registered = $cuisine->posttypes->registered;
 		$keys = array_keys( $registered );
+		$name = ''; $slug = '';
 
 		if( is_single() && in_array( get_post_type(), $keys ) ){
 			
 			$pt = $registered[ get_post_type() ];
 
-			if( count( $nodes ) == 2 ){
+			$name = $pt['plural'];
+			$slug = $pt['slug'];
 
-				$nodes[2] = $nodes[1];
-				$nodes[1] = array(
-								'text'	=> $pt['plural'],
-								'url'	=> get_bloginfo('url').'/'.$pt['slug']
-				);
+		}else if( get_post_type() == 'post' ){
 
+			//get the rewrite rules:
+			$rules = $cuisine->plugins->template_list;
+
+			$slug = 'blog';
+			$name = 'Blog';
+			//get the slug out of the rewrite rules (default to blog)
+			foreach( $rules as $rule ){
+				if( $rule['object'] == 'post' ){
+
+					$name = ucwords( $rule['slug'] );
+					$slug = $rule['slug'];
+					break;
+				}
 			}
 
 		}
 
+
+		if( count( $nodes ) == 2 && $name != '' && $slug != '' ){
+
+			$nodes[2] = $nodes[1];
+			$nodes[1] = array(
+							'text'	=> $name,
+							'url'	=> get_bloginfo('url').'/'.$slug
+			);
+
+		}
+
 		return $nodes;
+
 
 	}
 	
