@@ -55,16 +55,39 @@ class Cuisine_Plugins {
 	/*************************************************************************/
 
 
-	function add_plugin_meta( $meta ){
+	/**
+	 * Add data to the save loop:
+	 *
+	 * @access public
+	 * @param String/Int $key  post_type or post_id
+	 * @param Array $data key / value pair of the data you'd like to save. 
+	 * @return void
+	 */
+	function save_plugin_data( $key, $data ){
 
-		//meta['id']
-		//meta['title']
-		//meta['data']			optional (add data to add to the save loop)
-		//meta['function'] 		optional (defaults to meta[id].'_html')
-		//meta['post_id'] 		optional (either this or post_type)
-		//meta['post_type'] 	optional (either this or post_id)
-		//meta['context'] 		(normal / side )optional 
-		//meta['priority'] 		(high / default) optional
+		if( !isset( $this->plugin_data_to_save[$key] ) )
+				$this->plugin_data_to_save[$key] = array();
+
+		$this->plugin_data_to_save[$key][] = $data;
+
+	}
+
+
+	/**
+	 * Add a new metabox
+	 *
+	 * @access public
+	 * @param Object $meta
+	 * @param $meta['id']
+	 * @param $meta['title']
+	 * @param $meta['data']				optional (add data to add to the save loop)
+	 * @param $meta['function'] 		optional (defaults to meta[id].'_html')
+	 * @param $meta['post_id'] 			optional (either this or post_type)
+	 * @param $meta['post_type'] 		optional (either this or post_id)
+	 * @param $meta['context'] 			(normal / side )optional 
+	 * @param $meta['priority'] 		(high / default) optional
+	 */
+	function add_plugin_meta( $meta ){
 
 
 		if( !isset( $meta['id'] ) )
