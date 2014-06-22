@@ -146,7 +146,7 @@ class Cuisine_Plugins {
 			foreach( $posttypes as $pt ){
 
 				//add the meta_box for eacht post type
-				add_meta_box($meta['id'], $meta['title'], $meta['function'], $pt, $meta['context'], $meta['priority'] );
+				add_meta_box($meta['id'], $meta['title'], $meta['function'], $pt, $meta['context'], $meta['priority'], $meta['callback_args'] );
 			}
 		}
 
@@ -333,6 +333,10 @@ class Cuisine_Plugins {
 		if( empty($meta['priority'] ) )
 			$meta['priority'] = 'default';
 		
+		//add callback arguments:
+		if( empty( $meta['callback_args'] ) )
+			$meta['callback_args'] = array();
+
 
 		//check if there's a function:
 		if( empty($meta['function'] ) )
