@@ -20,11 +20,11 @@
   			         var highestBox = 0;
   			         jQuery( object, this ).each(function(){
   			         
-  			             if( jQuery(this).height() > highestBox ) 
-  			                highestBox = jQuery(this).height(); 
+  			             if( jQuery(this).outerHeight() > highestBox ) 
+  			                highestBox = jQuery(this).outerHeight(); 
   			         });  
   			         
-  			         jQuery( object,this ).height( highestBox );
+  			         jQuery( object,this ).css({ height: highestBox+'px' });
   			         
   			 	});    
        		}
@@ -37,13 +37,13 @@
 
 			object.each( function(){ 
 		
-				if( ( jQuery(this).height() ) > highestBox ){
-					highestBox = jQuery(this).height();
+				if( ( jQuery(this).outerHeight() ) > highestBox ){
+					highestBox = jQuery(this).outerHeight();
 				}
 		
 			});
 		
-			object.height( highestBox );
+			object.css({ height: highestBox+'px' });
 
     	}
 
