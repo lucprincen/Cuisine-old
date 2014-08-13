@@ -352,7 +352,7 @@
 
 		}else{
 
-			$page = get_page_by_path( $page_slug );
+			$page = get_page_by_path( $slug );
 
 			if ( $page )
 				return $page;

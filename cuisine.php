@@ -219,7 +219,7 @@ class Cuisine {
 		}
 
 		// Init user roles
-		$this->add();
+		$this->add_user_roles();
 				
 		// Init action
 		do_action( 'cuisine_init' );
@@ -249,7 +249,7 @@ class Cuisine {
 	 * Init Cuisine user roles
 	 * @return void
 	 **/
-	function add() {
+	function add_user_roles() {
 		global $wp_roles;
 	
 		if ( class_exists('WP_Roles') ) if ( ! isset( $wp_roles ) ) $wp_roles = new WP_Roles();	
@@ -285,8 +285,6 @@ class Cuisine {
 		//first, add jQuery:
 		if ( ! is_admin()  && !in_array( $pagenow, array( 'wp-login.php', 'wp-register.php' ) ) && ! defined('DOING_AJAX') && apply_filters( 'cuisine_jquery_cdn', true ) ){
 
-			wp_deregister_script( 'jquery' );
-   			wp_register_script( 'jquery', "http" . ( $_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js", false, null, true );
    	 		wp_enqueue_script( 'jquery' );
 
    		}

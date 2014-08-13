@@ -175,5 +175,135 @@
 
 	}
 
+	/**
+	 * Translate dutch months
+	 *
+	 * @access public
+	 * @param String $val  monthname or dayname
+	 * @return String (translated)
+	 */
+	function cuisine_dutch_date( $val ){
+
+		$val = strtolower( $val );
+
+			switch( $val ){
+
+				case 'monday':
+					return 'maandag';
+					break;
+
+				case 'tuesday':
+					return 'dinsdag';
+					break;
+
+				case 'wednesday':
+					return 'woensdag';
+					break;
+
+				case 'thursday':
+					return 'donderdag';
+					break;
+
+				case 'friday':
+					return 'vrijdag';
+					break;
+
+				case 'saturday':
+					return 'zaterdag';
+					break;
+
+				case 'sunday':
+					return 'zondag';
+					break;
+
+				case 'january':
+					return 'januari';
+					break;
+
+				case 'february':
+					return 'februari';
+					break;
+
+				case 'march':
+					return 'maart';
+					break;
+
+				case 'may':
+					return 'mei';
+					break;
+
+				case 'june':
+					return 'juni';
+					break;
+
+				case 'july':
+					return 'juli';
+					break;
+
+				case 'august':
+					return 'augustus';
+					break;
+
+				case 'october':
+					return 'oktober';
+					break;
+
+				case 'oct':
+					return 'okt';
+					break;
+
+				default:
+
+					return $val;
+					break;
+			}
+	}
+
+
+	/**
+	 * Echoes any date in WordPress formats (so also translated)
+	 *
+	 * @access public
+	 * @param  string $format The date format
+	 * @param  int $date   unix timestamp
+	 * @return void
+	 */
+	function cuisine_date( $format = 'j F Y', $date = null ){
+
+		global $post;
+
+		if( $date == null )
+			$date = strtotime( $post->post_date );
+
+		echo cuisine_get_date( $format, $date );
+
+	}
+
+
+	/**
+	 * Returns any date in WordPress formats (so also translated)
+	 *
+	 * @access public
+	 * @param  string $format The date format
+	 * @param  int $date   unix timestamp
+	 * @return String (date)
+	 */
+	function cuisine_get_date( $format, $date = null ){
+
+		if( $date == null ){
+			$date_string = $post->post_date;
+
+		}else{
+			$date_string = date( 'Y-m-d H:i:s', $date );
+
+		}
+
+		$d = mysql2date( 'j F Y', $date_string );
+		$date = apply_filters( 'get_the_date', $d, 'j F Y' );
+		return $date;
+	}
+
+
+
 
 ?>
