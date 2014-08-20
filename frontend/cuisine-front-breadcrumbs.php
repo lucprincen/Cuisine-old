@@ -54,6 +54,8 @@
 
 		}
 
+		$name = apply_filters( 'cuisine_breadcrumb_name', $name, $nodes );
+
 
 		if( count( $nodes ) == 2 && $name != '' && $slug != '' ){
 
