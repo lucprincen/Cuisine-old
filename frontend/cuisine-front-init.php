@@ -46,6 +46,9 @@
 		//breadcrumbs:
 		require_once( 'cuisine-front-breadcrumbs.php' );
 
+		//pagination:
+		require_once( 'cuisine-front-pagination.php' );
+
 	}
 
 
