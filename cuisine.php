@@ -84,7 +84,7 @@ class Cuisine {
 		
 		if ( ! session_id() ) {
 			
-			$this->session_name = 'PHPSESSID_' . substr( md5( get_bloginfo('name') ), 0, 6 );
+			$this->session_name = 'PHPSESSID_' . substr( md5( 'chef' ), 0, 6 );
 
 			session_name( $this->session_name );
 			session_start();

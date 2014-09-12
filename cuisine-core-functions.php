@@ -298,8 +298,8 @@
 
 		}
 
-		$d = mysql2date( 'j F Y', $date_string );
-		$date = apply_filters( 'get_the_date', $d, 'j F Y' );
+		$d = mysql2date( $format, $date_string );
+		$date = apply_filters( 'get_the_date', $d, $format );
 		return $date;
 	}
 
