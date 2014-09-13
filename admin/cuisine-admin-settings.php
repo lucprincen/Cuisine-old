@@ -116,7 +116,7 @@
 				'label'			=>	'Cuisine',
 				'capability'	=>	'manage_cuisine',
 				'id'			=>	'cuisine_options',
-				'position'		=>	100,
+				'position'		=>	101,
 				'func'			=>	'cuisine_option_page'
 			)
 		);
