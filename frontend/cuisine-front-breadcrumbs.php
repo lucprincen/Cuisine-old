@@ -28,7 +28,7 @@
 		$keys = array_keys( $registered );
 		$name = ''; $slug = '';
 
-		if( is_single() && in_array( get_post_type(), $keys ) ){
+		if( in_array( get_post_type(), $keys ) ){
 			
 			$pt = $registered[ get_post_type() ];
 
@@ -57,9 +57,11 @@
 		$name = apply_filters( 'cuisine_breadcrumb_name', $name, $nodes );
 
 
-		if( count( $nodes ) == 2 && $name != '' && $slug != '' ){
+		if( $name != '' && $slug != '' ){
 
-			$nodes[2] = $nodes[1];
+			if( count( $nodes ) == 2 )
+				$nodes[2] = $nodes[1];
+			
 			$nodes[1] = array(
 							'text'	=> $name,
 							'url'	=> get_bloginfo('url').'/'.$slug
