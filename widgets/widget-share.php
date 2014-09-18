@@ -114,16 +114,20 @@ add_action( 'wp_ajax_nopriv_social_count', 'cuisine_social_count' );
 		$meta = get_post_meta( $pid, 'social_counts', true );
 		if( empty( $meta['tw'] ) ) $meta['tw'] = 0;
 		if( empty( $meta['fb'] ) ) $meta['fb'] = 0;
+		if( empty( $meta['in'] ) ) $meta['in'] = 0;
+		if( empty( $meta['pin'] ) ) $meta['pin'] = 0;
+		if( empty( $meta['gp'] ) ) $meta['gp'] = 0;
 
-		if( $type == 'twitter' ){
+		$shorts = array(
+							'twitter'	=> 'tw',
+							'facebook' 	=> 'fb',
+							'linkedin'	=> 'in',
+							'pinterest'	=> 'pin',
+							'google'	=> 'gp'
+		);
 
-			$meta['tw'] = $meta['tw'] + 1;
-
-		}else{
-
-			$meta['fb'] = $meta['fb'] + 1;
-
-		}
+		$short = $shorts[ $type ];
+		$meta[$short] = $meta[$short] + 1;
 
 		update_post_meta( $pid, 'social_counts', $meta );
 
