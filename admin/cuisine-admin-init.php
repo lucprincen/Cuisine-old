@@ -34,7 +34,8 @@
 			include( 'cuisine-admin-install.php' );
 		
 			//remove the ability to edit files from WordPress
-			define('DISALLOW_FILE_EDIT', TRUE);
+			if( !defined( 'DISALLOW_FILE_EDIT' ) )
+				define('DISALLOW_FILE_EDIT', TRUE);
 		}
 	}
 
