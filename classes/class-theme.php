@@ -1052,6 +1052,32 @@ class Cuisine_Theme {
 	}
 
 
+	/**
+	 * Register a sass file and add it to the /css/sass directory
+	 *
+	 * @access public
+	 * @param  Array $args ( file, root-url & hidden or not )
+	 * @return [type]       [description]
+	 */
+	function register_sass_file( $args ){
+
+
+		$f = file_get_contents( $args['root_url'] );
+				
+		if( substr( $args['name'], 0, 1 ) != '_' && $args['hidden'] )
+			$args['name'] = '_'.$args['name'];
+
+		$folder = apply_filters( 'cuisine_default_sass_folder', 'css/sass' );
+		$folder = trailingslashit( $folder );
+
+		$filepath = $this->root_url( 'theme', true ).$folder.$args['name'];
+
+
+		file_put_contents( $filepath, $f );
+
+	}
+
+
 
 	/*****************************************************************************/
 	/** Get Theme Style functions ************************************************/

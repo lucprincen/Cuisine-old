@@ -979,7 +979,7 @@ class Cuisine_Plugins {
 
 	function root_url( $slug = '', $trail = false ){
 		
-		$url = ABSPATH.'wp-content/plugins';
+		$url = WP_PLUGIN_DIR;
 
 		if( $slug != '' ) $url .= '/'.$slug;
 

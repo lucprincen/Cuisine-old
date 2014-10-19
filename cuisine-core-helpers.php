@@ -239,6 +239,42 @@
 			
 		$cuisine->theme->register_scripts( $args );
 	}
+
+
+	/**
+	 * Quickly add a sass-file to our theme
+	 *
+	 * @access public
+	 * @param  String  $file   filename
+	 * @param  String  $type   name of the plugin
+	 * @param  boolean $hidden create a separate css file for this one?
+	 * @return void
+	 */
+	function cuisine_add_sass( $file, $type, $hidden = true ){
+
+		global $cuisine;
+		$rooturl = $cuisine->plugins->root_url( $type, true );
+
+		$ex = explode( '/', $file );
+		if( count( $ex ) > 1 ){
+
+			$name = $ex[ count( $ex ) - 1 ];
+
+		}else{
+			$name = $file;
+		}
+
+		
+		$args = array(
+						'name'		=> $name,
+						'root_url'	=> $rooturl.$file,
+						'hidden'	=> $hidden
+		);
+
+		$cuisine->theme->register_sass_file( $args );
+
+
+	}
 	
 
 	/**
