@@ -3,11 +3,11 @@
  * Plugin Name: Cuisine
  * Plugin URI: http://www.chefduweb.nl/cuisine/
  * Description: Cuisine contains the basic framework for Chef du Web. Comunication between plugins and themes and loads of admin & frontend helpers
- * Version: 1.3.2
+ * Version: 1.3.3
  * Author: Chef du Web
  * Author URI: http://www.chefduweb.nl
- * Requires at least: 3.5
- * Tested up to: 3.9.1
+ * Requires at least: 3.9
+ * Tested up to: 4.1
  * 
  * Text Domain: cuisine
  * Domain Path: /languages/
@@ -34,7 +34,7 @@ class Cuisine {
 
 	/** Version ***************************************************************/
 	
-	var $version = '1.3.2';
+	var $version = '1.3.3';
 	
 	/** URLS ******************************************************************/
 	
