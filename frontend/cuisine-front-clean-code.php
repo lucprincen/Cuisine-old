@@ -201,7 +201,7 @@
 	/**
 	 * Remove unnecessary self-closing tags
 	 */
-	function remove_self_closing_tags( $input ) {
+	function cuisine_remove_self_closing_tags( $input ) {
 		return str_replace( ' />', '>', $input );
 	}
 	add_filter('get_avatar',          'cuisine_remove_self_closing_tags'); // <img />
