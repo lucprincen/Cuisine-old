@@ -268,9 +268,9 @@ class Cuisine_Plugins {
 
 	function get_nonce_name(){
 
-		if( isset( $_GET['post'] ) ){
+		if( isset( $_GET['post'] ) && !is_array( $_GET['post'] )){
 			return 'cuisine_nonce_'.$_GET['post'];
-		}else if( isset( $_GET['page'] ) ){
+		}else if( isset( $_GET['page'] ) && !is_array( $_GET['page'] )){
 			return 'cuisine_nonce_'.$_GET['page'];
 		}else {
 			
