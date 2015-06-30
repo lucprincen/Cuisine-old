@@ -1,3 +1,7 @@
+## NOTICE
+This version of Cuisine is outdated and abandoned. If your looking for the new version, [you can find the latest version of Cuisine here](https://github.com/chefduweb/cuisine).
+
+
 === Cuisine -- WordPress framework ===
 Contributors: chefduweb, towonder
 Tags: framework, development, simple-view, easy wp
